@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <color name="primarySwatch" type="material">#FAA500</color>
+    <color name="webwhite">#FFFFFF</color>
+    <color name="vert">#5FD800D4</color>
+    <color name="vertclair">#E9F9C7</color>
+    <color name="teal">#13B9B1</color>
+    <color name="tealclair">#E5F7F6</color>
+    <color name="jaune">#FECA18</color>
+    <color name="jauneclair">#FFF4D1</color>
+    <color name="rouge">#FF4848</color>
+    <color name="rougeclair">#FFF4F4</color>
+    <color name="bleu">#0F74A9</color>
+    <color name="gris">#F2EFF780</color>
+    <color name="webBlack">#000000</color>
+    <color name="webCardAuthDivider">#EFEFF4</color>
+    <color name="red">#C20023</color>
+    <color name="webCardAuthLabelColor">#C8C7CC</color>
+
+</resources>
