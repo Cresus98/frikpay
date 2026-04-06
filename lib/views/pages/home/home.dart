@@ -96,25 +96,25 @@ class _HomeState extends State<Home> {
                     childAspectRatio: 1.05,
                     children: [
                       _HomeTile(
-                        icon: Icons.south_west_rounded,
+                        iconSvg: Assets.icones.homeEncaisser,
                         label: l10n.encaisser,
                         accent: const Color(0xFF059669),
                         onTap: () => context.pushNamed(RoutesNames.Encaisser),
                       ),
                       _HomeTile(
-                        icon: Icons.north_east_rounded,
+                        iconSvg: Assets.icones.transfer,
                         label: l10n.payer,
                         accent: scheme.primary,
                         onTap: () => context.pushNamed(RoutesNames.Payer),
                       ),
                       _HomeTile(
-                        icon: Icons.credit_card_rounded,
+                        iconSvg: Assets.icones.homeCartes,
                         label: l10n.home4,
                         accent: const Color(0xFF6366F1),
                         onTap: () => context.pushNamed(RoutesNames.AddCarte),
                       ),
                       _HomeTile(
-                        icon: Icons.person_rounded,
+                        iconSvg: Assets.icones.profile,
                         label: l10n.home,
                         accent: const Color(0xFF7C3AED),
                         onTap: () => context.pushNamed(RoutesNames.Profil),
@@ -133,13 +133,13 @@ class _HomeState extends State<Home> {
 
 class _HomeTile extends StatelessWidget {
   const _HomeTile({
-    required this.icon,
+    required this.iconSvg,
     required this.label,
     required this.accent,
     required this.onTap,
   });
 
-  final IconData icon;
+  final SvgGenImage iconSvg;
   final String label;
   final Color accent;
   final VoidCallback onTap;
@@ -161,12 +161,17 @@ class _HomeTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
-                child: Icon(icon, color: accent, size: 28),
+                child: iconSvg.svg(
+                  width: 30,
+                  height: 30,
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+                ),
               ),
               const Spacer(),
               Text(

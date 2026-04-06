@@ -183,7 +183,28 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
                     '${money.format(p.amountFcfa)} FCFA',
                     style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  subtitle: Text('${p.method} · ${p.phone}'),
+                  isThreeLine: true,
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        p.method,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        p.phone,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: scheme.onSurface.withValues(alpha: 0.65),
+                              height: 1.25,
+                              letterSpacing: 0.2,
+                            ),
+                      ),
+                    ],
+                  ),
                   trailing: Text(
                     DateFormat.Md().add_Hm().format(p.at),
                     style: TextStyle(

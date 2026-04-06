@@ -23,6 +23,14 @@ class $AssetsIconesGen {
   /// File path: assets/icones/error.svg
   SvgGenImage get error => const SvgGenImage('assets/icones/error.svg');
 
+  /// File path: assets/icones/home_cartes.svg
+  SvgGenImage get homeCartes =>
+      const SvgGenImage('assets/icones/home_cartes.svg');
+
+  /// File path: assets/icones/home_encaisser.svg
+  SvgGenImage get homeEncaisser =>
+      const SvgGenImage('assets/icones/home_encaisser.svg');
+
   /// File path: assets/icones/profile.svg
   SvgGenImage get profile => const SvgGenImage('assets/icones/profile.svg');
 
@@ -36,8 +44,17 @@ class $AssetsIconesGen {
   SvgGenImage get transfer => const SvgGenImage('assets/icones/transfer.svg');
 
   /// List of all assets
-  List<dynamic> get values =>
-      [avatar, change, error, profile, succes, swap, transfer];
+  List<dynamic> get values => [
+        avatar,
+        change,
+        error,
+        homeCartes,
+        homeEncaisser,
+        profile,
+        succes,
+        swap,
+        transfer
+      ];
 }
 
 class $AssetsImagesGen {
