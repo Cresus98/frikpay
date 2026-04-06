@@ -109,4 +109,73 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get devlpeur => 'Geliştirici';
+
+  @override
+  String get forgot_title => 'Şifremi unuttum';
+
+  @override
+  String get forgot_hint =>
+      'Hesabınıza bağlı e-postayı girin. Demo: e-posta gönderilmez.';
+
+  @override
+  String get forgot_send => 'Sıfırlama bağlantısı gönder';
+
+  @override
+  String get forgot_success_title => 'İstek alındı';
+
+  @override
+  String get forgot_success_body =>
+      'Bu adres için bir hesap varsa, sıfırlama bağlantısı alırsınız (simülasyon).';
+
+  @override
+  String get forgot_back => 'Girişe dön';
+
+  @override
+  String get expiry_incomplete => '4 rakam girin (AA sonra YY)';
+
+  @override
+  String get expiry_month => 'Geçersiz ay (01–12)';
+
+  @override
+  String get expiry_expired => 'Kartın süresi dolmuş';
+
+  @override
+  String get cards_title => 'Kartlarım';
+
+  @override
+  String get cards_subtitle =>
+      'Ödeme yöntemlerinizi güvenle yönetin.';
+
+  @override
+  String get operations_title => 'Son hareketler';
+
+  @override
+  String get encaisser => 'Para al';
+
+  @override
+  String get payer => 'Öde';
+
+  @override
+  String get txn_amount => 'Tutar (FCFA)';
+
+  @override
+  String get txn_network => 'Mobil şebeke';
+
+  @override
+  String get txn_phone => 'Telefon numarası';
+
+  @override
+  String get txn_moov => 'Moov Money';
+
+  @override
+  String get txn_mtn => 'MTN Mobile Money';
+
+  @override
+  String get txn_demo => 'Demo: gerçek ödeme yapılmaz.';
+
+  @override
+  String get txn_confirm_encaissement => 'Tahsilatı onayla';
+
+  @override
+  String get txn_confirm_paiement => 'Ödemeyi onayla';
 }

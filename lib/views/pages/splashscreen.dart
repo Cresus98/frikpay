@@ -94,15 +94,16 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   Future<void> loadPage() async {
-    await Future.delayed(const Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(milliseconds: 900));
 
-    if(interne_storage.read(tokens)== null) {
-      // Future(() => context.goNamed(RoutesNames.Connexion));
-      Future(() => context.goNamed(RoutesNames.Connexion));
+    if (!mounted) return;
+
+    if (interne_storage.read(tokens) == null) {
+      context.goNamed(RoutesNames.Connexion);
       return;
     }
 
-    Future(() => context.goNamed(RoutesNames.Home));
+    context.goNamed(RoutesNames.Home);
 
 
 

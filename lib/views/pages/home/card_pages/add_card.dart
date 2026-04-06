@@ -1,175 +1,184 @@
-
 import 'package:flutter/material.dart';
-import 'package:fripay/models/card_item.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fripay/theme/app_theme.dart';
+import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
+import 'package:intl/intl.dart';
 
-import '../../../routes.dart';
-import 'card_operation_dialogs.dart';
-
-
-class MyCardsPage extends StatefulWidget {
-  const MyCardsPage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyCardsPage> createState() => _MyCardsPageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyCardsPageState extends State<MyCardsPage> {
-  final List<CardItem> _cards = [
-    const CardItem(
-      id: 'card-int-7821',
-      maskedPan: '**** **** **** 4242',
-      last4: '4242',
-      phone: '+229 97 00 00 00',
-      label: 'Visa principale',
-      isActive: true,
-    ),
-    const CardItem(
-      id: 'card-int-9901',
-      maskedPan: '**** **** **** 8899',
-      last4: '8899',
-      phone: '+229 90 12 34 56',
-      label: 'Carte secondaire',
-      isActive: false,
-    ),
-  ];
+class _HomeScreenState extends State<HomeScreen>
+    with TickerProviderStateMixin {
+  double balance = 1500.75;
+  late AnimationController _pulseController;
+  late AnimationController _popController;
+  late AnimationController _shimmerController;
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+      lowerBound: 0.95,
+      upperBound: 1.05,
+    )..repeat(reverse: true);
+
+
+    _popController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+
+    _shimmerController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _popController.dispose();
+    _shimmerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Mes cartes'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: _cards.isEmpty
-          ? const Center(child: Text('Aucune carte. Ajoutez-en une.'))
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: _cards.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, i) {
-                final c = _cards[i];
-                return Card(
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+    final formatter = NumberFormat.currency(locale: 'fr_FR', symbol: '€');
+
+    return GeneralScaffold(
+    content: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 30),
+
+            // Carte avec shimmer
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: balance),
+              duration: const Duration(seconds: 2),
+              onEnd: () => _popController.forward(from: 0),
+              builder: (context, value, child) {
+                return AnimatedBuilder(
+                  animation: _shimmerController,
+                  builder: (context, _) {
+                    final shimmerPosition =
+                        _shimmerController.value * 2 - 1;
+                    return ShaderMask(
+                      shaderCallback: (bounds) {
+                        return LinearGradient(
+                          begin: Alignment(-1, -1),
+                          end: Alignment(1, 1),
+                          colors: [
+                            Colors.white.withOpacity(0.0),
+                            Colors.white.withOpacity(0.3),
+                            Colors.white.withOpacity(0.0),
+                          ],
+                          stops: [
+                            (shimmerPosition - 0.3).clamp(0.0, 1.0),
+                            shimmerPosition.clamp(0.0, 1.0),
+                            (shimmerPosition + 0.3).clamp(0.0, 1.0),
+                          ],
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcATop,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0061FF), Color(0xFF60EFFF)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadius.md),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    c.maskedPan,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Text(
-                                    c.label,
-                                    style: TextStyle(color: Colors.grey.shade700),
-                                  ),
-                                  Text(
-                                    c.isActive ? 'Active' : 'Inactive',
-                                    style: TextStyle(
-                                      color: c.isActive ? Colors.green : Colors.orange,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            PopupMenuButton<String>(
-                              onSelected: (v) => _onAction(v, c),
-                              itemBuilder: (context) => const [
-                                PopupMenuItem(value: 'recharge', child: Text('Recharger')),
-                                PopupMenuItem(value: 'desactiver', child: Text('Désactiver')),
-                                PopupMenuItem(value: 'activer', child: Text('Activer')),
-                                PopupMenuItem(value: 'retrait', child: Text('Retrait')),
-                                PopupMenuItem(value: 'details', child: Text('Détails')),
-                                PopupMenuItem(value: 'transfert', child: Text('Transfert carte à carte')),
-                                PopupMenuItem(value: 'transactions', child: Text('Transactions')),
-                                PopupMenuItem(value: 'solde', child: Text('Solde')),
+                            Row(
+                              children: [
+                                Icon(Icons.account_balance_wallet_rounded,
+                                    color: Colors.white.withValues(alpha: 0.85),
+                                    size: 20),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  "Solde disponible",
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 16),
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () => CardOperationDialogs.showRecharge(context, c),
-                              child: const Text('Recharger'),
-                            ),
-                            OutlinedButton(
-                              onPressed: () => CardOperationDialogs.showToggle(
-                                context,
-                                c,
-                                activate: !c.isActive,
+                            const SizedBox(height: 10),
+
+                            // Rebond sur le montant
+                            ScaleTransition(
+                              scale: Tween<double>(begin: 1, end: 1.1)
+                                  .chain(CurveTween(curve: Curves.elasticOut))
+                                  .animate(_popController),
+                              child: Text(
+                                formatter.format(value),
+                                style: const TextStyle(
+                                  fontSize: 34,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              child: Text(c.isActive ? 'Désactiver' : 'Activer'),
-                            ),
-                            OutlinedButton(
-                              onPressed: () => CardOperationDialogs.showDetails(context, c),
-                              child: const Text('Détails'),
-                            ),
-                            OutlinedButton(
-                              onPressed: () => CardOperationDialogs.fetchSolde(context, c),
-                              child: const Text('Solde'),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'fab_cards',
-        onPressed: () => context.pushNamed(RoutesNames.Home1),
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('Ajouter une carte'),
-      ),
-    );
-  }
 
-  Future<void> _onAction(String action, CardItem c) async {
-    switch (action) {
-      case 'recharge':
-        await CardOperationDialogs.showRecharge(context, c);
-        break;
-      case 'desactiver':
-        await CardOperationDialogs.showToggle(context, c, activate: false);
-        break;
-      case 'activer':
-        await CardOperationDialogs.showToggle(context, c, activate: true);
-        break;
-      case 'retrait':
-        await CardOperationDialogs.showRetrait(context, c);
-        break;
-      case 'details':
-        await CardOperationDialogs.showDetails(context, c);
-        break;
-      case 'transfert':
-        await CardOperationDialogs.showTransfert(context, c);
-        break;
-      case 'transactions':
-        await CardOperationDialogs.showTransactions(context, c);
-        break;
-      case 'solde':
-        await CardOperationDialogs.fetchSolde(context, c);
-        break;
-    }
+            const SizedBox(height: 40),
+
+            // Bouton avec effet de pulse
+            ScaleTransition(
+              scale: _pulseController,
+              child: FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 32, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Recharge en cours…")),
+                  );
+                },
+                icon: const Icon(Icons.add_rounded, size: 22),
+                label: const Text(
+                  "Recharger",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+    );
   }
 }

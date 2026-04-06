@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fripay/views/pages/auth/connexion.dart';
+import 'package:fripay/views/pages/auth/forgot_password.dart';
 import 'package:fripay/views/pages/auth/inscription.dart';
-import 'package:fripay/views/pages/home/dev_accounts_page.dart';
-import 'package:fripay/views/pages/home/encaissement_page.dart';
-import 'package:fripay/views/pages/home/operations_list_page.dart';
-import 'package:fripay/views/pages/home/payer_page.dart';
+import 'package:fripay/views/pages/home/applications_list.dart';
 import 'package:fripay/views/pages/home/card_pages/add_card.dart';
-import 'package:fripay/views/pages/home/card_pages/make_card.dart' show HomeScreen;
 import 'package:fripay/views/pages/home/card_pages/secons_fr.dart';
+import 'package:fripay/views/pages/home/cards/cards_hub_page.dart';
+import 'package:fripay/views/pages/home/encaissement/encaissement_form_page.dart';
+import 'package:fripay/views/pages/home/encaissement/encaissement_list_page.dart';
 import 'package:fripay/views/pages/home/home.dart';
+import 'package:fripay/views/pages/home/payer/payer_form_page.dart';
+import 'package:fripay/views/pages/home/payer/payer_hub_page.dart';
 import 'package:fripay/views/pages/home/profile.dart';
+import 'package:fripay/views/pages/home/profile/dev_accounts_page.dart';
 import 'package:fripay/views/pages/home/retrait_page.dart';
 import 'package:fripay/views/pages/splashscreen.dart' show Splashscreen;
 import 'package:fripay/views/utils/constantes.dart';
@@ -40,7 +43,7 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
@@ -59,12 +62,32 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
         builder: (context, state) => const Connexion(),
+      ),
+      GoRoute(
+        name: RoutesNames.ForgotPassword,
+        path: "/${RoutesNames.ForgotPassword}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const ForgotPasswordPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const ForgotPasswordPage(),
       ),
       GoRoute(
         name: RoutesNames.Home,
@@ -78,12 +101,96 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
         builder: (context, state) => const Home(),
+      ),
+      GoRoute(
+        name: RoutesNames.Encaisser,
+        path: "/${RoutesNames.Encaisser}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const EncaissementListPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(
+                  parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const EncaissementListPage(),
+      ),
+      GoRoute(
+        name: RoutesNames.EncaissementForm,
+        path: "/${RoutesNames.EncaissementForm}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const EncaissementFormPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(
+                  parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const EncaissementFormPage(),
+      ),
+      GoRoute(
+        name: RoutesNames.Payer,
+        path: "/${RoutesNames.Payer}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const PayerHubPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(
+                  parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const PayerHubPage(),
+      ),
+      GoRoute(
+        name: RoutesNames.PayerForm,
+        path: "/${RoutesNames.PayerForm}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const PayerFormPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(
+                  parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const PayerFormPage(),
       ),
       GoRoute(
         name: RoutesNames.Retrait,
@@ -93,16 +200,16 @@ final appRoutes = GoRouter(
             key: state.pageKey,
             transitionDuration: const Duration(milliseconds: transitive),
             reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: RetraitPage(),
+            child: const RetraitPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
-        builder: (context, state) =>  RetraitPage(),
+        builder: (context, state) => const RetraitPage(),
       ),
       GoRoute(
         name: RoutesNames.AddCarte,
@@ -112,16 +219,16 @@ final appRoutes = GoRouter(
             key: state.pageKey,
             transitionDuration: const Duration(milliseconds: transitive),
             reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: MyCardsPage(),
+            child: const CardsHubPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
-        builder: (context, state) =>  MyCardsPage(),
+        builder: (context, state) => const CardsHubPage(),
       ),
       GoRoute(
         name: RoutesNames.Home1,
@@ -135,7 +242,7 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
@@ -154,7 +261,7 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
@@ -173,7 +280,7 @@ final appRoutes = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
@@ -181,83 +288,45 @@ final appRoutes = GoRouter(
         builder: (context, state) =>  ProfileScreen(),
       ),
       GoRoute(
-        name: RoutesNames.Encaisser,
-        path: "/${RoutesNames.Encaisser}",
+        name: RoutesNames.Applications,
+        path: "/${RoutesNames.Applications}",
         pageBuilder: (context, state) {
           return CustomTransitionPage(
             key: state.pageKey,
             transitionDuration: const Duration(milliseconds: transitive),
             reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: const EncaissementPage(),
+            child: AnimatedListPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
-        builder: (context, state) => const EncaissementPage(),
+        builder: (context, state) =>  AnimatedListPage(),
       ),
       GoRoute(
-        name: RoutesNames.Payer,
-        path: "/${RoutesNames.Payer}",
+        name: RoutesNames.DevAccounts,
+        path: "/${RoutesNames.DevAccounts}",
         pageBuilder: (context, state) {
           return CustomTransitionPage(
             key: state.pageKey,
             transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: const PayerPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-              child: child,
-            ),
-          );
-        },
-        builder: (context, state) => const PayerPage(),
-      ),
-      GoRoute(
-        name: RoutesNames.Developpeurs,
-        path: "/${RoutesNames.Developpeurs}",
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
             child: const DevAccountsPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              opacity: CurvedAnimation(
+                  parent: animation, curve: Curves.easeOut),
               child: child,
             ),
           );
         },
         builder: (context, state) => const DevAccountsPage(),
       ),
-      GoRoute(
-        name: RoutesNames.Operations,
-        path: "/${RoutesNames.Operations}",
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: const OperationsListPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-              child: child,
-            ),
-          );
-        },
-        builder: (context, state) => const OperationsListPage(),
-      ),
-
-
     ]);
 
 
@@ -266,15 +335,19 @@ final appRoutes = GoRouter(
 class RoutesNames {
   static String Splasch = "Splash";
   static String Connexion = "Connexion";
+  static String ForgotPassword = "ForgotPassword";
   static String Inscription = "Inscription";
   static String Home = "Home";
+  static String Encaisser = "Encaissement";
+  static String Payer = "Paiement";
   static String Home1 = "Home1";
   static String Home2 = "Home2";
   static String Retrait = "Retrait";
   static String Profil = "Profil";
   static String AddCarte = "AddCartes";
-  static String Encaisser = "Encaisser";
-  static String Payer = "Payer";
+  static String Applications = "Applications";
   static String Developpeurs = "Developpeurs";
-  static String Operations = "Operations";
+  static String EncaissementForm = "EncaissementForm";
+  static String PayerForm = "PayerForm";
+  static String DevAccounts = "DevAccounts";
 }

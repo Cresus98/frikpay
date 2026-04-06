@@ -32,7 +32,29 @@
   "cmpt": "Account",
   "mrchnd": "Merchant",
   "cmgn": "Company",
-  "devlpeur": "Developper"
+  "devlpeur": "Developper",
+  "forgot_title": "Forgot password",
+  "forgot_hint": "Enter the email linked to your account. Demo mode: no email is sent.",
+  "forgot_send": "Send reset link",
+  "forgot_success_title": "Request recorded",
+  "forgot_success_body": "If an account exists for this address, you will receive a reset link (simulated).",
+  "forgot_back": "Back to sign in",
+  "expiry_incomplete": "Enter 4 digits (MM then YY)",
+  "expiry_month": "Invalid month (01–12)",
+  "expiry_expired": "Card has expired",
+  "cards_title": "My cards",
+  "cards_subtitle": "Manage your payment methods securely.",
+  "operations_title": "Recent activity",
+  "encaisser": "Cash in",
+  "payer": "Pay",
+  "txn_amount": "Amount (FCFA)",
+  "txn_network": "Mobile network",
+  "txn_phone": "Phone number",
+  "txn_moov": "Moov Money",
+  "txn_mtn": "MTN Mobile Money",
+  "txn_demo": "Demo: no real payment is processed.",
+  "txn_confirm_encaissement": "Confirm cash in",
+  "txn_confirm_paiement": "Confirm payment"
 }
 
 

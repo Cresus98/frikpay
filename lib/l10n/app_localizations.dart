@@ -300,6 +300,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Developper'**
   String get devlpeur;
+
+  String get forgot_title;
+  String get forgot_hint;
+  String get forgot_send;
+  String get forgot_success_title;
+  String get forgot_success_body;
+  String get forgot_back;
+  String get expiry_incomplete;
+  String get expiry_month;
+  String get expiry_expired;
+  String get cards_title;
+  String get cards_subtitle;
+  String get operations_title;
+
+  String get encaisser;
+  String get payer;
+  String get txn_amount;
+  String get txn_network;
+  String get txn_phone;
+  String get txn_moov;
+  String get txn_mtn;
+  String get txn_demo;
+  String get txn_confirm_encaissement;
+  String get txn_confirm_paiement;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

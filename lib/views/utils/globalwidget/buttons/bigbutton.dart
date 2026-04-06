@@ -71,7 +71,8 @@ class BigButton extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    final backgroundColour =Colors.blue;
+    final scheme = Theme.of(context).colorScheme;
+    final backgroundColour = backgroundClr ?? scheme.primary;
 
     return ElevatedButton(
      // onPressed: (isEnabled && !isBusy) ? onPressed : () {},
@@ -87,7 +88,7 @@ class BigButton extends StatelessWidget {
           side: buttonSide!,
           borderRadius: BorderRadius.circular(circle),
         ),
-        backgroundColor: backgroundClr?? backgroundColour,
+        backgroundColor: backgroundColour,
         elevation: elevation??1.5,
       ),
       child: Padding(

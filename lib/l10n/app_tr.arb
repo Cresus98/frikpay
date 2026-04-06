@@ -32,8 +32,29 @@
   "cmpt": "Hesap",
   "mrchnd": "Tüccar",
   "cmgn": "Şirket",
-  "devlpeur": "Geliştirici"
-
+  "devlpeur": "Geliştirici",
+  "forgot_title": "Şifremi unuttum",
+  "forgot_hint": "Hesabınıza bağlı e-postayı girin. Demo: e-posta gönderilmez.",
+  "forgot_send": "Sıfırlama bağlantısı gönder",
+  "forgot_success_title": "İstek alındı",
+  "forgot_success_body": "Bu adres için bir hesap varsa, sıfırlama bağlantısı alırsınız (simülasyon).",
+  "forgot_back": "Girişe dön",
+  "expiry_incomplete": "4 rakam girin (AA sonra YY)",
+  "expiry_month": "Geçersiz ay (01–12)",
+  "expiry_expired": "Kartın süresi dolmuş",
+  "cards_title": "Kartlarım",
+  "cards_subtitle": "Ödeme yöntemlerinizi güvenle yönetin.",
+  "operations_title": "Son hareketler",
+  "encaisser": "Para al",
+  "payer": "Öde",
+  "txn_amount": "Tutar (FCFA)",
+  "txn_network": "Mobil şebeke",
+  "txn_phone": "Telefon numarası",
+  "txn_moov": "Moov Money",
+  "txn_mtn": "MTN Mobile Money",
+  "txn_demo": "Demo: gerçek ödeme yapılmaz.",
+  "txn_confirm_encaissement": "Tahsilatı onayla",
+  "txn_confirm_paiement": "Ödemeyi onayla"
 }
 
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemChrome, DeviceOrientation;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,8 +14,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  await FlutterWindowManagerV2.addFlags(FlutterWindowManagerV2.FLAG_SECURE);
-  //await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  // FLAG_SECURE bloque captures / enregistrement écran (Android). En debug on le
+  // désactive pour faciliter maquettes et support ; en release on le garde.
+  if (kReleaseMode) {
+    await FlutterWindowManagerV2.addFlags(FlutterWindowManagerV2.FLAG_SECURE);
+  }
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const ProviderScope(child:

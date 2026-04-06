@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fripay/views/utils/extensions.dart';
 
+
+
+
 class GeneralScaffold extends ConsumerWidget {
   final Widget content;
   final Color ? backgroundColor;
@@ -16,7 +19,8 @@ class GeneralScaffold extends ConsumerWidget {
       //  child:
         Scaffold(
           key: scaffoldKey,
-          backgroundColor: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor:
+              backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
             child: Stack(
               fit: StackFit.expand,
