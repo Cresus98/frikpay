@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fripay/views/utils/extensions.dart';
@@ -8,8 +7,8 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../theme/app_theme.dart';
 import '../../routes.dart';
-import '../../utils/constantes.dart' show white;
 import '../../utils/globalwidget/app_textform.dart';
 import '../../utils/globalwidget/buttons/back_button.dart';
 import '../../utils/globalwidget/buttons/bigbutton.dart';
@@ -25,7 +24,6 @@ class Inscription extends ConsumerStatefulWidget {
 }
 
 class _InscriptionState extends ConsumerState<Inscription> {
-  TextEditingController id_controller = TextEditingController();
   TextEditingController nom = TextEditingController();
   TextEditingController prenom = TextEditingController();
   TextEditingController pseudo = TextEditingController();
@@ -43,19 +41,15 @@ class _InscriptionState extends ConsumerState<Inscription> {
   final globaykey = GlobalKey<FormState>();
 
   @override
-
-
-  @override
   void dispose() {
-    // TODO: implement dispose
+    nom.dispose();
+    prenom.dispose();
+    pseudo.dispose();
+    email.dispose();
+    password.dispose();
+    company.dispose();
+    numero.dispose();
     super.dispose();
-    id_controller.clear();
-    password.clear();
-    nom.clear();
-    prenom.clear();
-    pseudo.clear();
-    email.clear();
-    company.clear();
   }
 
 
@@ -124,9 +118,14 @@ class _InscriptionState extends ConsumerState<Inscription> {
                         Space.verticale(heigth:10),
                         Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
                         Space.verticale(heigth:5),
-                        Text("FrikPay",style: context.textStyle(
-                            colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
-                        ),),
+                        Text(
+                          'FinanfaSend',
+                          style: context.textStyle(
+                            colour: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
                         Space.verticale(heigth: 10),
                         Padding(
                             padding: const EdgeInsets.symmetric(
@@ -135,20 +134,17 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 suffix: false,
                                 next: true,
                                 cas: 2,
-                                hintext: "Login",
-                                //AppLocalizations.of(context)!.register1,
-                                onClick: () {
-                                },
-                                validator:(value) {
-                                  if(value!.isEmpty)
-                                  {
+                                hintext: AppLocalizations.of(context)!.register1,
+                                prefixIcon: Icons.alternate_email_rounded,
+                                onClick: () {},
+                                validator: (value) {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
                                 },
-                                label: "Login",
-                                //AppLocalizations.of(context)!.register1,
-                                controller:pseudo)),
+                                label: AppLocalizations.of(context)!.register1,
+                                controller: pseudo)),
                         Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -157,17 +153,16 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 next: true,
                                 cas: 2,
                                 hintext: AppLocalizations.of(context)!.register2,
-                                onClick: () {
-                                },
-                                validator:(value) {
-                                  if(value!.isEmpty)
-                                  {
+                                prefixIcon: Icons.badge_outlined,
+                                onClick: () {},
+                                validator: (value) {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
                                 },
-                                label:  AppLocalizations.of(context)!.register2,
-                                controller:nom)),
+                                label: AppLocalizations.of(context)!.register2,
+                                controller: nom)),
                         Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -176,16 +171,15 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 next: true,
                                 cas: 2,
                                 hintext: AppLocalizations.of(context)!.register3,
-                                onClick: () {
-                                },
-                                validator:(value) {
-                                  if(value!.isEmpty)
-                                  {
+                                prefixIcon: Icons.person_outline_rounded,
+                                onClick: () {},
+                                validator: (value) {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
                                 },
-                                label:  AppLocalizations.of(context)!.register3,
+                                label: AppLocalizations.of(context)!.register3,
                                 controller: prenom)),
                         Space.verticale(heigth: 6),
                         Container(
@@ -222,8 +216,8 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                             color: ColorName.webBlack,
                                             width: 1,
                                           ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(3.0)),
+                                          borderRadius: BorderRadius.circular(
+                                              AppRadius.sm),
                                         ),
                                       ),
                                       Space.horizontale(width: 8),
@@ -235,8 +229,8 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                               color: ColorName.webBlack,
                                               width: 1,
                                             ),
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(3.0)),
+                                            borderRadius: BorderRadius.circular(
+                                                AppRadius.sm),
                                           ),
                                         ),
                                       ),
@@ -312,17 +306,16 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 next: true,
                                 cas: 2,
                                 hintext: AppLocalizations.of(context)!.register5,
-                                onClick: () {
-                                },
-                                validator:(value) {
-                                  if(value!.isEmpty)
-                                  {
+                                prefixIcon: Icons.mail_outline_rounded,
+                                onClick: () {},
+                                validator: (value) {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
                                 },
-                                label:  AppLocalizations.of(context)!.register5,
-                                controller:email)),
+                                label: AppLocalizations.of(context)!.register5,
+                                controller: email)),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 1),
@@ -340,7 +333,9 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                     ismarchand = value;
                                   });
                                 },
-                                activeColor: ColorName.bleu,
+                                activeTrackColor: ColorName.bleu.withValues(
+                                    alpha: 0.45),
+                                activeThumbColor: ColorName.bleu,
                               ),
                             ],
                           ),
@@ -352,23 +347,21 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 suffix: false,
                                 next: true,
                                 cas: 2,
-                                hintext:
-                                ismarchand?
-                                AppLocalizations.of(context)!.cmgn:
-                                AppLocalizations.of(context)!.devlpeur,
-                                onClick: () {
-                                },
-                                validator:(value) {
-                                  if(value!.isEmpty)
-                                  {
+                                hintext: ismarchand
+                                    ? AppLocalizations.of(context)!.cmgn
+                                    : AppLocalizations.of(context)!.devlpeur,
+                                prefixIcon: Icons.business_outlined,
+                                onClick: () {},
+                                validator: (value) {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
                                 },
-                                label:  ismarchand?
-                                AppLocalizations.of(context)!.cmgn:
-                                AppLocalizations.of(context)!.devlpeur,
-                                controller:company)),
+                                label: ismarchand
+                                    ? AppLocalizations.of(context)!.cmgn
+                                    : AppLocalizations.of(context)!.devlpeur,
+                                controller: company)),
                         Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -378,19 +371,19 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 next: false,
                                 cas: 2,
                                 hintext: AppLocalizations.of(context)!.login2,
+                                prefixIcon: Icons.lock_outline_rounded,
                                 onClick: () {
                                   obscure = !obscure;
                                   setState(() {});
                                 },
                                 obscure: obscure,
-                                input_type: TextInputType.text,
+                                input_type: TextInputType.visiblePassword,
                                 iconData: obscure
                                     ? Icons.visibility_off
                                     : Icons.visibility,
-                                label:  AppLocalizations.of(context)!.login2,
+                                label: AppLocalizations.of(context)!.login2,
                                 validator: (value) {
-                                  if(value!.isEmpty)
-                                  {
+                                  if (value!.isEmpty) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -400,14 +393,14 @@ class _InscriptionState extends ConsumerState<Inscription> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
                           child: BigButton(
-                            labelText:  AppLocalizations.of(context)!.register7,
-                            backgroundClr:  ColorName.bleu,
-                            color:ColorName.webwhite,
-                            fixedSized: Size(350, 48),
-                            size: 17,
-                            circle: 4,
-                            buttonSide: const BorderSide(
-                              color: ColorName.bleu,
+                            labelText: AppLocalizations.of(context)!.register7,
+                            backgroundClr: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fixedSized: const Size(350, 50),
+                            size: 16,
+                            circle: AppRadius.sm,
+                            buttonSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
                               width: 1,
                             ),
                             fontWeight: FontWeight.w500,

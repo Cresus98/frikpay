@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fripay/gen/assets.gen.dart';
 import 'package:fripay/l10n/app_localizations.dart';
+import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,204 +17,175 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return GeneralScaffold(
-        content: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "${AppLocalizations.of(context)!.home1} Joel AYEKOWOUI !",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8),
-              Text(
-                AppLocalizations.of(context)!.home2,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 32),
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+      content: LayoutBuilder(
+        builder: (context, constraints) {
+          final h = constraints.maxHeight;
+          final horizontal = 20.0;
+          final topPad = (h * 0.06).clamp(28.0, 72.0);
+          final bottomPad = (h * 0.06).clamp(24.0, 56.0);
+          final minChildHeight = (h - topPad - bottomPad).clamp(0.0, double.infinity);
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(horizontal, topPad, horizontal, bottomPad),
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: minChildHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Clickable(
-                    onClick: () {
-                      context.pushNamed(RoutesNames.Profil);
-                    },
-                    child: Card(
-                      color: Colors.green[100],
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.person, color: Colors.green, size: 40),
-                          SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.home, style: TextStyle(fontSize: 16)),
-                        ],
-                      ),
+                  Center(
+                    child: Assets.images.logoFripaySvg.svg(
+                      height: 52,
+                      fit: BoxFit.contain,
+                      semanticsLabel: 'FinanfaSend',
                     ),
                   ),
-                  Clickable(
-                    onClick: () {
-                      context.pushNamed(RoutesNames.Home2);
-                     // context.pushNamed(RoutesNames.Applications);
-                    },
-                    child: Card(
-                      color: Colors.blue[100],
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.phone_android, color: Colors.blue, size: 40),
-                          SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.home3, style: TextStyle(fontSize: 16)),
-                        ],
+                  SizedBox(height: (h * 0.03).clamp(14.0, 28.0)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.waving_hand_rounded,
+                        color: scheme.secondary.withValues(alpha: 0.9),
+                        size: 32,
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${l10n.home1} Joel',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.2,
+                                  ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              l10n.home2,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: scheme.onSurface
+                                        .withValues(alpha: 0.64),
+                                    height: 1.5,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Clickable(
-                    onClick: () {
-                      context.pushNamed(RoutesNames.AddCarte);
-                    },
-                    child: Card(
-                      color: Colors.yellow[100],
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.credit_card, color: Colors.yellow[800], size: 40),
-                          SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.home4, style: TextStyle(fontSize: 16)),
-                        ],
+                  SizedBox(height: (h * 0.05).clamp(20.0, 40.0)),
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
+                    childAspectRatio: 1.05,
+                    children: [
+                      _HomeTile(
+                        icon: Icons.south_west_rounded,
+                        label: l10n.encaisser,
+                        accent: const Color(0xFF059669),
+                        onTap: () => context.pushNamed(RoutesNames.Encaisser),
                       ),
-                    ),
-                  ),
-                  Clickable(
-                    onClick: () {
-                      context.pushNamed(RoutesNames.Applications);
-                    },
-                    child: Card(
-                      color: Colors.pink[100],
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.transfer_within_a_station, color: Colors.red, size: 40),
-                          SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.home5, style: TextStyle(fontSize: 16)),
-                        ],
+                      _HomeTile(
+                        icon: Icons.north_east_rounded,
+                        label: l10n.payer,
+                        accent: scheme.primary,
+                        onTap: () => context.pushNamed(RoutesNames.Payer),
                       ),
-                    ),
+                      _HomeTile(
+                        icon: Icons.credit_card_rounded,
+                        label: l10n.home4,
+                        accent: const Color(0xFF6366F1),
+                        onTap: () => context.pushNamed(RoutesNames.AddCarte),
+                      ),
+                      _HomeTile(
+                        icon: Icons.person_rounded,
+                        label: l10n.home,
+                        accent: const Color(0xFF7C3AED),
+                        onTap: () => context.pushNamed(RoutesNames.Profil),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ));
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
+class _HomeTile extends StatelessWidget {
+  const _HomeTile({
+    required this.icon,
+    required this.label,
+    required this.accent,
+    required this.onTap,
+  });
 
+  final IconData icon;
+  final String label;
+  final Color accent;
+  final VoidCallback onTap;
 
-
-class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes back arrow
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '9:41 AM', // Mock time
-              style: TextStyle(fontSize: 16, color: Colors.black87),
-            ),
-            Row(
-              children: [
-                Icon(Icons.wifi, size: 16, color: Colors.black87),
-                SizedBox(width: 4),
-                Icon(Icons.battery_full, size: 16, color: Colors.black87),
-                Text('100%', style: TextStyle(fontSize: 16, color: Colors.black87)),
-              ],
-            ),
-          ],
+    final scheme = Theme.of(context).colorScheme;
+    return Clickable(
+      onClick: onTap,
+      child: Material(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.55),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          side: BorderSide(color: scheme.outlineVariant),
         ),
-        backgroundColor: Colors.grey[200], // Mimics the light grey background
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Bienvenue, Joel AYEKOWOU !',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Bienvenue dans notre service qui vous fera faire des transactions en toute sécurité.',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 32),
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                Card(
-                  color: Colors.green[100],
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.person, color: Colors.green, size: 40),
-                      SizedBox(height: 8),
-                      Text('Profil', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
-                Card(
-                  color: Colors.blue[100],
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.phone_android, color: Colors.blue, size: 40),
-                      SizedBox(height: 8),
-                      Text('Transfert', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-                Card(
-                  color: Colors.yellow[100],
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.credit_card, color: Colors.yellow[800], size: 40),
-                      SizedBox(height: 8),
-                      Text('Change', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-                Card(
-                  color: Colors.pink[100],
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.transfer_within_a_station, color: Colors.red, size: 40),
-                      SizedBox(height: 8),
-                      Text('Transfert rapide', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+                child: Icon(icon, color: accent, size: 28),
+              ),
+              const Spacer(),
+              Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 20,
+                color: scheme.onSurface.withValues(alpha: 0.38),
+              ),
+            ],
+          ),
         ),
       ),
     );

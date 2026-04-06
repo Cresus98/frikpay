@@ -56,5 +56,6 @@ const  String bearer_password = "dvxhzdbppk-flutter";
 const String succes="success";
 const String failed="success";
 
-const int transitive=1000;
-const int reversetransitive=1000;
+/// Transitions GoRouter : courtes pour une navigation fluide.
+const int transitive = 240;
+const int reversetransitive = 200;

@@ -3,7 +3,6 @@ import 'package:fripay/views/routes.dart' show RoutesNames;
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
-import '';
 import '../../controllers/init.dart' show interne_storage;
 import '../../gen/assets.gen.dart';
 import '../../gen/colors.gen.dart';
@@ -64,15 +63,16 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   Future<void> loadPage() async {
-    await Future.delayed(const Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(milliseconds: 900));
 
-    if(interne_storage.read(tokens)== null) {
-      // Future(() => context.goNamed(RoutesNames.Connexion));
-      Future(() => context.goNamed(RoutesNames.Connexion));
+    if (!mounted) return;
+
+    if (interne_storage.read(tokens) == null) {
+      context.goNamed(RoutesNames.Connexion);
       return;
     }
 
-    Future(() => context.goNamed(RoutesNames.Home));
+    context.goNamed(RoutesNames.Home);
 
 
 

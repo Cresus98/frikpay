@@ -1,18 +1,15 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fripay/views/utils/constantes.dart';
+import 'package:fripay/l10n/app_localizations.dart';
+import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../controllers/authview/authview.dart' show authviewProvider;
 import '../../../gen/assets.gen.dart';
-import '../../../gen/colors.gen.dart' show ColorName;
-import '../../../l10n/app_localizations.dart';
 import '../../routes.dart' show RoutesNames;
 import '../../utils/globalwidget/app_textform.dart' show AuthTextformField;
-import '../../utils/globalwidget/buttons/back_button.dart' show ButtonBack;
 import '../../utils/globalwidget/buttons/bigbutton.dart' show BigButton;
 import '../../utils/globalwidget/dialogs.dart' show openDialogBox, CustomAlertDialog;
 import '../../utils/globalwidget/space.dart' show Space;
@@ -25,207 +22,155 @@ class Connexion extends ConsumerStatefulWidget {
 }
 
 class _ConnexionState extends ConsumerState<Connexion> {
-  TextEditingController id_controller = TextEditingController();
-  TextEditingController password = TextEditingController();
-  bool _isChecked = false;
+  final TextEditingController id_controller = TextEditingController();
+  final TextEditingController password = TextEditingController();
   bool obscure = true;
-  int selected = 0;
   final globaykey = GlobalKey<FormState>();
-
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    id_controller.dispose();
+    password.dispose();
     super.dispose();
-    id_controller.clear();
-    password.clear();
   }
+
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
-
-    return
-      GeneralScaffold(
-        content: SingleChildScrollView(
-          child: Container(
-            width: context.screenWidth,
-            height: context.screenHeight,
-            decoration: const BoxDecoration(
-              color: white,
-            ),
-            child: Form(
-              key: globaykey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
-                  Space.verticale(heigth:15),
-                  Text("FrikPay",style: context.textStyle(
-                      colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
-                  ),),
-                  Space.verticale(heigth: 10),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 12),
-                      child: AuthTextformField(
-                          suffix: false,
-                          next: true,
-                          cas: 2,
-                          hintext: "Login",
-                          //AppLocalizations.of(context)!.register1,
-                          onClick: () {
-                          },
-                          validator:(value) {
-                            if(value!.isEmpty)
-                            {
-                              return AppLocalizations.of(context)!.error;
-                            }
-                            return null;
-                          },
-                          label: "Login",
-                          //AppLocalizations.of(context)!.register1,
-                          controller: id_controller)),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 12),
-                      child:
-                      AuthTextformField(
-                          suffix: true,
-                          next: false,
-                          cas: 2,
-                          hintext: AppLocalizations.of(context)!.login2,
-                          onClick: () {
-                            obscure = !obscure;
-                            setState(() {});
-                          },
-                          obscure: obscure,
-                          input_type: TextInputType.text,
-                          onChanged: (p0) {
-                            if(globaykey.currentState!.validate())
-                            {
-                              _seconnecter(context);
-                            }
-
-                          },
-                          iconData: obscure
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          label: AppLocalizations.of(context)!.login2,
-                          validator: (value) {
-                            if(value!.isEmpty)
-                            {
-                              return "";
-                            }
-                            return null;
-                          },
-                          controller: password)),
-                  Space.verticale(heigth: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 5, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Spacer(),
-                        RichText(
-                          text: TextSpan(
-                              text: AppLocalizations.of(context)!.forgotpass,
-                              style: context.textStyle(
-                                  colour: ColorName.bleu,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 11),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  //context.pushNamed(RoutesNames.Resset,
-                                  //  extra: 2);
-                                }),
-                        ),
-                      ],
-                    ),
+    return GeneralScaffold(
+      content: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: context.screenHeight - 40),
+          child: Form(
+            key: globaykey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Assets.images.logoFripaySvg.svg(
+                    height: 64,
+                    width: 64,
+                    fit: BoxFit.cover,
                   ),
-                  Space.verticale(heigth: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
-                    child: BigButton(
-                      labelText:  AppLocalizations.of(context)!.login,
-                      backgroundClr:  ColorName.bleu,
-                      color:ColorName.webwhite,
-                      fixedSized: Size(350, 48),
-                      size: 17,
-                      circle: 4,
-                      buttonSide: const BorderSide(
-                        color: ColorName.bleu,
-                        width: 1,
+                ),
+                Space.verticale(heigth: 16),
+                Text(
+                  'FinanfaSend',
+                  textAlign: TextAlign.center,
+                  style: context.textStyle(
+                    colour: scheme.onSurface,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Space.verticale(heigth: 6),
+                Text(
+                  l10n.login1,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurface.withValues(alpha: 0.6),
                       ),
-                      fontWeight: FontWeight.w500,
-                      onPressed: () {
-                        _seconnecter(context);
-                        // context.goNamed(RoutesNames.Home);
-                      },
-                    ),
-                  ),
-                  Space.verticale(heigth: 2),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
-                    child: BigButton(
-                      labelText: AppLocalizations.of(context)!.register6,
-                      backgroundClr: ColorName.webwhite,
-                      color:ColorName.bleu,
-                      fixedSized: Size(350, 48),
-                      size: 17,
-                      circle: 4,
-                      buttonSide: const BorderSide(
-                        color: ColorName.bleu,
-                        width: 1,
+                ),
+                Space.verticale(heigth: 28),
+                AuthTextformField(
+                  suffix: false,
+                  next: true,
+                  cas: 2,
+                  hintext: l10n.register1,
+                  prefixIcon: Icons.alternate_email_rounded,
+                  onClick: () {},
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return l10n.error;
+                    }
+                    return null;
+                  },
+                  label: l10n.register1,
+                  controller: id_controller,
+                ),
+                Space.verticale(heigth: 4),
+                AuthTextformField(
+                  suffix: true,
+                  next: false,
+                  cas: 2,
+                  hintext: l10n.login2,
+                  prefixIcon: Icons.lock_outline_rounded,
+                  onClick: () {
+                    obscure = !obscure;
+                    setState(() {});
+                  },
+                  obscure: obscure,
+                  input_type: TextInputType.visiblePassword,
+                  iconData: obscure ? Icons.visibility_off : Icons.visibility,
+                  label: l10n.login2,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.error;
+                    return null;
+                  },
+                  controller: password,
+                ),
+                Space.verticale(heigth: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: RichText(
+                    text: TextSpan(
+                      text: l10n.forgotpass,
+                      style: TextStyle(
+                        color: scheme.primary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
                       ),
-                      fontWeight: FontWeight.w500,
-                      onPressed: () {
-                        print("press it ");
-                        context.pushNamed(RoutesNames.Inscription);
-                      },
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            context.pushNamed(RoutesNames.ForgotPassword),
                     ),
                   ),
-
-                ],
-              ),
+                ),
+                Space.verticale(heigth: 16),
+                BigButton(
+                  labelText: l10n.login,
+                  backgroundClr: scheme.primary,
+                  color: scheme.onPrimary,
+                  fixedSized: const Size(350, 50),
+                  size: 16,
+                  circle: AppRadius.sm,
+                  buttonSide: BorderSide(color: scheme.primary, width: 1),
+                  fontWeight: FontWeight.w600,
+                  onPressed: () => _seconnecter(context),
+                ),
+                Space.verticale(heigth: 10),
+                BigButton(
+                  labelText: l10n.register6,
+                  backgroundClr: scheme.surface,
+                  color: scheme.primary,
+                  fixedSized: const Size(350, 50),
+                  size: 16,
+                  circle: AppRadius.sm,
+                  buttonSide: BorderSide(color: scheme.primary, width: 1),
+                  fontWeight: FontWeight.w600,
+                  onPressed: () => context.pushNamed(RoutesNames.Inscription),
+                ),
+              ],
             ),
           ),
-        )
+        ),
+      ),
     );
   }
 
-  void _seconnecter(BuildContext context) async{
+  Future<void> _seconnecter(BuildContext context) async {
+    if (!globaykey.currentState!.validate()) return;
 
-    if (globaykey.currentState!.validate()) {
+    openDialogBox(context, '', const CustomAlertDialog());
+    const state = true;
 
-      openDialogBox(context,"",const CustomAlertDialog());
-     // print("les valeurs sont ${id_controller.text.replaceAll('', '')}");
-      bool state=true;
-      //await ref
-        //  .read(authviewProvider.notifier)
-
-          //.login(id_controller.text.replaceAll(' ', ''), password.text.replaceAll(' ', ''), "7", "6");
-
-
-      if(state)
-      {
-        context.pop();
-        context.goNamed(RoutesNames.Home);
-      }
-      //else
-      //{
-      //context.pop();
-      //}
-
-      //
+    if (state && context.mounted) {
+      context.pop();
+      context.goNamed(RoutesNames.Home);
     }
-
-  }
-
-  void _toggleCheckbox() {
-    setState(() {
-      _isChecked = !_isChecked;
-    });
   }
 }

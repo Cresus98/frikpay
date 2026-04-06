@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:intl/intl.dart';
 
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen>
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(AppRadius.md),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
@@ -113,10 +113,18 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Solde disponible",
-                              style: TextStyle(
-                                  color: Colors.white70, fontSize: 16),
+                            Row(
+                              children: [
+                                Icon(Icons.account_balance_wallet_rounded,
+                                    color: Colors.white.withValues(alpha: 0.85),
+                                    size: 20),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  "Solde disponible",
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 16),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 10),
 
@@ -148,23 +156,22 @@ class _HomeScreenState extends State<HomeScreen>
             // Bouton avec effet de pulse
             ScaleTransition(
               scale: _pulseController,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+              child: FilledButton.icon(
+                style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 40, vertical: 15),
+                      horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
                 ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Recharge en cours...")),
+                    const SnackBar(content: Text("Recharge en cours…")),
                   );
                 },
-                icon: const Icon(Icons.add_circle_outline, size: 24),
+                icon: const Icon(Icons.add_rounded, size: 22),
                 label: const Text(
                   "Recharger",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             )

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fripay/l10n/app_localizations.dart';
+import 'package:fripay/theme/app_theme.dart';
+import 'package:fripay/views/routes.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../gen/colors.gen.dart';
-import '../../utils/constantes.dart';
-import '../../utils/globalwidget/buttons/back_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -36,21 +36,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  GeneralScaffold(content: Column(
+    final scheme = Theme.of(context).colorScheme;
+    return GeneralScaffold(
+        content: Column(
       children: [
-        //  HEADER
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-          decoration:  BoxDecoration(
-            color: ColorName.bleu,
-            borderRadius: const  BorderRadius.only(
-              bottomLeft: Radius.circular(15),
-              bottomRight: Radius.circular(15),
+          padding: const EdgeInsets.fromLTRB(8, 8, 20, 36),
+          decoration: BoxDecoration(
+            color: scheme.primary,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(AppRadius.md),
+              bottomRight: Radius.circular(AppRadius.md),
             ),
           ),
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () => context.pop(),
+                  icon: Icon(Icons.arrow_back_rounded, color: scheme.onPrimary),
+                ),
+              ),
               Stack(
                 children: [
                   Container(
@@ -58,8 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 92,
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: white),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: scheme.onPrimary),
                     child: CachedNetworkImage(
                       imageUrl:"",
                      // finanFaImages + finanFaProfile + clients.photo,
@@ -71,9 +79,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.cover,
                               ))),
                       placeholder: (context, url) =>
-                      const CircularProgressIndicator(
-                        color: ColorName.bleu,
-                        backgroundColor: ColorName.webwhite,
+                      CircularProgressIndicator(
+                        color: scheme.primary,
+                        backgroundColor:
+                            scheme.onPrimary.withValues(alpha: 0.3),
                       ),
                       errorWidget: (context, url, error) =>
                           Container(
@@ -98,14 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 30,
                         width: 30,
                         padding: const EdgeInsets.all(3),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: ColorName.vert),
-                        child: const Padding(
+                            color: scheme.secondary),
+                        child: Padding(
                           padding: EdgeInsets.zero,
                           child: Icon(
-                            Icons.camera_alt,
-                            color: white,
+                            Icons.photo_camera_rounded,
+                            color: scheme.onSecondary,
                             size: 18,
                           ),
                         ),
@@ -115,17 +124,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 "John Doe",
                 style: TextStyle(
-                    color: Colors.white,
+                    color: scheme.onPrimary,
                     fontSize: 22,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
               Text(
                 "johndoe@email.com",
-                style: TextStyle(color: Colors.white.withOpacity(0.9)),
+                style: TextStyle(color: scheme.onPrimary.withOpacity(0.9)),
               ),
             ],
           ),
@@ -152,6 +161,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
+              _optionTile(
+                Icons.receipt_long_rounded,
+                AppLocalizations.of(context)!.operations_title,
+                onTap: () =>
+                    context.pushNamed(RoutesNames.Applications),
+              ),
               _expandableOptionTile(
                 icon: Icons.settings,
                 title: "Paramètres",
@@ -163,6 +178,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _subOption("Préférences de langue"),
                   _subOption("Notifications"),
                 ],
+              ),
+              _optionTile(
+                Icons.code_rounded,
+                "Comptes développeurs (Dev)",
+                onTap: () => context.pushNamed(RoutesNames.DevAccounts),
               ),
               _expandableOptionTile(
                 icon: Icons.security,
@@ -193,13 +213,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       height: _expanded ? 120 : 100,
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 5)),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -217,32 +238,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
               : Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent),
+                color: Theme.of(context).colorScheme.primary),
           ),
           const SizedBox(height: 5),
-          Text(title, style: const TextStyle(color: Colors.grey)),
+          Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.55),
+            ),
+          ),
         ],
       ),
     );
   }
 
   // Option simple
-  Widget _optionTile(IconData icon, String title, {bool isLogout = false}) {
+  Widget _optionTile(IconData icon, String title,
+      {bool isLogout = false, VoidCallback? onTap}) {
+    final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
       child: ListTile(
-        leading: Icon(icon, color: isLogout ? Colors.red : Colors.blueAccent),
+        leading: Icon(icon, color: isLogout ? scheme.error : scheme.primary),
         title: Text(
           title,
           style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: isLogout ? Colors.red : Colors.black87),
+              color: isLogout ? scheme.error : scheme.onSurface),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {},
+        trailing: Icon(Icons.chevron_right_rounded,
+            size: 22, color: scheme.onSurface.withValues(alpha: 0.4)),
+        onTap: onTap ?? () {},
       ),
     );
   }
@@ -255,19 +290,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required VoidCallback onTap,
     required List<Widget> children,
   }) {
+    final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(icon, color: Colors.blueAccent),
+            leading: Icon(icon, color: scheme.primary),
             title: Text(title,
-                style:
-                const TextStyle(fontWeight: FontWeight.w500, color: Colors.black87)),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500, color: scheme.onSurface)),
             trailing: AnimatedRotation(
               turns: isExpanded ? 0.5 : 0,
               duration: const Duration(milliseconds: 300),
-              child: const Icon(Icons.keyboard_arrow_down),
+              child: Icon(Icons.keyboard_arrow_down_rounded,
+                  color: scheme.onSurface.withValues(alpha: 0.55)),
             ),
             onTap: onTap,
           ),

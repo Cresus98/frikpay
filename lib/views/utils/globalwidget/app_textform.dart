@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
 import 'package:fripay/views/utils/globalwidget/space.dart';
 
 import '../../../gen/colors.gen.dart';
-
-
 
 class AppTextformField extends StatelessWidget {
   final TextEditingController controller;
@@ -25,9 +24,9 @@ class AppTextformField extends StatelessWidget {
       obscureText: obscure,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: BorderRadius.circular(AppRadius.sm)),
       ),
     );
   }
@@ -38,100 +37,112 @@ class AuthTextformField extends StatelessWidget {
   final bool obscure;
   final bool next;
   final String label;
-  final String ? hintext;
+  final String? hintext;
   final void Function()? onClick;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
   final bool suffix;
   final int cas;
   final IconData? iconData;
+  final IconData? prefixIcon;
   final TextInputType? input_type;
+  final List<TextInputFormatter>? inputFormatters;
   const AuthTextformField(
       {super.key,
       required this.controller,
       this.obscure = false,
       this.validator,
       this.cas = 1,
-
       required this.next,
       required this.label,
       required this.onClick,
       required this.suffix,
       this.input_type,
       this.iconData,
-        this.hintext,
-        this.onChanged
-      });
+      this.prefixIcon,
+      this.hintext,
+      this.onChanged,
+      this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {
-    return
-    cas==1?
-      TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      validator: validator,
-      onChanged: onChanged,
-      keyboardType: input_type ?? TextInputType.text,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      textInputAction: next ? TextInputAction.next : TextInputAction.done,
-      decoration: InputDecoration(
-        hintText: label,
-        hintStyle: const TextStyle(
-            color: ColorName.webCardAuthLabelColor,
-            fontWeight: FontWeight.w400),
-        suffixIcon: suffix
-            ? Clickable(
-                onClick: onClick!,
-                child: Icon(
-                  iconData,
-                  color: Colors.grey,
+    final scheme = Theme.of(context).colorScheme;
+    final prefix = prefixIcon != null
+        ? Icon(prefixIcon,
+            color: scheme.onSurface.withValues(alpha: 0.5), size: 22)
+        : null;
+
+    return cas == 1
+        ? TextFormField(
+            controller: controller,
+            obscureText: obscure,
+            validator: validator,
+            onChanged: onChanged,
+            inputFormatters: inputFormatters,
+            keyboardType: input_type ?? TextInputType.text,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            textInputAction: next ? TextInputAction.next : TextInputAction.done,
+            decoration: InputDecoration(
+              hintText: label,
+              hintStyle: const TextStyle(
+                  color: ColorName.webCardAuthLabelColor,
+                  fontWeight: FontWeight.w400),
+              prefixIcon: prefix,
+              suffixIcon: suffix
+                  ? Clickable(
+                      onClick: onClick!,
+                      child: Icon(
+                        iconData,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : null,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.sm)),
+            ),
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: context.textStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    colour: scheme.onSurface),
+              ),
+              Space.verticale(heigth: 8),
+              TextFormField(
+                controller: controller,
+                obscureText: obscure,
+                validator: validator,
+                onChanged: onChanged,
+                inputFormatters: inputFormatters,
+                keyboardType: input_type ?? TextInputType.text,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction:
+                    next ? TextInputAction.next : TextInputAction.done,
+                decoration: InputDecoration(
+                  hintText: hintext,
+                  hintStyle: const TextStyle(
+                      color: ColorName.webCardAuthLabelColor,
+                      fontWeight: FontWeight.w400),
+                  prefixIcon: prefix,
+                  suffixIcon: suffix
+                      ? Clickable(
+                          onClick: onClick!,
+                          child: Icon(
+                            iconData,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : null,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
                 ),
               )
-            : null,
-        border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(05))),
-      ),
-    ):
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style:
-          context.textStyle(fontWeight: FontWeight.bold, fontSize: 15,
-          colour: Colors.black),
-        ),
-        Space.verticale(heigth: 8),
-        TextFormField(
-          controller: controller,
-          obscureText: obscure,
-          validator: validator,
-          keyboardType: input_type ?? TextInputType.text,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          textInputAction: next ? TextInputAction.next : TextInputAction.done,
-          decoration: InputDecoration(
-            hintText:hintext ,
-            hintStyle: const TextStyle(
-                color: ColorName.webCardAuthLabelColor,
-                fontWeight: FontWeight.w400),
-            suffixIcon: suffix
-                ? Clickable(
-              onClick: onClick!,
-              child: Icon(
-                iconData,
-                color: Colors.grey,
-              ),
-            )
-                : null,
-            border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(03))),
-          ),
-        )
-      ],
-    )
-
-    ;
+            ],
+          );
   }
 }
 
@@ -178,9 +189,9 @@ class WalletformField extends StatelessWidget {
                     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
                   ],
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                        borderRadius: BorderRadius.circular(AppRadius.sm)),
                   ),
                 )
               : TextFormField(
@@ -191,9 +202,9 @@ class WalletformField extends StatelessWidget {
                   textInputAction:
                       next ? TextInputAction.next : TextInputAction.done,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                        borderRadius: BorderRadius.circular(AppRadius.sm)),
                   ),
                 )
         ],
