@@ -8,7 +8,10 @@
 "register6":"Créer un compte",
 "register7":"S'inscrire",
 "register8":"L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter",
-"login":"Se connecter",
+"activation": "Activation de votre compte",
+"activProcess": "Entrez le code à 5 chifrres reçu sur par email et définissez votre mot de passe ",
+  "active": "Activer",
+  "login":"Se connecter",
 "login1":"Connexion",
 "login2":"Mot de passe ",
 "home":"Profil",
@@ -54,5 +57,6 @@
   "txn_mtn": "MTN Mobile Money",
   "txn_demo": "Démonstration : aucun paiement réel n’est effectué.",
   "txn_confirm_encaissement": "Valider l’encaissement",
-  "txn_confirm_paiement": "Confirmer le paiement"
+  "txn_confirm_paiement": "Confirmer le paiement",
+  "wntdisconect":"Souhaitez vous vraiment vous déconnecter?"
 }

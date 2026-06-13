@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
+import '../../../controllers/authview/authview.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
 import '../../routes.dart';
+import '../../utils/constantes.dart';
 import '../../utils/globalwidget/app_textform.dart';
 import '../../utils/globalwidget/buttons/back_button.dart';
 import '../../utils/globalwidget/buttons/bigbutton.dart';
+import '../../utils/globalwidget/dialogs.dart';
 import '../../utils/globalwidget/general_scaffold.dart' show GeneralScaffold;
 import '../../utils/globalwidget/space.dart' show Space;
 
@@ -28,7 +32,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
   TextEditingController prenom = TextEditingController();
   TextEditingController pseudo = TextEditingController();
   TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  //TextEditingController password = TextEditingController();
   TextEditingController company = TextEditingController();
 
   final numero = TextEditingController();
@@ -46,7 +50,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
     prenom.dispose();
     pseudo.dispose();
     email.dispose();
-    password.dispose();
+  //  password.dispose();
     company.dispose();
     numero.dispose();
     super.dispose();
@@ -79,6 +83,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                         iconColor:  ColorName.webBlack,
                         //backgroundColor: Colors.grey.withOpacity(0.5),
                         onclick: () {
+
                           context.pop();
                         },
                       ),
@@ -119,7 +124,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                         Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
                         Space.verticale(heigth:5),
                         Text(
-                          'FinanfaSend',
+                          appName,
                           style: context.textStyle(
                             colour: Theme.of(context).colorScheme.onSurface,
                             fontSize: 25,
@@ -316,6 +321,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 },
                                 label: AppLocalizations.of(context)!.register5,
                                 controller: email)),
+
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 1),
@@ -362,6 +368,8 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                     ? AppLocalizations.of(context)!.cmgn
                                     : AppLocalizations.of(context)!.devlpeur,
                                 controller: company)),
+
+                        /*
                         Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -389,6 +397,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                   return null;
                                 },
                                 controller: password)),
+                        */
                         Space.verticale(heigth: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
@@ -405,7 +414,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                             ),
                             fontWeight: FontWeight.w500,
                             onPressed: () {
-                               context.goNamed(RoutesNames.Home);
+                              _inscription(context);
                             },
                           ),
                         ),
@@ -444,6 +453,44 @@ class _InscriptionState extends ConsumerState<Inscription> {
   */
   }
 
+
+  void _inscription(BuildContext context) async {
+
+
+
+    if (globaykey.currentState!.validate()) {
+      openDialogBox(context, "", const CustomAlertDialog());
+
+      bool state = await ref
+          .read(authviewProvider.notifier)
+          .register(
+        firstname: nom.text,
+        lastname: prenom.text,
+        email: email.text,
+        country: phoneNumber.dialCode != null
+            ? phoneNumber.dialCode!.substring(1)
+            : "",
+        telephone: numero.text, login: pseudo.text,
+         company: company.text,
+      );
+
+      if (state) {
+        context.pop();
+        context.pushNamed(RoutesNames.Activate);
+
+        /*
+        openDialogBox(context, "", const CustomAlertDialog());
+        state = await ref
+            .read(authviewProvider.notifier)
+            .activation_compte(password: password.text);
+        context.pop();
+        if (state) {
+          context.goNamed(RoutesNames.Home);
+        }
+        */
+      }
+    }
+  }
 }
 
 

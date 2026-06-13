@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -6,12 +7,14 @@ import '../../../views/utils/constantes.dart';
 import '../../appservices/apiservices/apireponse.dart';
 import '../../appservices/apiservices/dio_implements.dart';
 import '../../models/appuser/appuser.dart';
+import '../../views/utils/fonctions.dart';
 import '../init.dart';
 
 part 'authview.g.dart';
 part 'authview.freezed.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
+
 class Authview extends _$Authview {
   static String url_login = "auth/v1/user/login";
   static String url_register = "v1/user/register";
@@ -20,6 +23,7 @@ class Authview extends _$Authview {
   static String url_add_subscription = "v1/subscription/add";
   static String url_types_subscription = "v1/subscription/types";
   static String url_getCountries = "v1/geography/countries";
+  static DioServices dioServices=DioServices(baseUrl: frikpayBaseUrl);
   bool loading = false;
 
 
@@ -33,7 +37,7 @@ class Authview extends _$Authview {
         : AuthState(user: AppUser(firstname: "", lastname: ""));
   }
 
-  Future<bool> login(String tel, String password, String profil, String module) async {
+  Future<bool> login({ required String account,  required String password}) async {
 
 //username
   //admin
@@ -42,47 +46,32 @@ class Authview extends _$Authview {
     update(loading: true);
     update(msg: "Connexion en cours ....");
     try {
-      //await Future.delayed(const Duration(milliseconds: 5000));
-      ApiReponse reponse=(await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
+
+      ApiReponse reponse=(await dioServices.dispatch(httpRequest:dioServices.request(
             requestEndpoint: url_login,
             payload: {
-              "account": tel,
+              "account": account,
               "password": password,
             },
             headers: {
-             //"X-API-KEY": header_code,
               "Authorization":
               'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
-              // 'Content-Type': 'application/json'
             },
             method: "POST"),
         onPositiveResponse: (response) {
-
           AppUser appUser=AppUser.fromJson(response.data[user]);
           interne_storage.write(tokens,response.data[tokens]);
-          //interne_storage.write(client,response.data[client]);
-          //interne_storage.write(user,response.data[user]);
-          //interne_storage.write(notf,response.data[notf]);
+          interne_storage.write(user,appUser);
           update(user: appUser);
           print("la réponse du login est donc ${response.data}");
           },
       ));
 
-      if(reponse.status!)
-      {
 
-      }
-      update(loading: true,
-          success: reponse.status!,msg: reponse.message);
-      /*if(reponse.message=="Authentification failed, check credentials!")
-      {
-        reponse.message="Utilisateur non identifié.Veuillez saisir les données correctes!";
-      }
-      */
-      update(msg:reponse.message );
-      await Future.delayed(const Duration(milliseconds: 500));
-      print("le status final est ${reponse.status!}");
+      update(loading: true, success: reponse.status!,msg: reponse.message);
+      await Future.delayed( Duration(milliseconds: reponse.status! ? 1000:3000));
+
+      print("le status final du login est  est ${reponse.status!} de data ${reponse.data}");
 
       return reponse.status!;
     } catch (e) {
@@ -90,10 +79,8 @@ class Authview extends _$Authview {
       return false;
     }
   }
-  Future<bool> register({
-    required String login, required String password,required String company,
-    required String firstname,required String lastname,required String email,required String country,
-  required String telephone,required String profil,required String sexe}) async {
+
+  Future<bool> register({required String login,  required String telephone,required String country, required String firstname,required String lastname, required String company,required String email,}) async {
 
     /*
      "account": "96312179",
@@ -111,15 +98,13 @@ class Authview extends _$Authview {
             requestEndpoint: url_register,
             payload: {
               "login":login,
-              "password":password,
+             // "password":password,
+              "telephone": telephone,
+              "country":country,
               "firstname": firstname,
               "lastname": lastname,
-              "email": email,
-              "country":country,
-              "telephone": telephone,
               "company":company,
-              "profil": 7,
-              "sexe": sexe
+              "email": email,
             },
             headers: {
               //"X-API-KEY": header_code,
@@ -149,6 +134,63 @@ class Authview extends _$Authview {
       return false;
     }
   }
+
+
+  Future<bool> activation_compte({required String code,required String password}) async {
+    update(loading: true);
+    update(msg: "Activation du compte  en cours ....");
+
+    try {
+
+
+      ApiReponse reponse= await dioServices.dispatch(
+          httpRequest: dioServices.request(
+              requestEndpoint: url_activation,
+              payload: FormData.fromMap(
+                  {
+                    "code":code,
+                    "account":state.account,
+                    "password":password
+                  }),
+              method: 'POST'));
+
+      update(loading: false, success: reponse.status!);
+      update(msg:reponse.message );
+      await Future.delayed(const Duration(milliseconds: 500));
+      print("le status final de l'activation  est ${reponse.status!}");
+      return reponse.status!;
+    } catch (e) {
+      update(loading: false, success: false);
+      return false;
+    }
+  }
+
+  Future<bool> logout() async {
+    update(loading: true);
+    update(msg: "Déconnexion en cours ....");
+
+    try {
+
+      interne_storage.write(user,null);
+      interne_storage.write(tokens,null);
+
+
+
+      //ref.invalidate(gettinCurrencyProvider);
+      //ref.invalidate(gettinWalletProvider);
+
+      await Future.delayed(const Duration(milliseconds: 1000));
+      update(loading: false, success: true,logout: true);
+      update(msg:"Déconnexion réussie ");
+      await Future.delayed(const Duration(milliseconds: 510));
+      return true;
+    } catch (e) {
+      update(loading: true, success: false);
+      return false;
+    }
+  }
+
+
 /*
   Future<bool> ressetPassword({required String lang,required String account}) async {
     update(loading: true);
@@ -260,71 +302,13 @@ class Authview extends _$Authview {
       return false;
     }
   }
-  Future<bool> activation_compte({required String password}) async {
-    update(loading: true);
-    update(msg: "Activation du compte  en cours ....");
-
-    try {
-
-      var data = {
-        "code":state.data_code,
-        "account":state.account,
-        "password":password,
-      };
-      FormData formData=FormData.fromMap(data);
-      ApiReponse reponse= await DioServices.withoutNothing().dispatch(
-          httpRequest: DioServices(baseUrl: clientAuthBaseUrl).request(
-              requestEndpoint: url_activation,
-              payload: formData,
-              method: 'POST'));
-
-      update(loading: false, success: reponse.status!);
-      update(msg:reponse.message );
-      await Future.delayed(const Duration(milliseconds: 500));
-      print("le status final de l'activation  est ${reponse.status!}");
-
-      return reponse.status!;
-    } catch (e) {
-      update(loading: false, success: false);
-      return false;
-    }
-  }
-
-  Future<bool> logout() async {
-    update(loading: true);
-    update(msg: "Déconnexion en cours ....");
-
-    try {
-
-      interne_storage.write(user,null);
-      interne_storage.write(tokens,null);
-      interne_storage.write(portefeuilles,null);
-      interne_storage.write(ktes,null);
-      interne_storage.write(boutiks,null);
-      interne_storage.write(cmpt,null);
-      interne_storage.write(souscription,null);
 
 
-      ref.invalidate(gettinCurrencyProvider);
-      ref.invalidate(gettinWalletProvider);
-      ref.invalidate(gettinCarteProvider);
-      ref.invalidate(gettinCompteProvider);
-      ref.invalidate(gettingSouscriptionProvider);
-      await Future.delayed(const Duration(milliseconds: 1000));
-      update(loading: false, success: true,logout: true);
-      update(msg:"Déconnexion réussie ");
-      await Future.delayed(const Duration(milliseconds: 510));
-      return true;
-    } catch (e) {
-      update(loading: true, success: false);
-      return false;
-    }
-  }
 */
 
   void update({
     AppUser? user, bool? loading, bool? success,
-    String? msg,bool ? logout,String ? account,})
+    String? msg,bool ? logout,String ? account})
   {
     state = state.copyWith(user: user ?? state.user,
         loading: loading ?? state.loading, succes: success ?? state.succes,

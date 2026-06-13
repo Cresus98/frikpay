@@ -7,7 +7,10 @@
 "register5":"E-posta",
 "register6":"Hesap oluştur",
 "register7":"Kaydol",
-  "register8":"L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter",
+  "register8":"Kayıt işlemi tek seferliktir; bir dahaki oturum açışınızda bunu tekrar yapmanız gerekmeyecektir",
+  "activation": "Hesabınızın etkinleştirilmesi",
+  "activProcess": "E-posta ile aldığınız 5 haneli kodu girin ve şifrenizi belirleyin",
+  "active": "Etkinleştir",
 "login":"Giriş yap",
 "login1":"Giriş",
   "login2":"Şifrenizi  ",
@@ -54,7 +57,8 @@
   "txn_mtn": "MTN Mobile Money",
   "txn_demo": "Demo: gerçek ödeme yapılmaz.",
   "txn_confirm_encaissement": "Tahsilatı onayla",
-  "txn_confirm_paiement": "Ödemeyi onayla"
+  "txn_confirm_paiement": "Ödemeyi onayla",
+  "wntdisconect":"Gerçekten oturumu kapatmak istiyor musunuz ? "
 }
 
 

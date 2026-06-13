@@ -36,6 +36,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
 
   @override
+  String get activation => 'Activation de votre compte';
+
+  @override
+  String get activProcess => 'Entrez le code à 5 chifrres reçu sur par email et définissez votre mot de passe ';
+
+  @override
+  String get active => 'Activer';
+
+  @override
   String get login => 'Se connecter';
 
   @override
@@ -114,8 +123,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgot_title => 'Mot de passe oublié';
 
   @override
-  String get forgot_hint =>
-      'Entrez l’e-mail lié à votre compte. En mode démo, aucun e-mail n’est envoyé.';
+  String get forgot_hint => 'Entrez l’e-mail lié à votre compte. En mode démo, aucun e-mail n’est envoyé.';
 
   @override
   String get forgot_send => 'Envoyer le lien';
@@ -124,8 +132,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgot_success_title => 'Demande enregistrée';
 
   @override
-  String get forgot_success_body =>
-      'Si un compte existe pour cette adresse, vous recevrez un lien de réinitialisation (simulation).';
+  String get forgot_success_body => 'Si un compte existe pour cette adresse, vous recevrez un lien de réinitialisation (simulation).';
 
   @override
   String get forgot_back => 'Retour connexion';
@@ -143,8 +150,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cards_title => 'Mes cartes';
 
   @override
-  String get cards_subtitle =>
-      'Gérez vos moyens de paiement en toute sécurité.';
+  String get cards_subtitle => 'Gérez vos moyens de paiement en toute sécurité.';
 
   @override
   String get operations_title => 'Activité récente';
@@ -171,12 +177,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get txn_mtn => 'MTN Mobile Money';
 
   @override
-  String get txn_demo =>
-      'Démonstration : aucun paiement réel n’est effectué.';
+  String get txn_demo => 'Démonstration : aucun paiement réel n’est effectué.';
 
   @override
   String get txn_confirm_encaissement => 'Valider l’encaissement';
 
   @override
   String get txn_confirm_paiement => 'Confirmer le paiement';
+
+  @override
+  String get wntdisconect => 'Souhaitez vous vraiment vous déconnecter?';
 }

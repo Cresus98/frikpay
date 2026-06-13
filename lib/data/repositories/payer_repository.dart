@@ -33,8 +33,10 @@ abstract class PayerRepository {
 }
 
 class MockPayerRepository implements PayerRepository {
-  double _solde = 125_430.50;
-  double _soldeDisponible = 98_200.00;
+ // double _solde = 125_430.50;
+  double _solde = 125430.50;
+  //double _soldeDisponible = 98_200.00;
+  double _soldeDisponible = 98200.00;
   final List<PaymentRecord> _payments = [
     PaymentRecord(
       id: 'pay-1',

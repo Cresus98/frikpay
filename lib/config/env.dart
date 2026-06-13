@@ -6,6 +6,7 @@
 ///   --dart-define=FRIKPAY_BEARER_USER=app \
 ///   --dart-define=FRIKPAY_BEARER_PASSWORD=secret
 /// ```
+
 abstract final class Env {
   Env._();
 

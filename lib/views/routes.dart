@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fripay/views/pages/auth/activate_compte.dart';
 import 'package:fripay/views/pages/auth/connexion.dart';
 import 'package:fripay/views/pages/auth/forgot_password.dart';
 import 'package:fripay/views/pages/auth/inscription.dart';
@@ -11,7 +12,7 @@ import 'package:fripay/views/pages/home/encaissement/encaissement_list_page.dart
 import 'package:fripay/views/pages/home/home.dart';
 import 'package:fripay/views/pages/home/payer/payer_form_page.dart';
 import 'package:fripay/views/pages/home/payer/payer_hub_page.dart';
-import 'package:fripay/views/pages/home/profile.dart';
+import 'package:fripay/views/pages/home/profile/profile.dart';
 import 'package:fripay/views/pages/home/profile/dev_accounts_page.dart';
 import 'package:fripay/views/pages/home/retrait_page.dart';
 import 'package:fripay/views/pages/splashscreen.dart' show Splashscreen;
@@ -21,7 +22,8 @@ import 'package:go_router/go_router.dart';
 
 
 final appRoutes = GoRouter(
-    initialLocation: "/${RoutesNames.Splasch}",
+    //initialLocation: "/${RoutesNames.Splasch}",
+    initialLocation: "/${RoutesNames.Activate}",
     //initialLocation:"/${RoutesNames.VerifyCode}",
     routes: [
       GoRoute(
@@ -89,6 +91,28 @@ final appRoutes = GoRouter(
         },
         builder: (context, state) => const ForgotPasswordPage(),
       ),
+      GoRoute(
+        name: RoutesNames.Activate,
+        path: "/${RoutesNames.Activate}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration:
+                const Duration(milliseconds: reversetransitive),
+            child: const ActivationAccountPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const ActivationAccountPage(),
+      ),
+
+
       GoRoute(
         name: RoutesNames.Home,
         path: "/${RoutesNames.Home}",
@@ -230,6 +254,7 @@ final appRoutes = GoRouter(
         },
         builder: (context, state) => const CardsHubPage(),
       ),
+
       GoRoute(
         name: RoutesNames.Home1,
         path: "/${RoutesNames.Home1}",
@@ -350,4 +375,5 @@ class RoutesNames {
   static String EncaissementForm = "EncaissementForm";
   static String PayerForm = "PayerForm";
   static String DevAccounts = "DevAccounts";
+  static String Activate = "Activate";
 }

@@ -14,11 +14,11 @@ const transparent = Color(0x00000000);
 const black = Color(0xFF000000);
 const white = Color(0xFFFFFFFF);
 
-
+const lang="lang";
 
 
 // Storage
-const String tokens="tokens";
+const String tokens="token";
 const String user="user";
 /// Compte développeur sélectionné (id ou identifiant API) — requis pour certaines actions
 const String selectedDeveloperAccountKey = "selected_developer_account";
@@ -66,3 +66,6 @@ const String failed="success";
 /// Transitions GoRouter : courtes pour une navigation fluide.
 const int transitive = 240;
 const int reversetransitive = 200;
+
+
+const String appName="FrikPay";

@@ -152,6 +152,7 @@ class DioServices implements HttpServices {
       String? method,
       Map<String, dynamic>? params,
       RequestCase rcase = RequestCase.Default}) async {
+
     final Response<dynamic> response;
     if (rcase == RequestCase.ResetSendCodeLong) {
       response = await _dio2.request(baseUrl + requestEndpoint,

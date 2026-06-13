@@ -7,7 +7,10 @@
 "register5":"Email",
 "register6":"Create an account",
 "register7":"Sign up ",
-  "register8":"L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter",
+  "register8":"You only need to sign up once; you won't have to do it again until you log in",
+  "activation": "Activate your account",
+  "activProcess": "Enter the 5-digit code you received by email and define your password",
+  "active": "Activate",
 "login":"Log in ",
 "login1":"Login",
   "login2":"Password ",
@@ -54,7 +57,8 @@
   "txn_mtn": "MTN Mobile Money",
   "txn_demo": "Demo: no real payment is processed.",
   "txn_confirm_encaissement": "Confirm cash in",
-  "txn_confirm_paiement": "Confirm payment"
+  "txn_confirm_paiement": "Confirm payment",
+  "wntdisconect":" Are you sure you want to log out? "
 }
 
 

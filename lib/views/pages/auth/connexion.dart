@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fripay/controllers/authview/authview.dart';
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/utils/extensions.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../routes.dart' show RoutesNames;
+import '../../utils/constantes.dart';
 import '../../utils/globalwidget/app_textform.dart' show AuthTextformField;
 import '../../utils/globalwidget/buttons/bigbutton.dart' show BigButton;
 import '../../utils/globalwidget/dialogs.dart' show openDialogBox, CustomAlertDialog;
@@ -59,7 +61,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                 ),
                 Space.verticale(heigth: 16),
                 Text(
-                  'FinanfaSend',
+                  appName,
                   textAlign: TextAlign.center,
                   style: context.textStyle(
                     colour: scheme.onSurface,
@@ -92,7 +94,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                   label: l10n.register1,
                   controller: id_controller,
                 ),
-                Space.verticale(heigth: 4),
+                Space.verticale(heigth: 15),
                 AuthTextformField(
                   suffix: true,
                   next: false,
@@ -113,7 +115,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                   },
                   controller: password,
                 ),
-                Space.verticale(heigth: 8),
+                Space.verticale(heigth: 15),
                 Align(
                   alignment: Alignment.centerRight,
                   child: RichText(
@@ -130,7 +132,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                     ),
                   ),
                 ),
-                Space.verticale(heigth: 16),
+                Space.verticale(heigth: 25),
                 BigButton(
                   labelText: l10n.login,
                   backgroundClr: scheme.primary,
@@ -142,7 +144,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                   fontWeight: FontWeight.w600,
                   onPressed: () => _seconnecter(context),
                 ),
-                Space.verticale(heigth: 10),
+                Space.verticale(heigth: 20),
                 BigButton(
                   labelText: l10n.register6,
                   backgroundClr: scheme.surface,
@@ -166,7 +168,11 @@ class _ConnexionState extends ConsumerState<Connexion> {
     if (!globaykey.currentState!.validate()) return;
 
     openDialogBox(context, '', const CustomAlertDialog());
-    const state = true;
+
+    bool state= await ref.read(authviewProvider.notifier).login(
+      account: id_controller.text,
+      password: password.text
+    );
 
     if (state && context.mounted) {
       context.pop();

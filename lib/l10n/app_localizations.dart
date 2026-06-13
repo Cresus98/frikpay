@@ -148,8 +148,26 @@ abstract class AppLocalizations {
   /// No description provided for @register8.
   ///
   /// In en, this message translates to:
-  /// **'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter'**
+  /// **'You only need to sign up once; you won\'t have to do it again until you log in'**
   String get register8;
+
+  /// No description provided for @activation.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate your account'**
+  String get activation;
+
+  /// No description provided for @activProcess.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 5-digit code you received by email and define your password'**
+  String get activProcess;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get active;
 
   /// No description provided for @login.
   ///
@@ -301,29 +319,143 @@ abstract class AppLocalizations {
   /// **'Developper'**
   String get devlpeur;
 
+  /// No description provided for @forgot_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password'**
   String get forgot_title;
+
+  /// No description provided for @forgot_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email linked to your account. Demo mode: no email is sent.'**
   String get forgot_hint;
+
+  /// No description provided for @forgot_send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
   String get forgot_send;
+
+  /// No description provided for @forgot_success_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Request recorded'**
   String get forgot_success_title;
+
+  /// No description provided for @forgot_success_body.
+  ///
+  /// In en, this message translates to:
+  /// **'If an account exists for this address, you will receive a reset link (simulated).'**
   String get forgot_success_body;
+
+  /// No description provided for @forgot_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
   String get forgot_back;
+
+  /// No description provided for @expiry_incomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 4 digits (MM then YY)'**
   String get expiry_incomplete;
+
+  /// No description provided for @expiry_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid month (01–12)'**
   String get expiry_month;
+
+  /// No description provided for @expiry_expired.
+  ///
+  /// In en, this message translates to:
+  /// **'Card has expired'**
   String get expiry_expired;
+
+  /// No description provided for @cards_title.
+  ///
+  /// In en, this message translates to:
+  /// **'My cards'**
   String get cards_title;
+
+  /// No description provided for @cards_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your payment methods securely.'**
   String get cards_subtitle;
+
+  /// No description provided for @operations_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent activity'**
   String get operations_title;
 
+  /// No description provided for @encaisser.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash in'**
   String get encaisser;
+
+  /// No description provided for @payer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
   String get payer;
+
+  /// No description provided for @txn_amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (FCFA)'**
   String get txn_amount;
+
+  /// No description provided for @txn_network.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile network'**
   String get txn_network;
+
+  /// No description provided for @txn_phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
   String get txn_phone;
+
+  /// No description provided for @txn_moov.
+  ///
+  /// In en, this message translates to:
+  /// **'Moov Money'**
   String get txn_moov;
+
+  /// No description provided for @txn_mtn.
+  ///
+  /// In en, this message translates to:
+  /// **'MTN Mobile Money'**
   String get txn_mtn;
+
+  /// No description provided for @txn_demo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: no real payment is processed.'**
   String get txn_demo;
+
+  /// No description provided for @txn_confirm_encaissement.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm cash in'**
   String get txn_confirm_encaissement;
+
+  /// No description provided for @txn_confirm_paiement.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm payment'**
   String get txn_confirm_paiement;
+
+  /// No description provided for @wntdisconect.
+  ///
+  /// In en, this message translates to:
+  /// **' Are you sure you want to log out? '**
+  String get wntdisconect;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

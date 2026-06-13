@@ -2,6 +2,8 @@
 ///
 /// Tant que le backend n’est pas prêt : garder [useMockBackend] à `true`.
 /// Pour pointer vers l’API réelle : `false` + implémenter les `Remote*Repository`.
+
+
 class AppConfig {
   AppConfig._();
 

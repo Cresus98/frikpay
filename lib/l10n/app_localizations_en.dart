@@ -33,7 +33,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register7 => 'Sign up ';
 
   @override
-  String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
+  String get register8 => 'You only need to sign up once; you won\'t have to do it again until you log in';
+
+  @override
+  String get activation => 'Activate your account';
+
+  @override
+  String get activProcess => 'Enter the 5-digit code you received by email and define your password';
+
+  @override
+  String get active => 'Activate';
 
   @override
   String get login => 'Log in ';
@@ -114,8 +123,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgot_title => 'Forgot password';
 
   @override
-  String get forgot_hint =>
-      'Enter the email linked to your account. Demo mode: no email is sent.';
+  String get forgot_hint => 'Enter the email linked to your account. Demo mode: no email is sent.';
 
   @override
   String get forgot_send => 'Send reset link';
@@ -124,8 +132,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgot_success_title => 'Request recorded';
 
   @override
-  String get forgot_success_body =>
-      'If an account exists for this address, you will receive a reset link (simulated).';
+  String get forgot_success_body => 'If an account exists for this address, you will receive a reset link (simulated).';
 
   @override
   String get forgot_back => 'Back to sign in';
@@ -143,8 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cards_title => 'My cards';
 
   @override
-  String get cards_subtitle =>
-      'Manage your payment methods securely.';
+  String get cards_subtitle => 'Manage your payment methods securely.';
 
   @override
   String get operations_title => 'Recent activity';
@@ -178,4 +184,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txn_confirm_paiement => 'Confirm payment';
+
+  @override
+  String get wntdisconect => ' Are you sure you want to log out? ';
 }

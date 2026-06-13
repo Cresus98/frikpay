@@ -61,7 +61,7 @@ class _SplashscreenState extends State<Splashscreen> {
             ),
             Space.verticale(heigth: context.dy(16)),
             Text(
-              'FinanfaSend',
+              appName,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: cs.onPrimary,
                     fontWeight: FontWeight.w800,
@@ -94,7 +94,8 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   Future<void> loadPage() async {
-    await Future.delayed(const Duration(milliseconds: 900));
+
+    await Future.delayed(const Duration(milliseconds: 5000));
 
     if (!mounted) return;
 

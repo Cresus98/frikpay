@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
+import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../gen/assets.gen.dart';
+import '../../../../controllers/authview/authview.dart';
+import '../../../../gen/assets.gen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../utils/globalwidget/buttons/clickable.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../utils/globalwidget/buttons/bigbutton.dart';
+import '../../../utils/globalwidget/buttons/clickable.dart';
+import '../../../utils/globalwidget/dialogs.dart';
+import '../../../utils/globalwidget/space.dart';
 
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _expanded = false;
   bool _isLoading = true;
   bool _showSettingsOptions = false;
   bool _showSecurityOptions = false;
   XFile? image;
   bool sacnning = false;
+
+
   @override
   void initState() {
     super.initState();
@@ -196,7 +205,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               _optionTile(Icons.help_outline, "Support"),
-              _optionTile(Icons.logout, "Déconnexion", isLogout: true),
+              _optionTile(Icons.logout, "Déconnexion", isLogout: true,
+                onTap: () {
+                  _sedeconnecter(context);
+              },),
             ],
           ),
         ),
@@ -259,8 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Option simple
-  Widget _optionTile(IconData icon, String title,
-      {bool isLogout = false, VoidCallback? onTap}) {
+  Widget _optionTile(IconData icon, String title,{bool isLogout = false,VoidCallback? onTap}) {
     final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -381,6 +392,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           );
         });
+  }
+
+  void _sedeconnecter(BuildContext context) async {
+
+
+    openDialogBox(
+        context,
+        "",
+        AlertDialog(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          content: Container(
+              alignment: Alignment.center,
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppLocalizations.of(context)!.wntdisconect,
+                      textAlign: TextAlign.center,
+                      style: context.textStyle(
+                          fontWeight: FontWeight.w800, fontSize: 15)),
+                  Space.verticale(heigth: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      BigButton(
+                        labelText: AppLocalizations.of(context)!.y,
+                        backgroundClr: ColorName.bleu,
+                        size: 15,
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          openDialogBox(context, "", const CustomAlertDialog());
+                          bool state = await ref
+                              .read(authviewProvider.notifier)
+                              .logout();
+                          if (state && context.mounted) {
+                            context.pop();
+                            context.goNamed(RoutesNames.Connexion);
+                          }
+                        },
+                      ),
+                      BigButton(
+                        labelText: AppLocalizations.of(context)!.n,
+                        backgroundClr: ColorName.webViolet,
+                        color: ColorName.webwhite,
+                        size: 15,
+                        onPressed: () {
+                          context.pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+        ));
   }
 }
 

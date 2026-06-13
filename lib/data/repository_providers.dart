@@ -3,6 +3,7 @@ import 'package:fripay/data/repositories/encaissement_repository.dart';
 import 'package:fripay/data/repositories/payer_repository.dart';
 
 /// Instance unique par session (mock persistant ; remote stateless côté serveur).
+
 final encaissementRepositoryProvider = Provider<EncaissementRepository>((ref) {
   return EncaissementRepository.createDefault();
 });

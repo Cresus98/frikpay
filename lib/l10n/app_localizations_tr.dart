@@ -33,7 +33,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get register7 => 'Kaydol';
 
   @override
-  String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
+  String get register8 => 'Kayıt işlemi tek seferliktir; bir dahaki oturum açışınızda bunu tekrar yapmanız gerekmeyecektir';
+
+  @override
+  String get activation => 'Hesabınızın etkinleştirilmesi';
+
+  @override
+  String get activProcess => 'E-posta ile aldığınız 5 haneli kodu girin ve şifrenizi belirleyin';
+
+  @override
+  String get active => 'Etkinleştir';
 
   @override
   String get login => 'Giriş yap';
@@ -114,8 +123,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get forgot_title => 'Şifremi unuttum';
 
   @override
-  String get forgot_hint =>
-      'Hesabınıza bağlı e-postayı girin. Demo: e-posta gönderilmez.';
+  String get forgot_hint => 'Hesabınıza bağlı e-postayı girin. Demo: e-posta gönderilmez.';
 
   @override
   String get forgot_send => 'Sıfırlama bağlantısı gönder';
@@ -124,8 +132,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get forgot_success_title => 'İstek alındı';
 
   @override
-  String get forgot_success_body =>
-      'Bu adres için bir hesap varsa, sıfırlama bağlantısı alırsınız (simülasyon).';
+  String get forgot_success_body => 'Bu adres için bir hesap varsa, sıfırlama bağlantısı alırsınız (simülasyon).';
 
   @override
   String get forgot_back => 'Girişe dön';
@@ -143,8 +150,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cards_title => 'Kartlarım';
 
   @override
-  String get cards_subtitle =>
-      'Ödeme yöntemlerinizi güvenle yönetin.';
+  String get cards_subtitle => 'Ödeme yöntemlerinizi güvenle yönetin.';
 
   @override
   String get operations_title => 'Son hareketler';
@@ -178,4 +184,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get txn_confirm_paiement => 'Ödemeyi onayla';
+
+  @override
+  String get wntdisconect => 'Gerçekten oturumu kapatmak istiyor musunuz ? ';
 }

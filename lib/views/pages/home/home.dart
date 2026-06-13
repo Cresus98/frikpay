@@ -3,9 +3,13 @@ import 'package:fripay/gen/assets.gen.dart';
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
+import 'package:fripay/views/utils/constantes.dart';
 import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
+
+
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -42,7 +46,7 @@ class _HomeState extends State<Home> {
                     child: Assets.images.logoFripaySvg.svg(
                       height: 52,
                       fit: BoxFit.contain,
-                      semanticsLabel: 'FinanfaSend',
+                      semanticsLabel: appName,
                     ),
                   ),
                   SizedBox(height: (h * 0.03).clamp(14.0, 28.0)),

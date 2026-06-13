@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../controllers/authview/authview.dart';
+import '../../../gen/colors.gen.dart';
+import '../../routes.dart';
+import '../../utils/globalwidget/app_textform.dart';
+import '../../utils/globalwidget/buttons/bigbutton.dart';
+import '../../utils/globalwidget/dialogs.dart';
+import '../../utils/globalwidget/space.dart';
+
 /// Flux démo : aucun envoi réel, pour illustrer le parcours « mot de passe oublié ».
+
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -147,3 +157,5 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 }
+
+
