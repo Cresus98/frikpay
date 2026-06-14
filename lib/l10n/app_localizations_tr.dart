@@ -33,7 +33,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get register7 => 'Kaydol';
 
   @override
-  String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
+  String get register8 => 'Kayıt işlemi tek seferliktir; bir dahaki oturum açışınızda bunu tekrar yapmanız gerekmeyecektir';
+
+  @override
+  String get activation => 'Hesabınızın etkinleştirilmesi';
+
+  @override
+  String get activProcess => 'E-posta ile aldığınız 5 haneli kodu girin ve şifrenizi belirleyin';
+
+  @override
+  String get active => 'Etkinleştir';
 
   @override
   String get login => 'Giriş yap';
@@ -54,13 +63,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get home2 => 'İhtiyacınız olan hizmete hoş geldiniz. İşlemlerinizi güvenle gerçekleştirin';
 
   @override
-  String get home3 => 'Uygulamalar”';
+  String get home3 => 'Tahsilat';
 
   @override
   String get home4 => 'Kartlar';
 
   @override
-  String get home5 => 'Dev';
+  String get home5 => 'Öde';
 
   @override
   String get add_card => 'Kart ekle';
@@ -109,4 +118,73 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get devlpeur => 'Geliştirici';
+
+  @override
+  String get forgot_title => 'Şifremi unuttum';
+
+  @override
+  String get forgot_hint => 'Hesabınıza bağlı e-postayı girin. Demo: e-posta gönderilmez.';
+
+  @override
+  String get forgot_send => 'Sıfırlama bağlantısı gönder';
+
+  @override
+  String get forgot_success_title => 'İstek alındı';
+
+  @override
+  String get forgot_success_body => 'Bu adres için bir hesap varsa, sıfırlama bağlantısı alırsınız (simülasyon).';
+
+  @override
+  String get forgot_back => 'Girişe dön';
+
+  @override
+  String get expiry_incomplete => '4 rakam girin (AA sonra YY)';
+
+  @override
+  String get expiry_month => 'Geçersiz ay (01–12)';
+
+  @override
+  String get expiry_expired => 'Kartın süresi dolmuş';
+
+  @override
+  String get cards_title => 'Kartlarım';
+
+  @override
+  String get cards_subtitle => 'Ödeme yöntemlerinizi güvenle yönetin.';
+
+  @override
+  String get operations_title => 'Son hareketler';
+
+  @override
+  String get encaisser => 'Para al';
+
+  @override
+  String get payer => 'Öde';
+
+  @override
+  String get txn_amount => 'Tutar (FCFA)';
+
+  @override
+  String get txn_network => 'Mobil şebeke';
+
+  @override
+  String get txn_phone => 'Telefon numarası';
+
+  @override
+  String get txn_moov => 'Moov Money';
+
+  @override
+  String get txn_mtn => 'MTN Mobile Money';
+
+  @override
+  String get txn_demo => 'Demo: gerçek ödeme yapılmaz.';
+
+  @override
+  String get txn_confirm_encaissement => 'Tahsilatı onayla';
+
+  @override
+  String get txn_confirm_paiement => 'Ödemeyi onayla';
+
+  @override
+  String get wntdisconect => 'Gerçekten oturumu kapatmak istiyor musunuz ? ';
 }

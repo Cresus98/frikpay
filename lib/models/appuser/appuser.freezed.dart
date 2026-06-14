@@ -26,7 +26,9 @@ mixin _$AppUser {
   String? get country_prefix => throw _privateConstructorUsedError;
   String? get company => throw _privateConstructorUsedError;
   String? get telephone => throw _privateConstructorUsedError;
-  String? get profil => throw _privateConstructorUsedError;
+  String? get profil_id => throw _privateConstructorUsedError;
+  String? get photo_profil => throw _privateConstructorUsedError;
+  String? get is_active => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +47,9 @@ abstract class $AppUserCopyWith<$Res> {
       String? country_prefix,
       String? company,
       String? telephone,
-      String? profil});
+      String? profil_id,
+      String? photo_profil,
+      String? is_active});
 }
 
 /// @nodoc
@@ -67,7 +71,9 @@ class _$AppUserCopyWithImpl<$Res, $Val extends AppUser>
     Object? country_prefix = freezed,
     Object? company = freezed,
     Object? telephone = freezed,
-    Object? profil = freezed,
+    Object? profil_id = freezed,
+    Object? photo_profil = freezed,
+    Object? is_active = freezed,
   }) {
     return _then(_value.copyWith(
       firstname: null == firstname
@@ -94,9 +100,17 @@ class _$AppUserCopyWithImpl<$Res, $Val extends AppUser>
           ? _value.telephone
           : telephone // ignore: cast_nullable_to_non_nullable
               as String?,
-      profil: freezed == profil
-          ? _value.profil
-          : profil // ignore: cast_nullable_to_non_nullable
+      profil_id: freezed == profil_id
+          ? _value.profil_id
+          : profil_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      photo_profil: freezed == photo_profil
+          ? _value.photo_profil
+          : photo_profil // ignore: cast_nullable_to_non_nullable
+              as String?,
+      is_active: freezed == is_active
+          ? _value.is_active
+          : is_active // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -116,7 +130,9 @@ abstract class _$$AppUserImplCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       String? country_prefix,
       String? company,
       String? telephone,
-      String? profil});
+      String? profil_id,
+      String? photo_profil,
+      String? is_active});
 }
 
 /// @nodoc
@@ -136,7 +152,9 @@ class __$$AppUserImplCopyWithImpl<$Res>
     Object? country_prefix = freezed,
     Object? company = freezed,
     Object? telephone = freezed,
-    Object? profil = freezed,
+    Object? profil_id = freezed,
+    Object? photo_profil = freezed,
+    Object? is_active = freezed,
   }) {
     return _then(_$AppUserImpl(
       firstname: null == firstname
@@ -163,9 +181,17 @@ class __$$AppUserImplCopyWithImpl<$Res>
           ? _value.telephone
           : telephone // ignore: cast_nullable_to_non_nullable
               as String?,
-      profil: freezed == profil
-          ? _value.profil
-          : profil // ignore: cast_nullable_to_non_nullable
+      profil_id: freezed == profil_id
+          ? _value.profil_id
+          : profil_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      photo_profil: freezed == photo_profil
+          ? _value.photo_profil
+          : photo_profil // ignore: cast_nullable_to_non_nullable
+              as String?,
+      is_active: freezed == is_active
+          ? _value.is_active
+          : is_active // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -181,7 +207,9 @@ class _$AppUserImpl with DiagnosticableTreeMixin implements _AppUser {
       this.country_prefix,
       this.company,
       this.telephone,
-      this.profil});
+      this.profil_id,
+      this.photo_profil,
+      this.is_active});
 
   factory _$AppUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppUserImplFromJson(json);
@@ -199,11 +227,15 @@ class _$AppUserImpl with DiagnosticableTreeMixin implements _AppUser {
   @override
   final String? telephone;
   @override
-  final String? profil;
+  final String? profil_id;
+  @override
+  final String? photo_profil;
+  @override
+  final String? is_active;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppUser(firstname: $firstname, lastname: $lastname, email: $email, country_prefix: $country_prefix, company: $company, telephone: $telephone, profil: $profil)';
+    return 'AppUser(firstname: $firstname, lastname: $lastname, email: $email, country_prefix: $country_prefix, company: $company, telephone: $telephone, profil_id: $profil_id, photo_profil: $photo_profil, is_active: $is_active)';
   }
 
   @override
@@ -217,7 +249,9 @@ class _$AppUserImpl with DiagnosticableTreeMixin implements _AppUser {
       ..add(DiagnosticsProperty('country_prefix', country_prefix))
       ..add(DiagnosticsProperty('company', company))
       ..add(DiagnosticsProperty('telephone', telephone))
-      ..add(DiagnosticsProperty('profil', profil));
+      ..add(DiagnosticsProperty('profil_id', profil_id))
+      ..add(DiagnosticsProperty('photo_profil', photo_profil))
+      ..add(DiagnosticsProperty('is_active', is_active));
   }
 
   @override
@@ -235,13 +269,18 @@ class _$AppUserImpl with DiagnosticableTreeMixin implements _AppUser {
             (identical(other.company, company) || other.company == company) &&
             (identical(other.telephone, telephone) ||
                 other.telephone == telephone) &&
-            (identical(other.profil, profil) || other.profil == profil));
+            (identical(other.profil_id, profil_id) ||
+                other.profil_id == profil_id) &&
+            (identical(other.photo_profil, photo_profil) ||
+                other.photo_profil == photo_profil) &&
+            (identical(other.is_active, is_active) ||
+                other.is_active == is_active));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, firstname, lastname, email,
-      country_prefix, company, telephone, profil);
+      country_prefix, company, telephone, profil_id, photo_profil, is_active);
 
   @JsonKey(ignore: true)
   @override
@@ -265,7 +304,9 @@ abstract class _AppUser implements AppUser {
       final String? country_prefix,
       final String? company,
       final String? telephone,
-      final String? profil}) = _$AppUserImpl;
+      final String? profil_id,
+      final String? photo_profil,
+      final String? is_active}) = _$AppUserImpl;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$AppUserImpl.fromJson;
 
@@ -282,7 +323,11 @@ abstract class _AppUser implements AppUser {
   @override
   String? get telephone;
   @override
-  String? get profil;
+  String? get profil_id;
+  @override
+  String? get photo_profil;
+  @override
+  String? get is_active;
   @override
   @JsonKey(ignore: true)
   _$$AppUserImplCopyWith<_$AppUserImpl> get copyWith =>

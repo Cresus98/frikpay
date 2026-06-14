@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../controllers/init.dart';
+import 'constantes.dart';
+
 
 
 
@@ -56,7 +59,7 @@ String truncateText(String text, {int maxLength = 12}) {
   if (text.length <= maxLength) {
     return text;
   } else {
-    return text.substring(0, maxLength) + "...";
+    return "${text.substring(0, maxLength)}...";
   }
 }
 
@@ -119,3 +122,6 @@ Future<void> sendMail({required String email}) async {
     throw Exception('Impossible d\'ouvrir le client mail');
   }
 }
+
+String return_lang()
+{return interne_storage.read(lang)??"en";}

@@ -1,5 +1,6 @@
 
 //import 'package:finanfasend/gen/fonts.gen.dart';
+import 'package:fripay/config/env.dart';
 import 'package:flutter/material.dart';
 
 
@@ -13,12 +14,16 @@ const transparent = Color(0x00000000);
 const black = Color(0xFF000000);
 const white = Color(0xFFFFFFFF);
 
-
+const lang="lang";
 
 
 // Storage
-const String tokens="tokens";
+const String tokens="token";
 const String user="user";
+/// Compte développeur sélectionné (id ou identifiant API) — requis pour certaines actions
+const String selectedDeveloperAccountKey = "selected_developer_account";
+/// Clé d’application active pour le flux « Payer » (fournie par l’API à terme)
+const String activeAppPaymentKey = "active_app_payment_key";
 
 
 
@@ -40,15 +45,17 @@ final allow_positiv = RegExp(r'^\d+(\.\d+)?$');
 final positive_value_regex=RegExp(r'^\d*\.?\d*$');
 final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$');
 
-/// api data
+/// api data — valeurs lues depuis [Env] (`--dart-define=…` au build).
 
+String get frikpayBaseUrl => Env.frikpayBaseUrl;
 
-const String frikpayBaseUrl="https://api.friklabel.com/";
+String get header_code => Env.headerCode;
 
-const  String header_code = "CODEX@123";
-const  String bearer_username = "flutter";
-const  String bearer_username_reset = "web";
-const  String bearer_password = "dvxhzdbppk-flutter";
+String get bearer_username => Env.bearerUsername;
+
+String get bearer_username_reset => Env.bearerUsernameReset;
+
+String get bearer_password => Env.bearerPassword;
 
 
 /// Files things
@@ -56,5 +63,9 @@ const  String bearer_password = "dvxhzdbppk-flutter";
 const String succes="success";
 const String failed="success";
 
-const int transitive=1000;
-const int reversetransitive=1000;
+/// Transitions GoRouter : courtes pour une navigation fluide.
+const int transitive = 240;
+const int reversetransitive = 200;
+
+
+const String appName="FrikPay";

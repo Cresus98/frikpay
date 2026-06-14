@@ -28,6 +28,8 @@ openDialogBox(BuildContext context,String title,  Widget content) {
 }
 
 class RequestButton extends StatelessWidget {
+  const RequestButton({super.key});
+
   Future<void> makeRequest(BuildContext context) async {
     showDialog(
       context: context,
@@ -85,6 +87,8 @@ class RequestButton extends StatelessWidget {
 }
 
 class SuccessDialog extends StatelessWidget {
+  const SuccessDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -111,6 +115,8 @@ class SuccessDialog extends StatelessWidget {
 }
 
 class ErrorDialog extends StatelessWidget {
+  const ErrorDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -137,6 +143,8 @@ class ErrorDialog extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
 //class MyAppTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -181,11 +189,11 @@ class CustomAnimatedDialog extends StatefulWidget {
   final VoidCallback onCancel;
 
   const CustomAnimatedDialog({
-    Key? key,
+    super.key,
     required this.isSuccess,
     required this.onConfirm,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   _CustomAnimatedDialogState createState() => _CustomAnimatedDialogState();
@@ -253,6 +261,8 @@ class _CustomAnimatedDialogState extends State<CustomAnimatedDialog>
 }
 
 class MyAppTest extends StatelessWidget {
+  const MyAppTest({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -280,6 +290,8 @@ class MyAppTest extends StatelessWidget {
 }
 
 class SaveAlertDialog extends StatefulWidget {
+  const SaveAlertDialog({super.key});
+
   @override
   _SaveAlertDialogState createState() => _SaveAlertDialogState();
 }

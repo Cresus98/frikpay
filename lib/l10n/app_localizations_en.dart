@@ -33,7 +33,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register7 => 'Sign up ';
 
   @override
-  String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
+  String get register8 => 'You only need to sign up once; you won\'t have to do it again until you log in';
+
+  @override
+  String get activation => 'Activate your account';
+
+  @override
+  String get activProcess => 'Enter the 5-digit code you received by email and define your password';
+
+  @override
+  String get active => 'Activate';
 
   @override
   String get login => 'Log in ';
@@ -54,13 +63,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home2 => 'Welcome to the service you need. Make your transactions securely';
 
   @override
-  String get home3 => 'Applications';
+  String get home3 => 'Cash in';
 
   @override
   String get home4 => 'Cards';
 
   @override
-  String get home5 => 'Dev';
+  String get home5 => 'Pay';
 
   @override
   String get add_card => 'Add Card';
@@ -109,4 +118,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devlpeur => 'Developper';
+
+  @override
+  String get forgot_title => 'Forgot password';
+
+  @override
+  String get forgot_hint => 'Enter the email linked to your account. Demo mode: no email is sent.';
+
+  @override
+  String get forgot_send => 'Send reset link';
+
+  @override
+  String get forgot_success_title => 'Request recorded';
+
+  @override
+  String get forgot_success_body => 'If an account exists for this address, you will receive a reset link (simulated).';
+
+  @override
+  String get forgot_back => 'Back to sign in';
+
+  @override
+  String get expiry_incomplete => 'Enter 4 digits (MM then YY)';
+
+  @override
+  String get expiry_month => 'Invalid month (01–12)';
+
+  @override
+  String get expiry_expired => 'Card has expired';
+
+  @override
+  String get cards_title => 'My cards';
+
+  @override
+  String get cards_subtitle => 'Manage your payment methods securely.';
+
+  @override
+  String get operations_title => 'Recent activity';
+
+  @override
+  String get encaisser => 'Cash in';
+
+  @override
+  String get payer => 'Pay';
+
+  @override
+  String get txn_amount => 'Amount (FCFA)';
+
+  @override
+  String get txn_network => 'Mobile network';
+
+  @override
+  String get txn_phone => 'Phone number';
+
+  @override
+  String get txn_moov => 'Moov Money';
+
+  @override
+  String get txn_mtn => 'MTN Mobile Money';
+
+  @override
+  String get txn_demo => 'Demo: no real payment is processed.';
+
+  @override
+  String get txn_confirm_encaissement => 'Confirm cash in';
+
+  @override
+  String get txn_confirm_paiement => 'Confirm payment';
+
+  @override
+  String get wntdisconect => ' Are you sure you want to log out? ';
 }

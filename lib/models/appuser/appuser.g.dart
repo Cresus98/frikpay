@@ -14,7 +14,9 @@ _$AppUserImpl _$$AppUserImplFromJson(Map<String, dynamic> json) =>
       country_prefix: json['country_prefix'] as String?,
       company: json['company'] as String?,
       telephone: json['telephone'] as String?,
-      profil: json['profil'] as String?,
+      profil_id: json['profil_id'] as String?,
+      photo_profil: json['photo_profil'] as String?,
+      is_active: json['is_active'] as String?,
     );
 
 Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
@@ -25,5 +27,7 @@ Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
       'country_prefix': instance.country_prefix,
       'company': instance.company,
       'telephone': instance.telephone,
-      'profil': instance.profil,
+      'profil_id': instance.profil_id,
+      'photo_profil': instance.photo_profil,
+      'is_active': instance.is_active,
     };

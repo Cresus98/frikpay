@@ -3,10 +3,8 @@ import 'package:fripay/views/routes.dart' show RoutesNames;
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
-import '';
 import '../../controllers/init.dart' show interne_storage;
 import '../../gen/assets.gen.dart';
-import '../../gen/colors.gen.dart';
 import '../utils/constantes.dart';
 import '../utils/globalwidget/space.dart';
 
@@ -30,29 +28,61 @@ class _SplashscreenState extends State<Splashscreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return GeneralScaffold(
       content: Container(
         width: context.screenWidth,
         height: context.screenHeight,
-        color: ColorName.webwhite,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              cs.primary,
+              cs.primary.withValues(alpha: 0.92),
+              Theme.of(context).scaffoldBackgroundColor,
+            ],
+            stops: const [0.0, 0.42, 1.0],
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
-
-            Space.verticale(heigth: context.dy(10)),
-            Text("FrikPay",style: context.textStyle(
-              colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
-            ),),
-            Space.verticale(heigth: context.dy(30)),
-            Container(
-              alignment: Alignment.center,
-              height: context.dy(45),
-              width: context.dx(45),
-              child: const CircularProgressIndicator(
-                color: ColorName.bleu,
-                backgroundColor: ColorName.webwhite,
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: cs.onPrimary.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Assets.images.logoFripaySvg.svg(height: 56, width: 56, fit: BoxFit.cover),
+              ),
+            ),
+            Space.verticale(heigth: context.dy(16)),
+            Text(
+              appName,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: cs.onPrimary,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                  ),
+            ),
+            Space.verticale(heigth: context.dy(8)),
+            Text(
+              'Paiements mobiles sécurisés',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: cs.onPrimary.withValues(alpha: 0.88),
+                  ),
+            ),
+            Space.verticale(heigth: context.dy(36)),
+            SizedBox(
+              height: context.dy(44),
+              width: context.dx(44),
+              child: CircularProgressIndicator(
+                color: cs.onPrimary,
+                strokeWidth: 3,
+                backgroundColor: cs.onPrimary.withValues(alpha: 0.2),
               ),
             ),
           ],
@@ -64,15 +94,17 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   Future<void> loadPage() async {
+
     await Future.delayed(const Duration(milliseconds: 5000));
 
-    if(interne_storage.read(tokens)== null) {
-      // Future(() => context.goNamed(RoutesNames.Connexion));
-      Future(() => context.goNamed(RoutesNames.Connexion));
+    if (!mounted) return;
+
+    if (interne_storage.read(tokens) == null) {
+      context.goNamed(RoutesNames.Connexion);
       return;
     }
 
-    Future(() => context.goNamed(RoutesNames.Home));
+    context.goNamed(RoutesNames.Home);
 
 
 

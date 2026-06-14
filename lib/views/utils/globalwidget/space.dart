@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 
 class Space extends StatelessWidget {
 
-  Space({super.key, required this.width, required this.heigth});
-  Space.verticale({required this.heigth, this.width=0});
-  Space.horizontale({this.heigth=0, required this.width});
+  const Space({super.key, required this.width, required this.heigth});
+  const Space.verticale({super.key, required this.heigth, this.width=0});
+  const Space.horizontale({super.key, this.heigth=0, required this.width});
 
 
   final double width;

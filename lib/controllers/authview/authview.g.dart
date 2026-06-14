@@ -6,12 +6,11 @@ part of 'authview.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authviewHash() => r'29145d17981e9c990aea0eeb7deb3cba0e0350b1';
+String _$authviewHash() => r'd3261de9dde8e400c95c133b2f341283d9dd6bde';
 
 /// See also [Authview].
 @ProviderFor(Authview)
-final authviewProvider =
-    AutoDisposeNotifierProvider<Authview, AuthState>.internal(
+final authviewProvider = NotifierProvider<Authview, AuthState>.internal(
   Authview.new,
   name: r'authviewProvider',
   debugGetCreateSourceHash:
@@ -20,6 +19,6 @@ final authviewProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Authview = AutoDisposeNotifier<AuthState>;
+typedef _$Authview = Notifier<AuthState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

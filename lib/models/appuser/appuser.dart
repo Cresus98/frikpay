@@ -15,7 +15,9 @@ class AppUser with _$AppUser
     String ? country_prefix,
     String ? company,
     String ? telephone,
-    String ? profil,
+    String ? profil_id,
+    String ? photo_profil,
+    String ? is_active,
   })=_AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json)=>_$AppUserFromJson(json);

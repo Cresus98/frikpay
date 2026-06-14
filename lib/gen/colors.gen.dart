@@ -82,6 +82,12 @@ class ColorName {
   /// Color: #C8C7CC
   static const Color webCardAuthLabelColor = Color(0xFFC8C7CC);
 
+  /// Color: #700408
+  static const Color webRouge = Color(0xFF700408);
+
+  /// Color: #624097
+  static const Color webViolet = Color(0xFF624097);
+
   /// Color: #FFFFFF
   static const Color webwhite = Color(0xFFFFFFFF);
 }
