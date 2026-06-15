@@ -46,6 +46,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final authState = ref.watch(authviewProvider);
+    final user = authState.user;
+    
+    final fullName = (user?.firstname != null && user!.firstname.isNotEmpty) 
+        ? "${user.firstname} ${user.lastname}".trim()
+        : (authState.account.isNotEmpty ? authState.account : "Utilisateur");
+        
+    final emailDisplay = (user?.email != null && user!.email!.isNotEmpty) 
+        ? user.email! 
+        : (user?.telephone ?? "Non renseigné");
     return GeneralScaffold(
         content: Column(
       children: [
@@ -134,7 +144,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               const SizedBox(height: 10),
               Text(
-                "John Doe",
+                fullName,
                 style: TextStyle(
                     color: scheme.onPrimary,
                     fontSize: 22,
@@ -142,7 +152,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                "johndoe@email.com",
+                emailDisplay,
                 style: TextStyle(color: scheme.onPrimary.withOpacity(0.9)),
               ),
             ],

@@ -59,10 +59,17 @@ class Authview extends _$Authview {
             },
             method: "POST"),
         onPositiveResponse: (response) {
-          AppUser appUser=AppUser.fromJson(response.data[user]);
-          interne_storage.write(tokens,response.data[tokens]);
-          interne_storage.write(user,appUser);
-          update(user: appUser);
+          AppUser appUser = AppUser(
+            firstname: response.data["firstname"] ?? response.data["username"] ?? account,
+            lastname: response.data["lastname"] ?? "",
+            email: response.data["email"],
+            telephone: response.data["telephone"],
+            profil_id: response.data["profil_id"]?.toString(),
+            is_active: response.data["is_active"]?.toString(),
+          );
+          interne_storage.write(tokens, response.data[tokens]);
+          interne_storage.write(user, appUser.toJson());
+          update(user: appUser, account: account);
           print("la réponse du login est donc ${response.data}");
           },
       ));
