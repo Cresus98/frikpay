@@ -8,21 +8,29 @@ import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../controllers/authview/authview.dart';
 
 
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
+    final authState = ref.watch(authviewProvider);
+    final user = authState.user;
+    
+    final fullName = (user?.firstname != null && user!.firstname.isNotEmpty) 
+        ? "${user.firstname} ${user.lastname}".trim()
+        : (authState.account.isNotEmpty ? authState.account : "Utilisateur");
 
     return GeneralScaffold(
       content: LayoutBuilder(
@@ -64,7 +72,7 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${l10n.home1} Joel',
+                              '${l10n.home1} $fullName',
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineSmall
