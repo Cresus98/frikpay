@@ -310,6 +310,7 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
         key: _step1Key,
         child: Column(
           children: [
+            const SizedBox(height: 12),
             _dropdownField(
               label: 'Civilité',
               value: _selectedCivility,
@@ -364,6 +365,7 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 12),
             _dropdownField(
               label: 'Type de pièce',
               value: _selectedTypePiece,
@@ -434,8 +436,9 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
     TextInputType type = TextInputType.text,
     String? prefixText,
   }) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: ctrl,
         keyboardType: type,
@@ -445,8 +448,18 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
           hintText: hint,
           prefixText: prefixText,
           prefixStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusSm)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          filled: true,
+          fillColor: scheme.surfaceContainerHighest.withOpacity(0.3),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusMd)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.outlineVariant),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.primary, width: 1.5),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
         validator: (v) {
           if (required && (v == null || v.trim().isEmpty)) {
@@ -465,8 +478,9 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
   }
 
   Widget _datePicker(String label, TextEditingController ctrl, {bool required = false}) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: ctrl,
         readOnly: true,
@@ -474,9 +488,19 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
         decoration: InputDecoration(
           labelText: label,
           hintText: 'AAAA-MM-JJ',
-          suffixIcon: const Icon(Icons.calendar_today_rounded),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusSm)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          suffixIcon: Icon(Icons.calendar_today_rounded, color: scheme.primary),
+          filled: true,
+          fillColor: scheme.surfaceContainerHighest.withOpacity(0.3),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusMd)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.outlineVariant),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.primary, width: 1.5),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
         validator: required
             ? (v) => (v == null || v.trim().isEmpty) ? 'Champ requis' : null
@@ -491,18 +515,47 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
     required List<String> items,
     required void Function(String?) onChanged,
   }) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
         value: value,
+        icon: Icon(Icons.keyboard_arrow_down_rounded, color: scheme.primary),
+        elevation: 8,
+        borderRadius: BorderRadius.circular(16),
+        dropdownColor: scheme.surface,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusSm)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          filled: true,
+          fillColor: scheme.surfaceContainerHighest.withOpacity(0.3),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusMd)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.outlineVariant),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(_radiusMd),
+            borderSide: BorderSide(color: scheme.primary, width: 1.5),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
-        items: items
-            .map((e) => DropdownMenuItem(value: e, child: Text(e, overflow: TextOverflow.ellipsis)))
-            .toList(),
+        items: items.map((e) {
+          final isSelected = e == value;
+          return DropdownMenuItem(
+            value: e,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                e,
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? scheme.primary : scheme.onSurface,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          );
+        }).toList(),
         onChanged: onChanged,
       ),
     );
