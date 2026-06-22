@@ -37,7 +37,9 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
   final _step2Key = GlobalKey<FormState>();
 
   // ── Étape 1 : Informations personnelles ──
-  final _civilityCtrl      = TextEditingController();
+  String _selectedCivility         = 'Monsieur';
+  static const List<String> _civilityOptions = ['Monsieur', 'Madame', 'Mademoiselle', 'Autre'];
+
   final _lastnameCtrl      = TextEditingController();
   final _firstnameCtrl     = TextEditingController();
   final _emailCtrl         = TextEditingController();
@@ -133,11 +135,11 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
     openDialogBox(context, '', const CustomAlertDialog());
 
     final success = await ref.read(cardControllerProvider.notifier).createCard(
-          civility:           _civilityCtrl.text.trim(),
+          civility:           _selectedCivility,
           lastname:           _lastnameCtrl.text.trim(),
           firstname:          _firstnameCtrl.text.trim(),
           email:              _emailCtrl.text.trim(),
-          telephone:          _telephoneCtrl.text.trim(),
+          telephone:          '+229${_telephoneCtrl.text.trim()}',
           nationality:        _nationalityCtrl.text.trim(),
           birthday:           _birthdayCtrl.text.trim(),
           birthplace:         _birthplaceCtrl.text.trim(),
@@ -179,7 +181,7 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
   @override
   void dispose() {
     for (final c in [
-      _civilityCtrl, _lastnameCtrl, _firstnameCtrl, _emailCtrl,
+      _lastnameCtrl, _firstnameCtrl, _emailCtrl,
       _telephoneCtrl, _nationalityCtrl, _birthdayCtrl, _birthplaceCtrl,
       _addressCtrl, _cityCtrl, _countryCodeCtrl, _professionCtrl,
       _identityNumberCtrl, _dateDeliveryCtrl, _dateExpiryCtrl,
@@ -308,17 +310,39 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
         key: _step1Key,
         child: Column(
           children: [
-            _field('Civilité (Mr, Mme...)', _civilityCtrl, required: true, hint: 'Mr'),
-            _field('Nom', _lastnameCtrl, required: true),
-            _field('Prénom', _firstnameCtrl, required: true),
+            _dropdownField(
+              label: 'Civilité',
+              value: _selectedCivility,
+              items: _civilityOptions,
+              onChanged: (v) => setState(() => _selectedCivility = v!),
+            ),
+            Row(
+              children: [
+                Expanded(child: _field('Nom', _lastnameCtrl, required: true)),
+                const SizedBox(width: 12),
+                Expanded(child: _field('Prénom', _firstnameCtrl, required: true)),
+              ],
+            ),
             _field('Email', _emailCtrl, required: true, type: TextInputType.emailAddress),
-            _field('Téléphone', _telephoneCtrl, required: true, type: TextInputType.phone),
+            _field('Téléphone', _telephoneCtrl, required: true, type: TextInputType.phone, prefixText: '+229 '),
             _field('Nationalité', _nationalityCtrl, required: true, hint: 'ex: Béninoise'),
-            _datePicker('Date de naissance', _birthdayCtrl, required: true),
-            _field('Lieu de naissance', _birthplaceCtrl, required: true),
-            _field('Adresse', _addressCtrl, required: true),
-            _field('Ville', _cityCtrl, required: true),
-            _field('Code pays', _countryCodeCtrl, required: true, hint: 'ex: BJ'),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _datePicker('Date de naissance', _birthdayCtrl, required: true)),
+                const SizedBox(width: 12),
+                Expanded(child: _field('Lieu de naissance', _birthplaceCtrl, required: true)),
+              ],
+            ),
+            _field('Adresse / Rue', _addressCtrl, required: true),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _field('Ville', _cityCtrl, required: true)),
+                const SizedBox(width: 12),
+                Expanded(child: _field('Pays (Code)', _countryCodeCtrl, required: true, hint: 'ex: BJ')),
+              ],
+            ),
             _field('Profession', _professionCtrl, required: true),
           ],
         ),
@@ -408,6 +432,7 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
     bool required = false,
     String? hint,
     TextInputType type = TextInputType.text,
+    String? prefixText,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -418,12 +443,23 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
+          prefixText: prefixText,
+          prefixStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(_radiusSm)),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         ),
-        validator: required
-            ? (v) => (v == null || v.trim().isEmpty) ? 'Champ requis' : null
-            : null,
+        validator: (v) {
+          if (required && (v == null || v.trim().isEmpty)) {
+            return 'Champ requis';
+          }
+          if (type == TextInputType.emailAddress && v != null && v.trim().isNotEmpty) {
+            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+            if (!emailRegex.hasMatch(v.trim())) {
+              return 'Format e-mail invalide';
+            }
+          }
+          return null;
+        },
       ),
     );
   }
