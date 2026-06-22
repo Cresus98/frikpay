@@ -61,7 +61,7 @@ class _ConnexionState extends ConsumerState<Connexion> {
                 children: [
                   Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
                   Space.verticale(heigth:15),
-                  Text("FrikPay",style: context.textStyle(
+                  Text("FinanSend",style: context.textStyle(
                       colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
                   ),),
                   Space.verticale(heigth: 10),

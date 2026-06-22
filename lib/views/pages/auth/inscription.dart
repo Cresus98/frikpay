@@ -124,7 +124,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                         Space.verticale(heigth:10),
                         Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
                         Space.verticale(heigth:5),
-                        Text("FrikPay",style: context.textStyle(
+                        Text("FinanSend",style: context.textStyle(
                             colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
                         ),),
                         Space.verticale(heigth: 10),
@@ -197,112 +197,82 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                         ),
-                        Container(
-                          //height: 55,
-                          padding: const EdgeInsets.only(left: 3),
-                          margin: const EdgeInsets.symmetric(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 8),
-                          child: Stack(
-                            alignment: Alignment.topLeft,
-                            children: [
-                              Positioned(
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                right: 0,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final totalWidth = constraints.maxWidth;
+                              return Container(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: ColorName.webBlack,
+                                    width: 1,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(3.0)),
+                                ),
                                 child: SizedBox(
-                                  width: context.screenWidth,
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 95,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: ColorName.webBlack,
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(3.0)),
-                                        ),
-                                      ),
-                                      Space.horizontale(width: 8),
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
+                                  width: totalWidth,
+                                  height: 55,
+                                  child: InternationalPhoneNumberInput(
+                                    onInputChanged: (PhoneNumber number) {
+                                      phoneNumber = number;
+                                      setState(() {});
+                                    },
+                                    onInputValidated: (bool value) {
+                                      num_is_valid = value;
+                                    },
+                                    selectorConfig: const SelectorConfig(
+                                      selectorType:
+                                          PhoneInputSelectorType.BOTTOM_SHEET,
+                                    ),
+                                    ignoreBlank: false,
+                                    autoValidateMode: AutovalidateMode.disabled,
+                                    selectorTextStyle:
+                                        const TextStyle(color: ColorName.webBlack),
+                                    textFieldController: numero,
+                                    formatInput: false,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                    cursorColor: ColorName.webBlack,
+                                    inputDecoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.only(
+                                          bottom: 15, left: 8),
+                                      border: InputBorder.none,
+                                      hintText: 'Numéro de téléphone',
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey.shade500,
+                                          fontSize: 14),
+                                    ),
+                                    onSaved: (PhoneNumber number) {
+                                      phone_numero = number.phoneNumber!;
+                                    },
+                                    initialValue: phoneNumber,
+                                    errorMessage: "Numéro invalide",
+                                    searchBoxDecoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.only(
+                                          bottom: 2, left: 2),
+                                      border: OutlineInputBorder(
+                                          borderSide: const BorderSide(
                                               color: ColorName.webBlack,
-                                              width: 1,
-                                            ),
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(3.0)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                              width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      hintText: 'Recherchez le pays',
+                                      prefixIcon: const Icon(Icons.search,
+                                          color: Colors.blue),
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey.shade500,
+                                          fontSize: 14),
+                                    ),
                                   ),
                                 ),
-                              ),
-                    
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6),
-                                child: InternationalPhoneNumberInput(
-                                  onInputChanged: (PhoneNumber number) {
-                                    phoneNumber = number;
-                                    setState(() {});
-                                  },
-                                  onInputValidated: (bool value) {
-                                    num_is_valid = value;
-                                  },
-                                  selectorConfig: const SelectorConfig(
-                                    selectorType:
-                                    PhoneInputSelectorType.BOTTOM_SHEET,
-                                  ),
-                                  ignoreBlank: false,
-                                  autoValidateMode: AutovalidateMode.disabled,
-                                  selectorTextStyle:
-                                  const TextStyle(color: ColorName.webBlack),
-                                  textFieldController: numero,
-                                  formatInput: false,
-                                  //maxLength: 9,
-                                  keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                      signed: true, decimal: true),
-                                  cursorColor: ColorName.webBlack,
-                                  inputDecoration: InputDecoration(
-                                    contentPadding:
-                                    const EdgeInsets.only(bottom: 15, left: 0),
-                                    border: InputBorder.none,
-                                    hintText: '',
-                                    hintStyle: TextStyle(
-                                        color: Colors.grey.shade500, fontSize: 16),
-                                  ),
-                                  onSaved: (PhoneNumber number) {
-                                    phone_numero = number.phoneNumber!;
-                                  },
-                                  initialValue: phoneNumber,
-                                  errorMessage: "Numéro invalide ",
-                                  searchBoxDecoration: InputDecoration(
-                                    contentPadding:
-                                    const EdgeInsets.only(bottom: 2, left: 2),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: ColorName.webBlack,
-                                            width: 2),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    hintText: 'Recherchez le pays ',
-                                    prefixIcon:
-                                    Icon(Icons.search, color: Colors.blue),
-                                    hintStyle: TextStyle(
-                                        color: Colors.grey.shade500, fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                    
-                            ],
+                              );
+                            },
                           ),
-                          //),
                         ),
                         Padding(
                             padding: const EdgeInsets.symmetric(

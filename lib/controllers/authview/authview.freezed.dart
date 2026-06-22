@@ -175,12 +175,12 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuthStateImpl implements _AuthState {
-  _$AuthStateImpl(
+  const _$AuthStateImpl(
       {this.user,
       this.loading = false,
       this.succes = false,
       this.logout = false,
-      this.account = "",
+      this.account = '',
       this.message = 'Opération en cours ...'});
 
   @override
@@ -231,7 +231,7 @@ class _$AuthStateImpl implements _AuthState {
 }
 
 abstract class _AuthState implements AuthState {
-  factory _AuthState(
+  const factory _AuthState(
       {final AppUser? user,
       final bool loading,
       final bool succes,

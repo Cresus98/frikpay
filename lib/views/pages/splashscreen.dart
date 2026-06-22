@@ -3,7 +3,7 @@ import 'package:fripay/views/routes.dart' show RoutesNames;
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
-import '';
+
 import '../../controllers/init.dart' show interne_storage;
 import '../../gen/assets.gen.dart';
 import '../../gen/colors.gen.dart';
@@ -42,7 +42,7 @@ class _SplashscreenState extends State<Splashscreen> {
             Assets.images.logoFripaySvg.svg(height: 70, width: 70,fit: BoxFit.cover),
 
             Space.verticale(heigth: context.dy(10)),
-            Text("FrikPay",style: context.textStyle(
+            Text("FinanSend",style: context.textStyle(
               colour: Colors.black,fontSize: 25,fontWeight: FontWeight.w900
             ),),
             Space.verticale(heigth: context.dy(30)),

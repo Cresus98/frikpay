@@ -3,6 +3,7 @@ import 'package:fripay/views/pages/auth/connexion.dart';
 import 'package:fripay/views/pages/auth/inscription.dart';
 import 'package:fripay/views/pages/home/applications_list.dart';
 import 'package:fripay/views/pages/home/card_pages/add_card.dart';
+import 'package:fripay/views/pages/home/card_pages/add_card_stepper.dart';
 import 'package:fripay/views/pages/home/card_pages/make_card.dart';
 import 'package:fripay/views/pages/home/card_pages/secons_fr.dart';
 import 'package:fripay/views/pages/home/home.dart';
@@ -198,21 +199,41 @@ final appRoutes = GoRouter(
       ),
 
 
+      GoRoute(
+        name: RoutesNames.AddCarteStepper,
+        path: "/${RoutesNames.AddCarteStepper}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            child: const AddCardStepperPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const AddCardStepperPage(),
+      ),
     ]);
 
 
 
 
 class RoutesNames {
-  static String Splasch = "Splash";
-  static String Connexion = "Connexion";
-  static String Inscription = "Inscription";
-  static String Home = "Home";
-  static String Home1 = "Home1";
-  static String Home2 = "Home2";
-  static String Retrait = "Retrait";
-  static String Profil = "Profil";
-  static String AddCarte = "AddCartes";
-  static String Applications = "Applications";
-  static String Developpeurs = "Developpeurs";
+  static String Splasch         = "Splash";
+  static String Connexion       = "Connexion";
+  static String Inscription     = "Inscription";
+  static String Home            = "Home";
+  static String Home1           = "Home1";
+  static String Home2           = "Home2";
+  static String Retrait         = "Retrait";
+  static String Profil          = "Profil";
+  static String AddCarte        = "AddCartes";
+  static String AddCarteStepper = "AddCarteStepper";
+  static String Applications    = "Applications";
+  static String Developpeurs    = "Developpeurs";
 }

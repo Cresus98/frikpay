@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemChrome, DeviceOrientation;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_windowmanager_v2/flutter_windowmanager_v2.dart' show FlutterWindowManagerV2;
+import 'package:flutter_windowmanager_v2/flutter_windowmanager_v2.dart'
+    show FlutterWindowManagerV2;
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await FlutterWindowManagerV2.addFlags(FlutterWindowManagerV2.FLAG_SECURE);
   //await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const ProviderScope(child:
-  MyApp()
-    //QrCodeScreen()
-  ));
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+      //QrCodeScreen()
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,30 +31,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp.router
-        (
-        title: 'FinanfaSend',
-        debugShowCheckedModeBanner: false,
-        supportedLocales: const [
-          Locale('en'),
-          Locale('fr'),
-          Locale('tr'),
-        ],
-        localizationsDelegates: const [
-         // généré par gen-l10n
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        routerConfig: appRoutes,
-      )
-
+    return MaterialApp.router(
+      title: 'FinanfaSend',
+      debugShowCheckedModeBanner: false,
+      supportedLocales: const [Locale('en'), Locale('fr'), Locale('tr')],
+      localizationsDelegates: const [
+        // généré par gen-l10n
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      routerConfig: appRoutes,
+    )
     /*
       MaterialApp(
       title: 'Frikpay',
@@ -68,8 +64,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-
 
   final String title;
 

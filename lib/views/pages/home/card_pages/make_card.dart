@@ -89,7 +89,7 @@ class MyCardsPage extends StatelessWidget {
                   ),
                   fontWeight: FontWeight.w500,
                   onPressed: () {
-                    context.pushNamed(RoutesNames.Home1);
+                    context.pushNamed(RoutesNames.AddCarteStepper);
                   },
                 ),
               ),

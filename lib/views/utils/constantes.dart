@@ -16,9 +16,15 @@ const white = Color(0xFFFFFFFF);
 
 
 
-// Storage
-const String tokens="tokens";
-const String user="user";
+// Storage keys
+const String tokens = "tokens";
+const String user = "user";
+const String portefeuilles = "portefeuilles";
+const String ktes = "ktes";
+const String boutiks = "boutiks";
+const String cmpt = "cmpt";
+const String souscription = "souscription";
+const String devAccounts = "dev_accounts";
 
 
 
@@ -33,17 +39,19 @@ const designWidth = 393;
 const codeLength = 4;
 
 const appDefaultRadius = 8.0;
-final appBluePrimaryColor=Colors.blue.shade900;
+final appBluePrimaryColor = Colors.blue.shade900;
 
 /// REGEXP
 final allow_positiv = RegExp(r'^\d+(\.\d+)?$');
-final positive_value_regex=RegExp(r'^\d*\.?\d*$');
+final positive_value_regex = RegExp(r'^\d*\.?\d*$');
 final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$');
 
 /// api data
 
 
-const String frikpayBaseUrl="https://api.friklabel.com/";
+const String frikpayBaseUrl = "https://api.friklabel.com/";
+const String frikpayAuthBaseUrl = "https://api.friklabel.com/auth/";
+const String frikpayV1BaseUrl = "https://api.friklabel.com/";
 
 const  String header_code = "CODEX@123";
 const  String bearer_username = "flutter";
@@ -53,8 +61,8 @@ const  String bearer_password = "dvxhzdbppk-flutter";
 
 /// Files things
 
-const String succes="success";
-const String failed="success";
+const String succes = "success";
+const String failed = "failed";
 
-const int transitive=1000;
-const int reversetransitive=1000;
+const int transitive = 1000;
+const int reversetransitive = 1000;
