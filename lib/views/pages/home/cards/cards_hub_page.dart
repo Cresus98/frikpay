@@ -29,7 +29,7 @@ class CardsHubPage extends ConsumerWidget {
         title: Text(l10n.cards_title),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.pushNamed(RoutesNames.Home1),
+        onPressed: () => context.pushNamed(RoutesNames.AddCarteStepper),
         icon: const Icon(Icons.add_card_rounded),
         label: Text(l10n.add_card),
       ),

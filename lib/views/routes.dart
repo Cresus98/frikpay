@@ -5,6 +5,7 @@ import 'package:fripay/views/pages/auth/forgot_password.dart';
 import 'package:fripay/views/pages/auth/inscription.dart';
 import 'package:fripay/views/pages/home/applications_list.dart';
 import 'package:fripay/views/pages/home/card_pages/add_card.dart';
+import 'package:fripay/views/pages/home/card_pages/add_card_stepper.dart';
 import 'package:fripay/views/pages/home/card_pages/secons_fr.dart';
 import 'package:fripay/views/pages/home/cards/cards_hub_page.dart';
 import 'package:fripay/views/pages/home/encaissement/encaissement_form_page.dart';
@@ -254,6 +255,25 @@ final appRoutes = GoRouter(
         },
         builder: (context, state) => const CardsHubPage(),
       ),
+      GoRoute(
+        name: RoutesNames.AddCarteStepper,
+        path: "/${RoutesNames.AddCarteStepper}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            child: const AddCardStepperPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const AddCardStepperPage(),
+      ),
 
       GoRoute(
         name: RoutesNames.Home1,
@@ -370,6 +390,7 @@ class RoutesNames {
   static String Retrait = "Retrait";
   static String Profil = "Profil";
   static String AddCarte = "AddCartes";
+  static String AddCarteStepper = "AddCarteStepper";
   static String Applications = "Applications";
   static String Developpeurs = "Developpeurs";
   static String EncaissementForm = "EncaissementForm";
