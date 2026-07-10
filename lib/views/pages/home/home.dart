@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fripay/gen/assets.gen.dart';
 import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
-import 'package:fripay/views/utils/constantes.dart';
-import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
-import 'package:fripay/views/utils/globalwidget/general_scaffold.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/authview/authview.dart';
-
-
+import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -21,6 +15,8 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -32,178 +28,365 @@ class _HomeState extends ConsumerState<Home> {
         ? "${user.firstname} ${user.lastname}".trim()
         : (authState.account.isNotEmpty ? authState.account : "Utilisateur");
 
-    return GeneralScaffold(
-      content: LayoutBuilder(
-        builder: (context, constraints) {
-          final h = constraints.maxHeight;
-          final horizontal = 20.0;
-          final topPad = (h * 0.06).clamp(28.0, 72.0);
-          final bottomPad = (h * 0.06).clamp(24.0, 56.0);
-          final minChildHeight = (h - topPad - bottomPad).clamp(0.0, double.infinity);
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA), // Light background matching mockup
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Text(
+                'Bonjour $fullName',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Compte personnel',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 24),
 
-          return SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(horizontal, topPad, horizontal, bottomPad),
-            physics: const BouncingScrollPhysics(),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: minChildHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              // Balance Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF111827), // Dark navy/black
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Solde disponible',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      '125 000 FCFA',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Wallet FrikPay',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Action Buttons
+              Row(
                 children: [
-                  Center(
-                    child: Assets.images.logoFripaySvg.svg(
-                      height: 52,
-                      fit: BoxFit.contain,
-                      semanticsLabel: appName,
+                  Expanded(
+                    child: _ActionTile(
+                      icon: Icons.arrow_downward_rounded,
+                      label: l10n.encaisser,
+                      iconColor: Colors.blue.shade600,
+                      bgColor: Colors.blue.shade50,
+                      onTap: () => context.pushNamed(RoutesNames.Encaisser),
                     ),
                   ),
-                  SizedBox(height: (h * 0.03).clamp(14.0, 28.0)),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.waving_hand_rounded,
-                        color: scheme.secondary.withValues(alpha: 0.9),
-                        size: 32,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${l10n.home1} $fullName',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.2,
-                                  ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              l10n.home2,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: scheme.onSurface
-                                        .withValues(alpha: 0.64),
-                                    height: 1.5,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ActionTile(
+                      icon: Icons.arrow_upward_rounded,
+                      label: l10n.payer,
+                      iconColor: Colors.blue.shade600,
+                      bgColor: Colors.blue.shade50,
+                      onTap: () => context.pushNamed(RoutesNames.Payer),
+                    ),
                   ),
-                  SizedBox(height: (h * 0.05).clamp(20.0, 40.0)),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    childAspectRatio: 1.05,
-                    children: [
-                      _HomeTile(
-                        iconSvg: Assets.icones.homeEncaisser,
-                        label: l10n.encaisser,
-                        accent: const Color(0xFF059669),
-                        onTap: () => context.pushNamed(RoutesNames.Encaisser),
-                      ),
-                      _HomeTile(
-                        iconSvg: Assets.icones.transfer,
-                        label: l10n.payer,
-                        accent: scheme.primary,
-                        onTap: () => context.pushNamed(RoutesNames.Payer),
-                      ),
-                      _HomeTile(
-                        iconSvg: Assets.icones.homeCartes,
-                        label: l10n.home4,
-                        accent: const Color(0xFF6366F1),
-                        onTap: () => context.pushNamed(RoutesNames.AddCarte),
-                      ),
-                      _HomeTile(
-                        iconSvg: Assets.icones.profile,
-                        label: l10n.home,
-                        accent: const Color(0xFF7C3AED),
-                        onTap: () => context.pushNamed(RoutesNames.Profil),
-                      ),
-                    ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ActionTile(
+                      icon: Icons.square_rounded, 
+                      label: 'Carte',
+                      iconColor: Colors.blue.shade600,
+                      bgColor: Colors.blue.shade50,
+                      onTap: () => context.pushNamed(RoutesNames.AddCarte),
+                    ),
                   ),
                 ],
               ),
+              const SizedBox(height: 32),
+
+              // Recent Activity Title
+              const Text(
+                'Activité récente',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Recent Activity List
+              const _ActivityItem(
+                title: 'Paiement reçu',
+                subtitle: 'Réussi',
+                amount: '+15 000 FCFA',
+                isPositive: true,
+                isPending: false,
+                icon: Icons.add,
+              ),
+              const _ActivityItem(
+                title: 'Paiement marchand',
+                subtitle: 'Réussi',
+                amount: '-5 000 FCFA',
+                isPositive: false,
+                isPending: false,
+                icon: Icons.remove,
+              ),
+              const _ActivityItem(
+                title: 'Lien de paiement',
+                subtitle: 'En attente',
+                amount: '+2 500 FCFA',
+                isPositive: true,
+                isPending: true,
+                icon: Icons.add,
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade200,
+              width: 1.0,
             ),
-          );
-        },
+          ),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            if (index == 1) context.pushNamed(RoutesNames.Payer);
+            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
+            if (index == 3) context.pushNamed(RoutesNames.Profil);
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue.shade600,
+          unselectedItemColor: Colors.grey.shade500,
+          showUnselectedLabels: true,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.home_outlined),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.home),
+              ),
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.swap_horiz),
+              ),
+              label: 'Transactions',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.credit_card_outlined),
+              ),
+              label: 'Cartes',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.sentiment_satisfied_alt),
+              ),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _HomeTile extends StatelessWidget {
-  const _HomeTile({
-    required this.iconSvg,
+class _ActionTile extends StatelessWidget {
+  const _ActionTile({
+    required this.icon,
     required this.label,
-    required this.accent,
+    required this.iconColor,
+    required this.bgColor,
     required this.onTap,
   });
 
-  final SvgGenImage iconSvg;
+  final IconData icon;
   final String label;
-  final Color accent;
+  final Color iconColor;
+  final Color bgColor;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Clickable(
       onClick: onTap,
-      child: Material(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.55),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          side: BorderSide(color: scheme.outlineVariant),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                ),
-                child: iconSvg.svg(
-                  width: 30,
-                  height: 30,
-                  fit: BoxFit.contain,
-                  colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(12),
               ),
-              const Spacer(),
-              Text(
-                label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                    ),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: 24,
               ),
-              const SizedBox(height: 4),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 20,
-                color: scheme.onSurface.withValues(alpha: 0.38),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: Color(0xFF111827),
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActivityItem extends StatelessWidget {
+  const _ActivityItem({
+    required this.title,
+    required this.subtitle,
+    required this.amount,
+    required this.isPositive,
+    required this.isPending,
+    required this.icon,
+  });
+
+  final String title;
+  final String subtitle;
+  final String amount;
+  final bool isPositive;
+  final bool isPending;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    Color iconColor;
+    Color amountColor;
+    
+    if (isPending) {
+      iconColor = Colors.orange;
+      amountColor = Colors.orange;
+    } else if (isPositive) {
+      iconColor = Colors.green;
+      amountColor = Colors.green;
+    } else {
+      iconColor = Colors.red;
+      amountColor = Colors.red;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF3F4F6), // light grey
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 20,
+            ),
           ),
-        ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    color: Color(0xFF111827),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            amount,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+              color: amountColor,
+            ),
+          ),
+        ],
       ),
     );
   }

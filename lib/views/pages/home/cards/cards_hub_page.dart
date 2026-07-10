@@ -1,534 +1,364 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fripay/controllers/card_controller.dart';
-import 'package:fripay/l10n/app_localizations.dart';
-import 'package:fripay/models/card/card_model.dart';
 import 'package:fripay/theme/app_theme.dart';
-import 'package:fripay/views/pages/home/cards/card_actions.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CardsHubPage extends ConsumerWidget {
+class CardsHubPage extends ConsumerStatefulWidget {
   const CardsHubPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final scheme = Theme.of(context).colorScheme;
-    final cardState = ref.watch(cardControllerProvider);
-    final cards = cardState.cards;
-    final money = NumberFormat('#,###', 'fr_FR');
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(l10n.cards_title),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.pushNamed(RoutesNames.AddCarteStepper),
-        icon: const Icon(Icons.add_card_rounded),
-        label: Text(l10n.add_card),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
-            child: Row(
-              children: [
-                Icon(Icons.verified_user_outlined,
-                    size: 22, color: scheme.primary),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    l10n.cards_subtitle,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: scheme.onSurface.withValues(alpha: 0.7),
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: cards.isEmpty
-                ? Center(
-                    child: Text(
-                      'Aucune carte.\nAppuyez sur + pour en ajouter une.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: scheme.onSurface.withValues(alpha: 0.6),
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-                    itemCount: cards.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemBuilder: (context, i) {
-                      final c = cards[i];
-                      return _CardRow(
-                        card: c,
-                        money: money,
-                        scheme: scheme,
-                        allCards: cards,
-                        ref: ref,
-                      );
-                    },
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
+  ConsumerState<CardsHubPage> createState() => _CardsHubPageState();
 }
 
-class _CardRow extends StatelessWidget {
-  const _CardRow({
-    required this.card,
-    required this.money,
-    required this.scheme,
-    required this.allCards,
-    required this.ref,
-  });
-
-  final CardInfo card;
-  final NumberFormat money;
-  final ColorScheme scheme;
-  final List<CardInfo> allCards;
-  final WidgetRef ref;
+class _CardsHubPageState extends ConsumerState<CardsHubPage> {
+  int _currentIndex = 2; // "Cartes" active tab
 
   @override
   Widget build(BuildContext context) {
-    final c = card;
-    return Material(
-      color: scheme.surfaceContainerHighest.withValues(alpha: 0.7),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      child: InkWell(
-        onTap: () => showCardDetailsSheet(context, c),
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: scheme.primary.withValues(alpha: 0.12),
-                child: Icon(
-                  Icons.credit_card_rounded,
-                  color: scheme.primary,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Carte Bancaire · ${c.accountId}',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                    const SizedBox(height: 16),
+                    
+                    // Title
+                    const Text(
+                      'Cartes',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF111827),
+                      ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
+                    
+                    // Subtitle
                     Text(
-                      '${c.accountId} FCFA · '
-                      '${c.statusCarte == 'active' || c.statusCarte == '1' ? 'Active' : 'Désactivée'}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                scheme.onSurface.withValues(alpha: 0.65),
-                          ),
+                      'Créez et gérez vos cartes virtuelles\nsécurisées.',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey.shade600,
+                        height: 1.4,
+                      ),
                     ),
+                    const SizedBox(height: 32),
+                    
+                    // Main Card Display
+                    _buildMainCard(),
+                    
+                    const SizedBox(height: 32),
+                    
+                    // Action Buttons Row
+                    Row(
+                      children: [
+                        Expanded(child: _buildActionButton('Afficher', Icons.visibility_outlined)),
+                        const SizedBox(width: 12),
+                        Expanded(child: _buildActionButton('Bloquer', Icons.block_outlined)),
+                        const SizedBox(width: 12),
+                        Expanded(child: _buildActionButton('Recharger', Icons.add)),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // Autres cartes section
+                    const Text(
+                      'Autres cartes',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF111827),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    _buildOtherCardRow('Master USD', 'Actif'),
+                    const SizedBox(height: 16),
+                    _buildOtherCardRow('Visa EUR', 'Gelée'),
+                    
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
-              IconButton(
-                tooltip: 'Actions',
-                style: IconButton.styleFrom(
-                  foregroundColor: scheme.onSurface.withValues(alpha: 0.55),
-                ),
-                onPressed: () =>
-                    _showCardActionsSheet(context, ref, c, allCards),
-                icon: const Icon(Icons.more_horiz_rounded, size: 26),
-              ),
-            ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade200,
+              width: 1.0,
+            ),
           ),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            if (index == 0) context.pushNamed(RoutesNames.Home);
+            if (index == 1) context.pushNamed(RoutesNames.Payer);
+            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
+            if (index == 3) context.pushNamed(RoutesNames.Profil);
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue.shade600,
+          unselectedItemColor: Colors.grey.shade500,
+          showUnselectedLabels: true,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.home_outlined),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.home),
+              ),
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.swap_horiz),
+              ),
+              label: 'Transactions',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.credit_card_outlined),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.credit_card),
+              ),
+              label: 'Cartes',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Icon(Icons.sentiment_satisfied_alt),
+              ),
+              label: 'Profil',
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-Future<void> _showCardActionsSheet(
-  BuildContext context,
-  WidgetRef ref,
-  CardInfo c,
-  List<CardInfo> allCards,
-) async {
-  final scheme = Theme.of(context).colorScheme;
-  final money = NumberFormat('#,###', 'fr_FR');
-  final rootNav = Navigator.of(context);
-
-  void closeThen(Future<void> Function() fn) {
-    rootNav.pop();
-    Future.microtask(() async => fn());
-  }
-
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    barrierColor: Colors.black.withValues(alpha: 0.35),
-    builder: (sheetCtx) {
-      return SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 12,
-            right: 12,
-            bottom: MediaQuery.viewInsetsOf(sheetCtx).bottom + 8,
-          ),
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.sizeOf(sheetCtx).height * 0.78,
-            ),
-            decoration: BoxDecoration(
-              color: scheme.surface,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(20)),
-              border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.5)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 24,
-                  offset: const Offset(0, -4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: scheme.outlineVariant.withValues(alpha: 0.85),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: scheme.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(AppRadius.md),
-                        ),
-                        child: Icon(Icons.credit_card_rounded,
-                            color: scheme.primary, size: 28),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Carte Bancaire',
-                              style: Theme.of(sheetCtx).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              c.accountId,
-                              style: Theme.of(sheetCtx).textTheme.bodySmall?.copyWith(
-                                    fontFamily: 'monospace',
-                                    letterSpacing: 0.3,
-                                    color: scheme.onSurface.withValues(alpha: 0.65),
-                                  ),
-                            ),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 6,
-                              children: [
-                                _SheetChip(
-                                  icon: Icons.payments_outlined,
-                                  label:
-                                      '${c.accountId} FCFA',
-                                  scheme: scheme,
-                                ),
-                                _SheetChip(
-                                  icon: (c.statusCarte == 'active' || c.statusCarte == '1')
-                                      ? Icons.check_circle_outline_rounded
-                                      : Icons.pause_circle_outline_rounded,
-                                  label: (c.statusCarte == 'active' || c.statusCarte == '1') ? 'Active' : 'Désactivée',
-                                  scheme: scheme,
-                                  muted: !(c.statusCarte == 'active' || c.statusCarte == '1'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => rootNav.pop(),
-                        icon: Icon(Icons.close_rounded,
-                            color: scheme.onSurface.withValues(alpha: 0.45)),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 1,
-                  color: scheme.outlineVariant.withValues(alpha: 0.5),
-                ),
-                Flexible(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _SheetSectionLabel(
-                          scheme: scheme,
-                          label: 'Consulter',
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.info_outline_rounded,
-                          title: 'Détails',
-                          subtitle: 'Informations complètes de la carte',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showCardDetailsSheet(context, c)),
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.account_balance_wallet_outlined,
-                          title: 'Solde temps réel',
-                          subtitle: 'Interrogation simulée du solde',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showLiveBalanceDialog(context, ref, c)),
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.receipt_long_outlined,
-                          title: 'Transactions',
-                          subtitle: 'Historique et recherche (mock)',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showTransactionsSheet(context, ref, c)),
-                        ),
-                        const SizedBox(height: 6),
-                        _SheetSectionLabel(
-                          scheme: scheme,
-                          label: 'Opérations',
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.add_card_outlined,
-                          title: 'Recharger',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showRechargeSheet(context, ref, c)),
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.arrow_circle_down_outlined,
-                          title: 'Retrait',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showWithdrawSheet(context, ref, c)),
-                        ),
-                        _SheetActionRow(
-                          icon: Icons.swap_horiz_rounded,
-                          title: 'Transfert carte à carte',
-                          scheme: scheme,
-                          onTap: () => closeThen(
-                              () => showTransferSheet(context, ref, c, allCards)),
-                        ),
-                        const SizedBox(height: 6),
-                        _SheetSectionLabel(
-                          scheme: scheme,
-                          label: 'Statut',
-                        ),
-                        if (c.statusCarte == 'active' || c.statusCarte == '1')
-                          _SheetActionRow(
-                            icon: Icons.toggle_off_outlined,
-                            title: 'Désactiver la carte',
-                            subtitle: 'Blocage temporaire',
-                            scheme: scheme,
-                            onTap: () => closeThen(() =>
-                                showToggleActiveSheet(context, ref, c, false)),
-                          ),
-                        if (!(c.statusCarte == 'active' || c.statusCarte == '1'))
-                          _SheetActionRow(
-                            icon: Icons.toggle_on_outlined,
-                            title: 'Activer la carte',
-                            scheme: scheme,
-                            onTap: () => closeThen(() =>
-                                showToggleActiveSheet(context, ref, c, true)),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-
-class _SheetChip extends StatelessWidget {
-  const _SheetChip({
-    required this.icon,
-    required this.label,
-    required this.scheme,
-    this.muted = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final ColorScheme scheme;
-  final bool muted;
-
-  @override
-  Widget build(BuildContext context) {
-    final fg = muted
-        ? scheme.onSurface.withValues(alpha: 0.5)
-        : scheme.onSurface.withValues(alpha: 0.78);
+  Widget _buildMainCard() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      width: double.infinity,
+      height: 200,
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.6),
-        ),
+        color: const Color(0xFF111827),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Icon(icon, size: 16, color: fg),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: fg,
+          // Blue circle decoration clipping outside slightly
+          Positioned(
+            right: -20,
+            top: 40,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue.shade500,
+              ),
+            ),
+          ),
+          
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'VISA USD',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const Spacer(),
+                const Text(
+                  '****  ****  ****  1234',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'JOEL A.',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      '08/29',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
         ],
       ),
     );
   }
-}
 
-class _SheetSectionLabel extends StatelessWidget {
-  const _SheetSectionLabel({
-    required this.scheme,
-    required this.label,
-  });
-
-  final ColorScheme scheme;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
-      child: Text(
-        label.toUpperCase(),
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.9,
-          color: scheme.primary.withValues(alpha: 0.85),
-        ),
+  Widget _buildActionButton(String title, IconData icon) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent, // no background
+            ),
+            child: Icon(icon, color: Colors.blue.shade600, size: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF111827),
+            ),
+          ),
+        ],
       ),
     );
   }
-}
 
-class _SheetActionRow extends StatelessWidget {
-  const _SheetActionRow({
-    required this.icon,
-    required this.title,
-    required this.scheme,
-    required this.onTap,
-    this.subtitle,
-  });
-
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final ColorScheme scheme;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Material(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: scheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                  ),
-                  child: Icon(icon, color: scheme.primary, size: 22),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 3),
-                        Text(
-                          subtitle!,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: scheme.onSurface.withValues(alpha: 0.58),
-                                height: 1.25,
-                              ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: scheme.onSurface.withValues(alpha: 0.35),
-                ),
-              ],
-            ),
+  Widget _buildOtherCardRow(String title, String status) {
+    // Generate the icon matching the mockup
+    Widget customIcon = Center(
+      child: Container(
+        width: 14,
+        height: 14,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue.shade500, width: 2),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Center(
+          child: Container(
+            width: 4,
+            height: 4,
+            color: Colors.blue.shade500,
           ),
         ),
       ),
     );
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.01),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: customIcon,
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                status,
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
+
