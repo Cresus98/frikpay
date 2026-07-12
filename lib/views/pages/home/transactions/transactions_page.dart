@@ -54,43 +54,41 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-              child: Text(
-                'Transactions',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF111827),
-                ),
-              ),
-            ),
-            
-            // List of transactions
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                itemCount: _mockTransactions.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final transaction = _mockTransactions[index];
-                  return _buildTransactionItem(
-                    title: transaction['title'] as String,
-                    subtitle: transaction['subtitle'] as String,
-                    amount: transaction['amount'] as String,
-                    type: transaction['type'] as String,
-                  );
-                },
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8F9FA),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        titleSpacing: 24,
+        title: const Text(
+          'Transactions',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF111827),
+          ),
         ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // List of transactions
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+              itemCount: _mockTransactions.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final transaction = _mockTransactions[index];
+                return _buildTransactionItem(
+                  title: transaction['title'] as String,
+                  subtitle: transaction['subtitle'] as String,
+                  amount: transaction['amount'] as String,
+                  type: transaction['type'] as String,
+                );
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: AppBottomNavBar(currentIndex: _currentIndex),
     );

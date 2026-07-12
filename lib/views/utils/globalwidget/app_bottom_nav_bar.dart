@@ -25,16 +25,16 @@ class AppBottomNavBar extends StatelessWidget {
             if (index == currentIndex) return;
             switch (index) {
               case 0:
-                context.goNamed(RoutesNames.Home);
+                context.goNamed(RoutesNames.Home); // root → clears stack
                 break;
               case 1:
-                context.goNamed(RoutesNames.Transactions);
+                context.pushNamed(RoutesNames.Transactions);
                 break;
               case 2:
-                context.goNamed(RoutesNames.AddCarte);
+                context.pushNamed(RoutesNames.AddCarte);
                 break;
               case 3:
-                context.goNamed(RoutesNames.Profil);
+                context.pushNamed(RoutesNames.Profil);
                 break;
             }
           },

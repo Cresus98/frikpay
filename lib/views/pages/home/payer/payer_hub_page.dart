@@ -29,41 +29,46 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 24.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8F9FA),
+        elevation: 0,
+        titleSpacing: 24,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF111827)),
+          onPressed: () => context.pop(),
+        ),
+        title: Text(
+          l10n.payer_title,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF111827),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 16.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 4),
 
-                    // Title
-                    Text(
-                      l10n.payer_title,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF111827),
-                      ),
+                  // Subtitle
+                  Text(
+                    'Envoyez un paiement vers un numéro, QR,\nlien ou marchand.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey.shade600,
+                      height: 1.4,
                     ),
-                    const SizedBox(height: 8),
-
-                    // Subtitle
-                    Text(
-                      'Envoyez un paiement vers un numéro, QR,\nlien ou marchand.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey.shade600,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
+                  ),
+                  const SizedBox(height: 32),
 
                     // Montant Input / Display
                     Container(
@@ -223,78 +228,7 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: SafeArea(top: false,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              top: BorderSide(color: Colors.grey.shade200, width: 1.0),
-            ),
-          ),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-              if (index == 0) context.pushNamed(RoutesNames.Home);
-              if (index == 1) context.pushNamed(RoutesNames.Payer);
-              if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-              if (index == 3) context.pushNamed(RoutesNames.Profil);
-            },
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Colors.grey.shade500,
-            showUnselectedLabels: true,
-            selectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
-            elevation: 0,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.home_outlined),
-                ),
-                activeIcon: Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.home),
-                ),
-                label: 'Accueil',
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.swap_horiz),
-                ),
-                label: 'Transactions',
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.credit_card_outlined),
-                ),
-                label: 'Cartes',
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.sentiment_satisfied_alt),
-                ),
-                label: 'Profil',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+      );
   }
 
   Widget _buildMethodCard(String title) {

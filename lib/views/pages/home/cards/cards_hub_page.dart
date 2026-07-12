@@ -21,38 +21,43 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    
-                    // Title
-                    const Text(
-                      'Cartes',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF111827),
-                      ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8F9FA),
+        elevation: 0,
+        titleSpacing: 24,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF111827)),
+          onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'Cartes',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF111827),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 4),
+                  
+                  // Subtitle
+                  Text(
+                    'Créez et gérez vos cartes virtuelles\nsécurisées.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey.shade600,
+                      height: 1.4,
                     ),
-                    const SizedBox(height: 8),
-                    
-                    // Subtitle
-                    Text(
-                      'Créez et gérez vos cartes virtuelles\nsécurisées.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey.shade600,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
+                  ),
+                  const SizedBox(height: 32),
                     
                     // Main Card Display
                     _buildMainCard(),
@@ -104,9 +109,7 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 2),
-    );
+      );
   }
 
   Widget _buildMainCard() {

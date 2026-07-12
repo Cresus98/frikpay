@@ -6,6 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/globalwidget/app_bottom_nav_bar.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EncaissementListPage extends ConsumerStatefulWidget {
   const EncaissementListPage({super.key});
@@ -26,6 +31,8 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
   String? _phoneNumber;
   final String _initialCountry = 'BJ';
 
+  final ScreenshotController _screenshotController = ScreenshotController();
+
   @override
   void dispose() {
     _phoneController.dispose();
@@ -38,30 +45,35 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 16.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-
-                    // Title
-                    const Text(
-                      'Encaisser',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF111827),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8F9FA),
+        elevation: 0,
+        titleSpacing: 20,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF111827)),
+          onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'Encaisser',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF111827),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 16.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 4),
 
                     // Subtitle
                     Text(
@@ -165,17 +177,19 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_selectedMode == 'Demande directe') {
+                  onPressed: () async {
+                    if (_selectedMode == 'Demande directe' || _selectedMode == 'Demande') {
                       context.pushNamed(RoutesNames.EncaissementForm);
-                    } else {
-                      final message = _selectedMode == 'QR Code'
-                          ? 'QR Code partagé avec succès'
-                          : 'Lien copié/partagé avec succès';
-
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(message)));
+                    } else if (_selectedMode == 'QR Code') {
+                      final imageBytes = await _screenshotController.capture();
+                      if (imageBytes != null) {
+                        final directory = await getTemporaryDirectory();
+                        final imagePath = await File('${directory.path}/qr_code.png').create();
+                        await imagePath.writeAsBytes(imageBytes);
+                        await Share.shareXFiles([XFile(imagePath.path)], text: 'Mon QR Code de paiement FrikPay');
+                      }
+                    } else if (_selectedMode == 'Lien') {
+                      await Share.share('https://frikpay.com/pay/req-12345');
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -202,30 +216,31 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
-    );
+      );
   }
 
   Widget _buildDynamicContent() {
     if (_selectedMode == 'QR Code') {
       return Center(
-        child: Container(
-          width: 180,
-          height: 180,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
+        child: Screenshot(
+          controller: _screenshotController,
+          child: Container(
+            width: 180,
+            height: 180,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: const _MockQrCode(),
           ),
-          child: const _MockQrCode(),
         ),
       );
     } else if (_selectedMode == 'Lien') {
@@ -270,10 +285,20 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Icon(
-                      Icons.copy_rounded,
-                      size: 18,
-                      color: Colors.grey.shade500,
+                    GestureDetector(
+                      onTap: () async {
+                        await Clipboard.setData(const ClipboardData(text: 'https://frikpay.com/pay/req-12345'));
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Lien copié avec succès.')),
+                          );
+                        }
+                      },
+                      child: Icon(
+                        Icons.copy_rounded,
+                        size: 18,
+                        color: Colors.grey.shade500,
+                      ),
                     ),
                   ],
                 ),
