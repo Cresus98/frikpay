@@ -143,7 +143,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 prefixIcon: Icons.alternate_email_rounded,
                                 onClick: () {},
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value?.isEmpty ?? true) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -161,7 +161,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 prefixIcon: Icons.badge_outlined,
                                 onClick: () {},
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value?.isEmpty ?? true) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -179,7 +179,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 prefixIcon: Icons.person_outline_rounded,
                                 onClick: () {},
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value?.isEmpty ?? true) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -197,47 +197,19 @@ class _InscriptionState extends ConsumerState<Inscription> {
                           ),
                         ),
                         Container(
-                          //height: 55,
-                          padding: const EdgeInsets.only(left: 3),
                           margin: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 8),
-                          child: Stack(
-                            alignment: Alignment.topLeft,
-                            children: [
-                              Positioned.fill(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 105,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: ColorName.webBlack,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                            AppRadius.sm),
-                                      ),
-                                    ),
-                                    Space.horizontale(width: 12),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: ColorName.webBlack,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                              AppRadius.sm),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                    
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6),
-                                child: InternationalPhoneNumberInput(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEEEEEE).withOpacity(0.35),
+                            borderRadius: BorderRadius.circular(AppRadius.sm),
+                            border: Border.all(
+                              color: const Color(0xFFCBD5E1),
+                              width: 1,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 6),
+                            child: InternationalPhoneNumberInput(
                                   onInputChanged: (PhoneNumber number) {
                                     phoneNumber = number;
                                   },
@@ -272,7 +244,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                         color: Colors.grey.shade500, fontSize: 16),
                                   ),
                                   onSaved: (PhoneNumber number) {
-                                    phone_numero = number.phoneNumber!;
+                                    phone_numero = number.phoneNumber ?? '';
                                   },
                                   initialValue: phoneNumber,
                                   errorMessage: "Numéro invalide ",
@@ -292,11 +264,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                   ),
                                 ),
                               ),
-                    
-                            ],
-                          ),
-                          //),
-                        ),
+                         ),
                         Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -308,7 +276,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 prefixIcon: Icons.mail_outline_rounded,
                                 onClick: () {},
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value?.isEmpty ?? true) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -353,7 +321,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                                 prefixIcon: Icons.business_outlined,
                                 onClick: () {},
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value?.isEmpty ?? true) {
                                     return AppLocalizations.of(context)!.error;
                                   }
                                   return null;
@@ -399,7 +367,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
                             labelText: AppLocalizations.of(context)!.register7,
                             backgroundClr: Theme.of(context).colorScheme.primary,
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fixedSized: const Size(350, 50),
+                            fixedSized: Size(MediaQuery.of(context).size.width * 0.85, 50),
                             size: 16,
                             circle: AppRadius.sm,
                             buttonSide: BorderSide(
@@ -462,7 +430,7 @@ class _InscriptionState extends ConsumerState<Inscription> {
         lastname: prenom.text,
         email: email.text,
         country: phoneNumber.dialCode != null
-            ? phoneNumber.dialCode!.substring(1)
+            ? phoneNumber.dialCode?.substring(1) ?? ''
             : "",
         telephone: numero.text, login: pseudo.text,
          company: company.text,
@@ -478,122 +446,3 @@ class _InscriptionState extends ConsumerState<Inscription> {
   }
 }
 
-
-
-
-
-
-
-
-class RegistrationScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes back arrow
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '9:44 AM', // Mock time
-              style: TextStyle(fontSize: 16, color: Colors.black87),
-            ),
-            Row(
-              children: [
-                Icon(Icons.signal_wifi_4_bar, size: 16, color: Colors.black87),
-                SizedBox(width: 4),
-                Icon(Icons.battery_full, size: 16, color: Colors.black87),
-                Text('100%', style: TextStyle(fontSize: 16, color: Colors.black87)),
-              ],
-            ),
-          ],
-        ),
-        backgroundColor: Colors.grey[200], // Mimics the light grey background
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Inscription',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'L\'inscription est faite une seule fois vous ne \nferez plus avant de vous connecter',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Nom',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Prénoms',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Numéro de Téléphone',
-                prefixText: '+229 ',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.phone,
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Région/département',
-                border: OutlineInputBorder(),
-              ),
-              items: <String>['Atacora', 'Atlantique', 'Borgou', 'Collines'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (_) {},
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Ville/Commune',
-                border: OutlineInputBorder(),
-              ),
-              items: <String>['Porto-Novo', 'Cotonou', 'Parakou', 'Abomey'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (_) {},
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  //primary: Colors.blue,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text(
-                  'Suivre',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

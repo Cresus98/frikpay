@@ -1,3 +1,4 @@
+import 'package:fripay/appservices/apiservices/apireponse.dart';
 import 'package:fripay/config/app_config.dart';
 import 'package:fripay/controllers/init.dart';
 import 'package:fripay/models/payment_record.dart';
@@ -21,11 +22,11 @@ class PayerDashboard {
 abstract class PayerRepository {
   Future<PayerDashboard> load();
 
-  Future<PaymentRecord> createPayment({
-    required String method,
-    required String phone,
-    required double amount,
-  });
+  Future<ApiReponse> createPayment(
+    Map<String, dynamic> formData,
+    String token,
+    Map<String, dynamic> headers,
+  );
 
   static PayerRepository createDefault() {
     return AppConfig.useMockBackend ? MockPayerRepository() : RemotePayerRepository();
@@ -68,12 +69,15 @@ class MockPayerRepository implements PayerRepository {
   }
 
   @override
-  Future<PaymentRecord> createPayment({
-    required String method,
-    required String phone,
-    required double amount,
-  }) async {
+  Future<ApiReponse> createPayment(
+    Map<String, dynamic> formData,
+    String token,
+    Map<String, dynamic> headers,
+  ) async {
     await Future<void>.delayed(const Duration(milliseconds: 250));
+    final method = formData['method'] as String? ?? '';
+    final phone = formData['phone'] as String? ?? '';
+    final amount = (formData['amount'] as num?)?.toDouble() ?? 0;
     final p = PaymentRecord(
       id: 'pay-${DateTime.now().millisecondsSinceEpoch}',
       method: method,
@@ -83,7 +87,7 @@ class MockPayerRepository implements PayerRepository {
     );
     _payments.insert(0, p);
     _soldeDisponible = (_soldeDisponible - amount).clamp(0, double.infinity);
-    return p;
+    return ApiReponse(status: true, data: p);
   }
 }
 
@@ -104,11 +108,13 @@ class RemotePayerRepository implements PayerRepository {
   }
 
   @override
-  Future<PaymentRecord> createPayment({
-    required String method,
-    required String phone,
-    required double amount,
-  }) async {
-    throw UnimplementedError('API paiements : implémenter createPayment()');
+  Future<ApiReponse> createPayment(Map<String, dynamic> formData, String token, Map<String, dynamic> headers) async {
+    if (AppConfig.useMockBackend) {
+      return ApiReponse(
+        status: false,
+        message: "Cette fonctionnalité n'est pas encore disponible.",
+      );
+    }
+    throw UnimplementedError();
   }
 }

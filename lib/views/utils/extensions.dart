@@ -46,7 +46,7 @@ extension onContext on BuildContext
     double? height,
     Color? colour,
   }) {
-    return textTheme.bodyMedium!.copyWith(
+    return (textTheme.bodyMedium ?? const TextStyle()).copyWith(
       decoration: decoration,
       fontFamily: fontFamily,
       fontWeight: fontWeight,
@@ -68,7 +68,7 @@ extension onContext on BuildContext
     double? height,
     Color? colour,
   }) {
-    return textTheme.headlineLarge!.copyWith(
+    return (textTheme.headlineLarge ?? const TextStyle()).copyWith(
       decoration: decoration,
       fontWeight: fontWeight,
       fontStyle: fontStyle,

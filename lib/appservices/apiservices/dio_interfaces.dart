@@ -15,7 +15,6 @@ abstract class HttpServices {
     Map<String, dynamic>? params,
   });
 
-  //Future<bool> dispatch({
   Future<ApiReponse> dispatch({
     required Future<ApiReponse> httpRequest,
     ApiReponseCallBack? onPositiveResponse,

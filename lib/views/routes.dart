@@ -3,19 +3,19 @@ import 'package:fripay/views/pages/auth/activate_compte.dart';
 import 'package:fripay/views/pages/auth/connexion.dart';
 import 'package:fripay/views/pages/auth/forgot_password.dart';
 import 'package:fripay/views/pages/auth/inscription.dart';
-import 'package:fripay/views/pages/home/applications_list.dart';
-import 'package:fripay/views/pages/home/card_pages/add_card.dart';
 import 'package:fripay/views/pages/home/card_pages/add_card_stepper.dart';
-import 'package:fripay/views/pages/home/card_pages/secons_fr.dart';
 import 'package:fripay/views/pages/home/cards/cards_hub_page.dart';
 import 'package:fripay/views/pages/home/encaissement/encaissement_form_page.dart';
 import 'package:fripay/views/pages/home/encaissement/encaissement_list_page.dart';
 import 'package:fripay/views/pages/home/home.dart';
 import 'package:fripay/views/pages/home/payer/payer_form_page.dart';
 import 'package:fripay/views/pages/home/payer/payer_hub_page.dart';
+import 'package:fripay/views/pages/home/payer/payer_qr_page.dart';
+import 'package:fripay/views/pages/home/payer/payer_link_page.dart';
+import 'package:fripay/views/pages/home/payer/payer_merchant_page.dart';
 import 'package:fripay/views/pages/home/profile/profile.dart';
-import 'package:fripay/views/pages/home/dev_accounts_page.dart';
 import 'package:fripay/views/pages/home/retrait_page.dart';
+import 'package:fripay/views/pages/home/transactions/transactions_page.dart';
 import 'package:fripay/views/pages/splashscreen.dart' show Splashscreen;
 import 'package:fripay/views/utils/constantes.dart';
 import 'package:go_router/go_router.dart';
@@ -218,6 +218,60 @@ final appRoutes = GoRouter(
         builder: (context, state) => const PayerFormPage(),
       ),
       GoRoute(
+        name: RoutesNames.PayerQR,
+        path: "/${RoutesNames.PayerQR}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            child: const PayerQrPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const PayerQrPage(),
+      ),
+      GoRoute(
+        name: RoutesNames.PayerLink,
+        path: "/${RoutesNames.PayerLink}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            child: const PayerLinkPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const PayerLinkPage(),
+      ),
+      GoRoute(
+        name: RoutesNames.PayerMerchant,
+        path: "/${RoutesNames.PayerMerchant}",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: const Duration(milliseconds: transitive),
+            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
+            child: const PayerMerchantPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                FadeTransition(
+              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              child: child,
+            ),
+          );
+        },
+        builder: (context, state) => const PayerMerchantPage(),
+      ),
+      GoRoute(
         name: RoutesNames.Retrait,
         path: "/${RoutesNames.Retrait}",
         pageBuilder: (context, state) {
@@ -276,44 +330,6 @@ final appRoutes = GoRouter(
       ),
 
       GoRoute(
-        name: RoutesNames.Home1,
-        path: "/${RoutesNames.Home1}",
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: AddCardPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
-              child: child,
-            ),
-          );
-        },
-        builder: (context, state) =>  AddCardPage(),
-      ),
-      GoRoute(
-        name: RoutesNames.Home2,
-        path: "/${RoutesNames.Home2}",
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: HomeScreen(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
-              child: child,
-            ),
-          );
-        },
-        builder: (context, state) =>  HomeScreen(),
-      ),
-      GoRoute(
         name: RoutesNames.Profil,
         path: "/${RoutesNames.Profil}",
         pageBuilder: (context, state) {
@@ -330,17 +346,17 @@ final appRoutes = GoRouter(
             ),
           );
         },
-        builder: (context, state) =>  ProfileScreen(),
+        builder: (context, state) => ProfileScreen(),
       ),
       GoRoute(
-        name: RoutesNames.Applications,
-        path: "/${RoutesNames.Applications}",
+        name: RoutesNames.Transactions,
+        path: "/${RoutesNames.Transactions}",
         pageBuilder: (context, state) {
           return CustomTransitionPage(
             key: state.pageKey,
             transitionDuration: const Duration(milliseconds: transitive),
             reverseTransitionDuration: const Duration(milliseconds: reversetransitive),
-            child: AnimatedListPage(),
+            child: const TransactionsPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) =>
                     FadeTransition(
@@ -349,28 +365,7 @@ final appRoutes = GoRouter(
             ),
           );
         },
-        builder: (context, state) =>  AnimatedListPage(),
-      ),
-      GoRoute(
-        name: RoutesNames.DevAccounts,
-        path: "/${RoutesNames.DevAccounts}",
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(milliseconds: transitive),
-            reverseTransitionDuration:
-                const Duration(milliseconds: reversetransitive),
-            child: const DevAccountsPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: CurvedAnimation(
-                  parent: animation, curve: Curves.easeOut),
-              child: child,
-            ),
-          );
-        },
-        builder: (context, state) => const DevAccountsPage(),
+        builder: (context, state) => const TransactionsPage(),
       ),
     ]);
 
@@ -385,16 +380,15 @@ class RoutesNames {
   static String Home = "Home";
   static String Encaisser = "Encaissement";
   static String Payer = "Paiement";
-  static String Home1 = "Home1";
-  static String Home2 = "Home2";
   static String Retrait = "Retrait";
   static String Profil = "Profil";
   static String AddCarte = "AddCartes";
   static String AddCarteStepper = "AddCarteStepper";
-  static String Applications = "Applications";
-  static String Developpeurs = "Developpeurs";
   static String EncaissementForm = "EncaissementForm";
   static String PayerForm = "PayerForm";
-  static String DevAccounts = "DevAccounts";
   static String Activate = "Activate";
+  static String PayerQR = "PayerQR";
+  static String PayerLink = "PayerLink";
+  static String PayerMerchant = "PayerMerchant";
+  static String Transactions = "Transactions";
 }

@@ -187,4 +187,139 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wntdisconect => ' Are you sure you want to log out? ';
+
+  @override
+  String get home_title => 'Dashboard';
+
+  @override
+  String get home_solde => 'Balance';
+
+  @override
+  String get home_recharge => 'Top Up';
+
+  @override
+  String get home_retrait => 'Withdraw';
+
+  @override
+  String get home_historique => 'History';
+
+  @override
+  String get home_transactions_recentes => 'Recent Transactions';
+
+  @override
+  String get home_aucune_transaction => 'No transactions';
+
+  @override
+  String get home_voir_tout => 'See all';
+
+  @override
+  String get cards_ajouter => 'Add a card';
+
+  @override
+  String get cards_aucune_carte => 'No cards';
+
+  @override
+  String get cards_solde => 'Card balance';
+
+  @override
+  String get cards_details => 'Details';
+
+  @override
+  String get cards_activer => 'Activate';
+
+  @override
+  String get cards_desactiver => 'Deactivate';
+
+  @override
+  String get cards_recharger => 'Top up';
+
+  @override
+  String get cards_retirer => 'Withdraw';
+
+  @override
+  String get cards_voir_details => 'View details';
+
+  @override
+  String get payer_title => 'Pay';
+
+  @override
+  String get payer_choisir_service => 'Choose a service';
+
+  @override
+  String get payer_choisir_operateur => 'Choose an operator';
+
+  @override
+  String get payer_montant => 'Amount';
+
+  @override
+  String get payer_numero => 'Number';
+
+  @override
+  String get payer_confirmer => 'Confirm';
+
+  @override
+  String get payer_annuler => 'Cancel';
+
+  @override
+  String get encaissement_title => 'Collections';
+
+  @override
+  String get encaissement_aucun => 'No collections';
+
+  @override
+  String get encaissement_details => 'Details';
+
+  @override
+  String get encaissement_montant => 'Amount';
+
+  @override
+  String get encaissement_date => 'Date';
+
+  @override
+  String get encaissement_statut => 'Status';
+
+  @override
+  String get encaissement_voir_tout => 'See all';
+
+  @override
+  String get profile_title => 'Profile';
+
+  @override
+  String get profile_nom => 'Name';
+
+  @override
+  String get profile_email => 'E-mail';
+
+  @override
+  String get profile_telephone => 'Phone';
+
+  @override
+  String get profile_deconnecter => 'Logout';
+
+  @override
+  String get profile_parametres => 'Settings';
+
+  @override
+  String get profile_a_propos => 'About';
+
+  @override
+  String get common_chargement => 'Loading...';
+
+  @override
+  String get commonErreur => 'An error occurred';
+
+  @override
+  String get common_reessayer => 'Retry';
+
+  @override
+  String get common_annuler => 'Cancel';
+
+  @override
+  String get common_confirmer => 'Confirm';
+
+  @override
+  String get common_succes => 'Success';
+
+  @override
+  String get common_echec => 'Failure';
 }

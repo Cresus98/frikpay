@@ -1,3 +1,4 @@
+import 'package:fripay/appservices/apiservices/apireponse.dart';
 import 'package:fripay/config/app_config.dart';
 import 'package:fripay/models/encaissement_entry.dart';
 
@@ -6,11 +7,11 @@ abstract class EncaissementRepository {
   Future<List<EncaissementEntry>> list();
 
   /// Crée une demande d’encaissement (statut initial géré par l’implémentation).
-  Future<EncaissementEntry> create({
-    required String method,
-    required String phone,
-    String? extraNote,
-  });
+  Future<ApiReponse> create(
+    Map<String, dynamic> formData,
+    String token,
+    Map<String, dynamic> headers,
+  );
 
   static EncaissementRepository createDefault() {
     return AppConfig.useMockBackend
@@ -38,12 +39,14 @@ class MockEncaissementRepository implements EncaissementRepository {
   }
 
   @override
-  Future<EncaissementEntry> create({
-    required String method,
-    required String phone,
-    String? extraNote,
-  }) async {
+  Future<ApiReponse> create(
+    Map<String, dynamic> formData,
+    String token,
+    Map<String, dynamic> headers,
+  ) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
+    final method = formData['method'] as String? ?? '';
+    final phone = formData['phone'] as String? ?? '';
     final e = EncaissementEntry(
       id: 'enc-${DateTime.now().millisecondsSinceEpoch}',
       method: method,
@@ -52,7 +55,7 @@ class MockEncaissementRepository implements EncaissementRepository {
       status: EncaissementStatus.enCours,
     );
     _items.insert(0, e);
-    return e;
+    return ApiReponse(status: true, data: e);
   }
 }
 
@@ -65,14 +68,13 @@ class RemoteEncaissementRepository implements EncaissementRepository {
   }
 
   @override
-  Future<EncaissementEntry> create({
-    required String method,
-    required String phone,
-    String? extraNote,
-  }) async {
-    // TODO: POST …/encaissements
-    throw UnimplementedError(
-      'API encaissements : implémenter create() dans RemoteEncaissementRepository',
-    );
+  Future<ApiReponse> create(Map<String, dynamic> formData, String token, Map<String, dynamic> headers) async {
+    if (AppConfig.useMockBackend) {
+      return ApiReponse(
+        status: false,
+        message: "Cette fonctionnalité n'est pas encore disponible.",
+      );
+    }
+    throw UnimplementedError();
   }
 }

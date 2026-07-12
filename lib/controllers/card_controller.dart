@@ -4,31 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../views/utils/constantes.dart';
+import '../../config/api_config.dart';
 import '../appservices/apiservices/apireponse.dart';
 import '../appservices/apiservices/dio_implements.dart';
 import '../models/card/card_model.dart';
 import 'init.dart';
+import '../views/utils/constantes.dart';
 
 part 'card_controller.g.dart';
 part 'card_controller.freezed.dart';
 
 @riverpod
 class CardController extends _$CardController {
-  // ─── URLs (corrigées d'après Postman) ──────────────────────────────────────
-  static const String url_create               = "v1/card/create";
-  static const String url_load                 = "v1/card/load";
-  static const String url_withdrawal_init      = "v1/card/withdrawalInit";
-  static const String url_withdrawal_validate  = "v1/card/withdrawalSet";
-  static const String url_transfer_init        = "v1/card/TransferToCardInit";
-  static const String url_transfer_validate    = "v1/card/TransferToCardSet";
-  static const String url_transactions         = "v1/card/TransactionsList";
-  static const String url_infos                = "v1/card/infos";
-  static const String url_pci                  = "v1/card/cardPCIData";
-  static const String url_balance              = "v1/card/balance";
-  static const String url_activate             = "v1/card/activation";
-  static const String url_deactivate           = "v1/card/desactivation";
-
   @override
   CardState build() => const CardState();
 
@@ -36,7 +23,7 @@ class CardController extends _$CardController {
 
   Map<String, String> get _authHeaders => {
     "Authorization":
-        'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
+        ApiConfig.basicAuthHeader,
   };
 
   // ─── CREATE CARD ───────────────────────────────────────────────────────────
@@ -93,9 +80,9 @@ class CardController extends _$CardController {
           "piece": await MultipartFile.fromFile(piece.path, filename: "piece.jpg"),
       });
 
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_create,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardCreate,
           payload: formData,
           headers: _authHeaders,
           method: "POST",
@@ -105,9 +92,9 @@ class CardController extends _$CardController {
           update(createdCardId: response.data["data"]?.toString() ?? "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
+      update(loading: false, success: reponse.status, msg: reponse.message);
       await Future.delayed(const Duration(milliseconds: 300));
-      return reponse.status!;
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la création de la carte");
       return false;
@@ -125,9 +112,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Recharge de la carte en cours....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_load,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardLoad,
           payload: {
             "carteId": carteId,
             "amount": amount,
@@ -140,9 +127,9 @@ class CardController extends _$CardController {
         ),
         onPositiveResponse: (response) {},
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
+      update(loading: false, success: reponse.status, msg: reponse.message);
       await Future.delayed(const Duration(milliseconds: 300));
-      return reponse.status!;
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la recharge");
       return false;
@@ -161,9 +148,9 @@ class CardController extends _$CardController {
     update(loading: true, msg: "Initiation du retrait en cours....");
     try {
       String? withdrawalId;
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_withdrawal_init,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardWithdrawalInit,
           payload: {
             "carteId": carteId,
             "amount": amount,
@@ -180,9 +167,9 @@ class CardController extends _$CardController {
           update(pendingWithdrawalId: withdrawalId ?? "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
+      update(loading: false, success: reponse.status, msg: reponse.message);
       await Future.delayed(const Duration(milliseconds: 300));
-      return reponse.status! ? withdrawalId : null;
+      return reponse.status ? withdrawalId : null;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de l'initiation du retrait");
       return null;
@@ -198,9 +185,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Validation du retrait en cours....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_withdrawal_validate,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardWithdrawalValidate,
           payload: {
             "id": withdrawalId,
             "code": code,
@@ -213,8 +200,8 @@ class CardController extends _$CardController {
           update(pendingWithdrawalId: "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la validation du retrait");
       return false;
@@ -236,9 +223,9 @@ class CardController extends _$CardController {
     update(loading: true, msg: "Initiation du transfert en cours....");
     try {
       String? transferId;
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_transfer_init,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardTransferInit,
           payload: {
             "fromCarteId": fromCarteId,
             "toCarteId": toCarteId,
@@ -254,8 +241,8 @@ class CardController extends _$CardController {
           update(pendingTransferId: transferId ?? "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status! ? transferId : null;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status ? transferId : null;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de l'initiation du transfert");
       return null;
@@ -271,9 +258,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Validation du transfert en cours....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_transfer_validate,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardTransferValidate,
           payload: {
             "id": transferId,
             "code": code,
@@ -286,8 +273,8 @@ class CardController extends _$CardController {
           update(pendingTransferId: "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la validation du transfert");
       return false;
@@ -308,9 +295,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Chargement des transactions....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_transactions,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardTransactions,
           payload: {
             "carteId": carteId,
             "date": date,
@@ -329,8 +316,8 @@ class CardController extends _$CardController {
           }
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors du chargement des transactions");
       return false;
@@ -351,9 +338,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Chargement des infos de la carte....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_infos,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardInfos,
           payload: {
             "carteId": carteId,
             "app_key": appKey,
@@ -369,8 +356,8 @@ class CardController extends _$CardController {
           }
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors du chargement des infos");
       return false;
@@ -384,9 +371,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Chargement de vos cartes....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_infos, // Assuming infos returns all if carteId is empty
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardInfos, // Assuming infos returns all if carteId is empty
           payload: {
             "carteId": "",
             "app_key": appKey,
@@ -404,8 +391,8 @@ class CardController extends _$CardController {
           }
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors du chargement de la liste des cartes");
       return false;
@@ -423,9 +410,9 @@ class CardController extends _$CardController {
     update(loading: true, msg: "Génération du lien PCI en cours....");
     try {
       String? pciUrl;
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_pci,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardPci,
           payload: {
             "carteId": carteId,
             "app_key": appKey,
@@ -438,8 +425,8 @@ class CardController extends _$CardController {
           update(pciUrl: pciUrl ?? "");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status! ? pciUrl : null;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status ? pciUrl : null;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la génération PCI");
       return null;
@@ -455,9 +442,9 @@ class CardController extends _$CardController {
     update(loading: true, msg: "Consultation du solde....");
     try {
       String? balance;
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_balance,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardBalance,
           payload: {
             "carteId": carteId,
             "app_key": appKey,
@@ -470,8 +457,8 @@ class CardController extends _$CardController {
           update(cardBalance: balance ?? "0");
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status! ? balance : null;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status ? balance : null;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la consultation du solde");
       return null;
@@ -488,9 +475,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Activation de la carte en cours....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_activate,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardActivate,
           payload: {
             "carteId": carteId,
             "app_key": appKey,
@@ -500,8 +487,8 @@ class CardController extends _$CardController {
         ),
         onPositiveResponse: (response) {},
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de l'activation");
       return false;
@@ -518,9 +505,9 @@ class CardController extends _$CardController {
   }) async {
     update(loading: true, msg: "Désactivation de la carte en cours....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_deactivate,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.cardDeactivate,
           payload: {
             "carteId": carteId,
             "app_key": appKey,
@@ -530,8 +517,8 @@ class CardController extends _$CardController {
         ),
         onPositiveResponse: (response) {},
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
-      return reponse.status!;
+      update(loading: false, success: reponse.status, msg: reponse.message);
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la désactivation");
       return false;

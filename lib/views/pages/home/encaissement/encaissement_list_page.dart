@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../utils/globalwidget/app_bottom_nav_bar.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class EncaissementListPage extends ConsumerStatefulWidget {
@@ -20,20 +22,23 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
   // For Demande form
   String _selectedNetwork = 'MTN';
   final _phoneController = TextEditingController();
+  final _amountController = TextEditingController(text: '15000');
   String? _phoneNumber;
   final String _initialCountry = 'BJ';
 
   @override
   void dispose() {
     _phoneController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
+      body: SafeArea(bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -85,20 +90,31 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Montant',
+                            l10n.encaissement_montant,
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey.shade500,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            '15 000 FCFA',
-                            style: TextStyle(
+                          TextFormField(
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF111827),
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(vertical: 4),
+                              suffixText: 'FCFA',
+                              suffixStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF111827),
+                              ),
                             ),
                           ),
                         ],
@@ -150,18 +166,20 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () {
-                    final message = _selectedMode == 'QR Code'
-                        ? 'QR Code partagé avec succès'
-                        : _selectedMode == 'Lien'
-                        ? 'Lien copié/partagé avec succès'
-                        : 'Demande envoyée avec succès';
+                    if (_selectedMode == 'Demande directe') {
+                      context.pushNamed(RoutesNames.EncaissementForm);
+                    } else {
+                      final message = _selectedMode == 'QR Code'
+                          ? 'QR Code partagé avec succès'
+                          : 'Lien copié/partagé avec succès';
 
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(message)));
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(message)));
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade500,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -185,74 +203,7 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(color: Colors.grey.shade200, width: 1.0),
-          ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            if (index == 0) context.pushNamed(RoutesNames.Home);
-            if (index == 1) context.pushNamed(RoutesNames.Payer);
-            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-            if (index == 3) context.pushNamed(RoutesNames.Profil);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue.shade600,
-          unselectedItemColor: Colors.grey.shade500,
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-          ),
-          elevation: 0,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home_outlined),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home),
-              ),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.swap_horiz),
-              ),
-              label: 'Transactions',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.credit_card_outlined),
-              ),
-              label: 'Cartes',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.sentiment_satisfied_alt),
-              ),
-              label: 'Profil',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 
@@ -289,7 +240,7 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
           ),
           child: Column(
             children: [
-              Icon(Icons.link_rounded, size: 40, color: Colors.blue.shade500),
+              Icon(Icons.link_rounded, size: 40, color: Theme.of(context).colorScheme.primary),
               const SizedBox(height: 12),
               const Text(
                 'Lien de paiement généré',
@@ -468,10 +419,10 @@ class _EncaissementListPageState extends ConsumerState<EncaissementListPage> {
         padding: const EdgeInsets.symmetric(vertical: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.shade500 : Colors.white,
+          color: isSelected ? Theme.of(context).colorScheme.primary : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Colors.blue.shade500 : Colors.grey.shade300,
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300,
             width: 1,
           ),
         ),
@@ -558,3 +509,4 @@ class _MockQrCode extends StatelessWidget {
     );
   }
 }
+

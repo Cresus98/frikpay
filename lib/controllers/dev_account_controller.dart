@@ -2,19 +2,18 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../views/utils/constantes.dart';
+import '../../config/api_config.dart';
 import '../appservices/apiservices/apireponse.dart';
 import '../appservices/apiservices/dio_implements.dart';
 import '../models/dev_account/dev_account.dart';
 import 'init.dart';
+import '../views/utils/constantes.dart';
 
 part 'dev_account_controller.g.dart';
 part 'dev_account_controller.freezed.dart';
 
 @riverpod
 class DevAccountController extends _$DevAccountController {
-  static const String url_account_list = "v1/account/list";
-  static const String url_account_add = "v1/account/add";
 
   @override
   DevAccountState build() {
@@ -28,15 +27,15 @@ class DevAccountController extends _$DevAccountController {
   Future<bool> fetchAccounts() async {
     update(loading: true, msg: "Chargement des comptes en cours ....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_account_list,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.accountList,
           payload: {
             "token": _token,
           },
           headers: {
             "Authorization":
-                'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
+                ApiConfig.basicAuthHeader,
           },
           method: "POST",
         ),
@@ -51,9 +50,9 @@ class DevAccountController extends _$DevAccountController {
           }
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
+      update(loading: false, success: reponse.status, msg: reponse.message);
       await Future.delayed(const Duration(milliseconds: 300));
-      return reponse.status!;
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors du chargement");
       return false;
@@ -65,16 +64,16 @@ class DevAccountController extends _$DevAccountController {
   Future<bool> addAccount({required String name}) async {
     update(loading: true, msg: "Création du compte en cours ....");
     try {
-      ApiReponse reponse = await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
-          requestEndpoint: url_account_add,
+      ApiReponse reponse = await DioServices(baseUrl: ApiConfig.baseUrl).dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: ApiConfig.accountAdd,
           payload: {
             "token": _token,
             "name": name,
           },
           headers: {
             "Authorization":
-                'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
+                ApiConfig.basicAuthHeader,
           },
           method: "POST",
         ),
@@ -83,9 +82,9 @@ class DevAccountController extends _$DevAccountController {
           await fetchAccounts();
         },
       );
-      update(loading: false, success: reponse.status!, msg: reponse.message);
+      update(loading: false, success: reponse.status, msg: reponse.message);
       await Future.delayed(const Duration(milliseconds: 300));
-      return reponse.status!;
+      return reponse.status;
     } catch (e) {
       update(loading: false, success: false, msg: "Erreur lors de la création");
       return false;

@@ -151,7 +151,7 @@ password.dispose();
                           width: 50,
                           child: TextFormField(
                             validator: (value) {
-                              if(value!.isEmpty)
+                              if(value?.isEmpty ?? true)
                               {
                                 return '';
                               }
@@ -194,7 +194,7 @@ password.dispose();
                           : Icons.visibility,
                       label: AppLocalizations.of(context)!.login2,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value?.isEmpty ?? true) {
                           return AppLocalizations.of(context)!.error;
                         }
                         return null;
@@ -319,10 +319,10 @@ password.dispose();
       duration: const Duration(milliseconds: 300),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: isValid ? Colors.green.shade50 : Colors.white,
+        color: isValid ? const Color(0xFFE3F2FD) : Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isValid ? Colors.green.shade300 : Colors.grey.shade300,
+          color: isValid ? const Color(0xFF2196F3) : Colors.grey.shade300,
           width: isValid ? 1.5 : 1,
         ),
       ),
@@ -333,10 +333,10 @@ password.dispose();
             width: 20,
             height: 20,
             decoration: BoxDecoration(
-              color: isValid ? Colors.green.shade600 : Colors.transparent,
+              color: isValid ? const Color(0xFF2196F3) : Colors.transparent,
               shape: BoxShape.circle,
               border: Border.all(
-                color: isValid ? Colors.green.shade600 : Colors.grey.shade400,
+                color: isValid ? const Color(0xFF2196F3) : Colors.grey.shade400,
                 width: 2,
               ),
             ),
@@ -351,7 +351,7 @@ password.dispose();
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: isValid ? FontWeight.w600 : FontWeight.w500,
-                color: isValid ? Colors.green.shade700 : Colors.grey.shade700,
+                color: isValid ? const Color(0xFF2196F3) : Colors.grey.shade700,
               ),
             ),
           ),

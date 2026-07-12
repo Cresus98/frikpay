@@ -13,6 +13,7 @@ import '../../../../gen/colors.gen.dart';
 import '../../../utils/globalwidget/buttons/bigbutton.dart';
 import '../../../utils/globalwidget/dialogs.dart';
 import '../../../utils/globalwidget/space.dart';
+import '../../../utils/globalwidget/app_bottom_nav_bar.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -39,6 +40,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authviewProvider);
     final user = authState.user;
 
@@ -52,121 +54,101 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 24.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 16),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 250,
+            pinned: true,
+            backgroundColor: const Color(0xFFF8F9FA),
+            elevation: 0,
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                var top = constraints.biggest.height;
+                var minExt = MediaQuery.of(context).padding.top + kToolbarHeight;
+                var maxExt = 250.0;
+                var ratio = (top - minExt) / (maxExt - minExt);
+                ratio = ratio.clamp(0.0, 1.0);
 
-                    // Profile Header
-                    _buildProfileHeader(fullName, emailDisplay),
-
-                    const SizedBox(height: 32),
-
-                    // Balance & KYC Cards
-                    Row(
+                return FlexibleSpaceBar(
+                  centerTitle: true,
+                  titlePadding: const EdgeInsets.only(bottom: 16),
+                  title: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 150),
+                    opacity: ratio < 0.3 ? 1.0 : 0.0,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(
-                          child: _buildInfoCard(
-                            "Balance",
-                            "\$12,450",
-                            Icons.account_balance_wallet_outlined,
-                            isLoading: _isLoading,
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: "",
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(strokeWidth: 2),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset(Assets.icones.avatar.path, fit: BoxFit.cover),
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildInfoCard(
-                            "KYC",
-                            "Verified",
-                            Icons.verified_user_outlined,
+                        const SizedBox(width: 8),
+                        Text(
+                          fullName,
+                          style: const TextStyle(
+                            color: Color(0xFF111827),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: 32),
-
-                    // Options Group
-                    _buildOptionsGroup([
-                      _buildOptionTile(
-                        icon: Icons.receipt_long_rounded,
-                        title:
-                            AppLocalizations.of(context)?.operations_title ??
-                            "Opérations",
-                        onTap: () =>
-                            context.pushNamed(RoutesNames.Applications),
-                      ),
-                      _buildDivider(),
-                      _buildExpandableOptionTile(
-                        icon: Icons.settings_outlined,
-                        title: "Paramètres",
-                        isExpanded: _showSettingsOptions,
-                        onTap: () => setState(
-                          () => _showSettingsOptions = !_showSettingsOptions,
-                        ),
-                        children: [
-                          _buildSubOption("Changer mot de passe"),
-                          _buildSubOption("Préférences de langue"),
-                          _buildSubOption("Notifications"),
-                        ],
-                      ),
-                      _buildDivider(),
-                      _buildOptionTile(
-                        icon: Icons.code_rounded,
-                        title: "Comptes développeurs (Dev)",
-                        onTap: () => context.pushNamed(RoutesNames.DevAccounts),
-                      ),
-                      _buildDivider(),
-                      _buildExpandableOptionTile(
-                        icon: Icons.security_outlined,
-                        title: "Sécurité",
-                        isExpanded: _showSecurityOptions,
-                        onTap: () => setState(
-                          () => _showSecurityOptions = !_showSecurityOptions,
-                        ),
-                        children: [
-                          _buildSubOption("Authentification 2FA"),
-                          _buildSubOption("Appareils connectés"),
-                        ],
-                      ),
-                      _buildDivider(),
-                      _buildOptionTile(
-                        icon: Icons.help_outline,
-                        title: "Support",
-                        onTap: () {},
-                      ),
-                    ]),
-
-                    const SizedBox(height: 24),
-
-                    // Logout Button
-                    _buildOptionsGroup([
-                      _buildOptionTile(
-                        icon: Icons.logout_rounded,
-                        title: "Déconnexion",
-                        isLogout: true,
-                        onTap: () => _sedeconnecter(context),
-                      ),
-                    ]),
-
-                    const SizedBox(height: 40),
-                  ],
-                ),
-              ),
+                  ),
+                  background: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: MediaQuery.of(context).padding.top),
+                      _buildProfileHeader(fullName, emailDisplay),
+                    ],
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                const SizedBox(height: 24),
+
+                _buildMockupOptionTile(
+                  title: "Notifications",
+                  onTap: () {},
+                ),
+                _buildMockupOptionTile(
+                  title: "Support",
+                  onTap: () {},
+                ),
+                _buildMockupOptionTile(
+                  title: "À propos de FrikPay",
+                  onTap: () {},
+                ),
+                _buildMockupOptionTile(
+                  title: "Déconnexion",
+                  isLogout: true,
+                  onTap: () => _sedeconnecter(context),
+                ),
+
+                const SizedBox(height: 40),
+              ]),
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 3),
     );
   }
 
@@ -209,7 +191,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   height: 32,
                   width: 32,
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade600,
+                    color: Theme.of(context).colorScheme.primary,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: const Color(0xFFF8F9FA),
@@ -267,7 +249,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.blue.shade500, size: 24),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(height: 12),
           isLoading
               ? Shimmer.fromColors(
@@ -329,7 +311,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     required VoidCallback onTap,
   }) {
     final color = isLogout ? Colors.red.shade600 : const Color(0xFF111827);
-    final iconColor = isLogout ? Colors.red.shade500 : Colors.blue.shade500;
+    final iconColor = isLogout ? Colors.red.shade500 : Theme.of(context).colorScheme.primary;
 
     return InkWell(
       onTap: onTap,
@@ -341,7 +323,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isLogout ? Colors.red.shade50 : Colors.blue.shade50,
+                color: isLogout ? Colors.red.shade50 : Theme.of(context).colorScheme.primary.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: iconColor, size: 20),
@@ -387,10 +369,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(icon, color: Colors.blue.shade500, size: 20),
+                  child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -460,85 +442,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 68, right: 20),
       child: Divider(height: 1, color: Colors.grey.shade100),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade200, width: 1.0),
-        ),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          if (index == 0) context.pushNamed(RoutesNames.Home);
-          if (index == 1) context.pushNamed(RoutesNames.Payer);
-          if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-          if (index == 3) context.pushNamed(RoutesNames.Profil);
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue.shade600,
-        unselectedItemColor: Colors.grey.shade500,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-        ),
-        elevation: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.home_outlined),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.home),
-            ),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.swap_horiz),
-            ),
-            label: 'Transactions',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.credit_card_outlined),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.credit_card),
-            ),
-            label: 'Cartes',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.sentiment_satisfied_alt),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.sentiment_satisfied),
-            ),
-            label: 'Profil',
-          ),
-        ],
-      ),
     );
   }
 
@@ -651,4 +554,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       ),
     );
   }
+
+  Widget _buildMockupOptionTile({
+    required String title,
+    bool isLogout = false,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+            color: isLogout ? Colors.red.shade600 : const Color(0xFF111827),
+          ),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Colors.grey.shade400,
+          size: 20,
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
 }
+

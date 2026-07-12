@@ -47,12 +47,12 @@ import 'app_localizations_tr.dart';
 ///
 /// iOS applications define key application metadata, including supported
 /// locales, in an Info.plist file that is built into the application bundle.
-/// To configure the locales supported by your app, you’ll need to edit this
+/// To configure the locales supported by your app, you'll need to edit this
 /// file.
 ///
-/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// First, open your project's ios/Runner.xcworkspace Xcode workspace file.
 /// Then, in the Project Navigator, open the Info.plist file under the Runner
-/// project’s Runner folder.
+/// project's Runner folder.
 ///
 /// Next, select the Information Property List item, select Add Item from the
 /// Editor menu, then select Localizations from the pop-up menu.
@@ -456,6 +456,141 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' Are you sure you want to log out? '**
   String get wntdisconect;
+
+  /// Home page strings
+  String get home_title;
+
+  /// Home page strings
+  String get home_solde;
+
+  /// Home page strings
+  String get home_recharge;
+
+  /// Home page strings
+  String get home_retrait;
+
+  /// Home page strings
+  String get home_historique;
+
+  /// Home page strings
+  String get home_transactions_recentes;
+
+  /// Home page strings
+  String get home_aucune_transaction;
+
+  /// Home page strings
+  String get home_voir_tout;
+
+  /// Card page strings
+  String get cards_ajouter;
+
+  /// Card page strings
+  String get cards_aucune_carte;
+
+  /// Card page strings
+  String get cards_solde;
+
+  /// Card page strings
+  String get cards_details;
+
+  /// Card page strings
+  String get cards_activer;
+
+  /// Card page strings
+  String get cards_desactiver;
+
+  /// Card page strings
+  String get cards_recharger;
+
+  /// Card page strings
+  String get cards_retirer;
+
+  /// Card page strings
+  String get cards_voir_details;
+
+  /// Payer page strings
+  String get payer_title;
+
+  /// Payer page strings
+  String get payer_choisir_service;
+
+  /// Payer page strings
+  String get payer_choisir_operateur;
+
+  /// Payer page strings
+  String get payer_montant;
+
+  /// Payer page strings
+  String get payer_numero;
+
+  /// Payer page strings
+  String get payer_confirmer;
+
+  /// Payer page strings
+  String get payer_annuler;
+
+  /// Encaissement page strings
+  String get encaissement_title;
+
+  /// Encaissement page strings
+  String get encaissement_aucun;
+
+  /// Encaissement page strings
+  String get encaissement_details;
+
+  /// Encaissement page strings
+  String get encaissement_montant;
+
+  /// Encaissement page strings
+  String get encaissement_date;
+
+  /// Encaissement page strings
+  String get encaissement_statut;
+
+  /// Encaissement page strings
+  String get encaissement_voir_tout;
+
+  /// Profile page strings
+  String get profile_title;
+
+  /// Profile page strings
+  String get profile_nom;
+
+  /// Profile page strings
+  String get profile_email;
+
+  /// Profile page strings
+  String get profile_telephone;
+
+  /// Profile page strings
+  String get profile_deconnecter;
+
+  /// Profile page strings
+  String get profile_parametres;
+
+  /// Profile page strings
+  String get profile_a_propos;
+
+  /// Common strings
+  String get common_chargement;
+
+  /// Common strings
+  String get commonErreur;
+
+  /// Common strings
+  String get common_reessayer;
+
+  /// Common strings
+  String get common_annuler;
+
+  /// Common strings
+  String get common_confirmer;
+
+  /// Common strings
+  String get common_succes;
+
+  /// Common strings
+  String get common_echec;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

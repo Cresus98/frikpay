@@ -1,9 +1,6 @@
-import 'package:dio/dio.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:fripay/views/utils/globalwidget/buttons/bigbutton.dart';
 import 'package:fripay/views/utils/globalwidget/space.dart' show Space;
@@ -12,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import '../../../controllers/authview/authview.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
-import '../../routes.dart';
 import 'animations.dart' show Animations;
 
 openDialogBox(BuildContext context,String title,  Widget content) {
@@ -25,340 +21,6 @@ openDialogBox(BuildContext context,String title,  Widget content) {
     context: context,
     pageBuilder: (context, animation, secondaryAnimation) => content,
   );
-}
-
-class RequestButton extends StatelessWidget {
-  const RequestButton({super.key});
-
-  Future<void> makeRequest(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: SpinKitCircle(color: Colors.blue),
-        );
-      },
-    );
-
-    try {
-      final response =
-          await Dio().request('https://jsonplaceholder.typicode.com/posts/1');
-
-      Navigator.of(context).pop(); // Close the loading dialog
-
-      if (response.statusCode == 200) {
-        // Show success dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SuccessDialog();
-          },
-        );
-      } else {
-        // Show error dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return ErrorDialog();
-          },
-        );
-      }
-    } catch (e) {
-      Navigator.of(context).pop(); // Close the loading dialog
-
-      // Show error dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return ErrorDialog();
-        },
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => makeRequest(context),
-      child: Text('Make Request'),
-    );
-  }
-}
-
-class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.check_circle, color: Colors.green, size: 50),
-          SizedBox(height: 10),
-          Text('Success!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Text('The operation was completed successfully.'),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('OK'),
-        ),
-      ],
-    );
-  }
-}
-
-class ErrorDialog extends StatelessWidget {
-  const ErrorDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.error, color: Colors.red, size: 50),
-          SizedBox(height: 10),
-          Text('Error!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Text('Something went wrong. Please try again.'),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('OK'),
-        ),
-      ],
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-//class MyAppTest extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Custom Animated AlertDialog'),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () => showCustomDialog(context, true),
-            child: Text('Show Success Dialog'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void showCustomDialog(BuildContext context, bool isSuccess) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CustomAnimatedDialog(
-          isSuccess: isSuccess,
-          onConfirm: () {
-            print("Yes tapped");
-            Navigator.of(context).pop();
-          },
-          onCancel: () {
-            print("No tapped");
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
-}
-
-class CustomAnimatedDialog extends StatefulWidget {
-  final bool isSuccess;
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
-
-  const CustomAnimatedDialog({
-    super.key,
-    required this.isSuccess,
-    required this.onConfirm,
-    required this.onCancel,
-  });
-
-  @override
-  _CustomAnimatedDialogState createState() => _CustomAnimatedDialogState();
-}
-
-class _CustomAnimatedDialogState extends State<CustomAnimatedDialog>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 5000),
-    );
-    _scaleAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.bounceInOut,
-    );
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(widget.isSuccess ? 'Success' : 'Error'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              widget.isSuccess ? Icons.check_circle : Icons.error,
-              color: widget.isSuccess ? Colors.green : Colors.red,
-              size: 60,
-            ),
-            SizedBox(height: 10),
-            Text(widget.isSuccess
-                ? 'The operation was successful!'
-                : 'An error occurred.'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: widget.onCancel,
-            child: Text('No'),
-          ),
-          TextButton(
-            onPressed: widget.onConfirm,
-            child: Text('Yes'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyAppTest extends StatelessWidget {
-  const MyAppTest({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Animated Success Dialog'),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () => showAnimatedDialog(context),
-            child: Text('Show Save Alert'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void showAnimatedDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => SaveAlertDialog(),
-    );
-  }
-}
-
-class SaveAlertDialog extends StatefulWidget {
-  const SaveAlertDialog({super.key});
-
-  @override
-  _SaveAlertDialogState createState() => _SaveAlertDialogState();
-}
-
-class _SaveAlertDialogState extends State<SaveAlertDialog>
-    with SingleTickerProviderStateMixin {
-  bool _isSuccess = false;
-  late AnimationController _controller;
-  late Animation<double> _iconScale;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _iconScale = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.bounceOut,
-      ),
-    );
-
-    // Simulate a network request
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isSuccess = true;
-      });
-      _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      content: SizedBox(
-        height: 150,
-        child: Center(
-          child: _isSuccess
-              ? ScaleTransition(
-                  scale: _iconScale,
-                  child: const Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 100,
-                  ),
-                )
-              : const CircularProgressIndicator(),
-        ),
-      ),
-      actions: [
-        if (_isSuccess)
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('OK'),
-          ),
-      ],
-    );
-  }
 }
 
 // a cause de loading mis dans le riverpod au fait les action du loading fera en fonction du model view
@@ -475,7 +137,7 @@ class _CustomAlertDialogState extends ConsumerState<CustomAlertDialog>
             Text(succes? "Succes":"Echec",
                 textAlign: TextAlign.center,
                 style: context.textStyle(
-                    colour: succes?Colors.green:ColorName.red,
+                    colour: succes ? const Color(0xFF2196F3) : ColorName.red,
                     fontWeight: FontWeight.w800, fontSize: 15)),
             Space.verticale(heigth: 10),
             Text(msg,
@@ -625,7 +287,7 @@ class _CustomAlertDialogNewState extends ConsumerState<CustomAlertDialogNew>
             Text(succes? "Succes":"Echec",
                 textAlign: TextAlign.center,
                 style: context.textStyle(
-                  colour: succes?Colors.green:ColorName.red,
+                  colour: succes ? const Color(0xFF0F74A9) : ColorName.red,
                     fontWeight: FontWeight.w800, fontSize: 15)),
             Space.verticale(heigth: 10),
             //Text("Connexion en cours ....")
@@ -738,7 +400,7 @@ class _CustomLoadingDataState extends ConsumerState<CustomLoadingData>
                 scale: _iconScale,
                 child: const Icon(
                   Icons.check,
-                  color: Colors.green,
+                  color: const Color(0xFF2196F3),
                   size: 100,
                 ),
               )
@@ -836,7 +498,7 @@ class _CustomAlertDialogWalletState extends ConsumerState<CustomAlertDialogWalle
                 scale: _iconScale,
                 child: const Icon(
                   Icons.check,
-                  color: Colors.green,
+                  color: Color(0xFF2196F3),
                   size: 100,
                 ),
               )
@@ -948,7 +610,7 @@ class _CustomSuccesDialogState extends ConsumerState<CustomSuccesDialog>
                       scale: _iconScale,
                       child: const Icon(
                         Icons.check,
-                        color: Colors.green,
+                        color: Color(0xFF2196F3),
                         size: 100,
                       ),
                     )

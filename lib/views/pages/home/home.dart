@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/authview/authview.dart';
 import 'package:fripay/views/utils/globalwidget/buttons/clickable.dart';
+import '../../utils/globalwidget/app_bottom_nav_bar.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -30,7 +31,7 @@ class _HomeState extends ConsumerState<Home> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA), // Light background matching mockup
-      body: SafeArea(
+      body: SafeArea(bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
           child: Column(
@@ -174,70 +175,7 @@ class _HomeState extends ConsumerState<Home> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey.shade200,
-              width: 1.0,
-            ),
-          ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            if (index == 1) context.pushNamed(RoutesNames.Payer);
-            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-            if (index == 3) context.pushNamed(RoutesNames.Profil);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue.shade600,
-          unselectedItemColor: Colors.grey.shade500,
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-          elevation: 0,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home_outlined),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home),
-              ),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.swap_horiz),
-              ),
-              label: 'Transactions',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.credit_card_outlined),
-              ),
-              label: 'Cartes',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.sentiment_satisfied_alt),
-              ),
-              label: 'Profil',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 }
@@ -330,8 +268,8 @@ class _ActivityItem extends StatelessWidget {
       iconColor = Colors.orange;
       amountColor = Colors.orange;
     } else if (isPositive) {
-      iconColor = Colors.green;
-      amountColor = Colors.green;
+      iconColor = const Color(0xFF2196F3);
+      amountColor = const Color(0xFF2196F3);
     } else {
       iconColor = Colors.red;
       amountColor = Colors.red;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -15,12 +16,20 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
   int _currentIndex = 1; // "Transactions" (Payer)
   String _selectedMethod = 'QR';
   String _selectedNetwork = 'MTN';
+  final _amountController = TextEditingController(text: '5000');
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
+      body: SafeArea(bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -35,8 +44,8 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
                     const SizedBox(height: 16),
 
                     // Title
-                    const Text(
-                      'Payer',
+                    Text(
+                      l10n.payer_title,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w800,
@@ -79,13 +88,24 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            '5 000 FCFA',
-                            style: TextStyle(
+                          TextFormField(
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF111827),
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(vertical: 4),
+                              suffixText: 'FCFA',
+                              suffixStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF111827),
+                              ),
                             ),
                           ),
                         ],
@@ -176,10 +196,18 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Action Continuer
+                    if (_selectedMethod == 'QR') {
+                      context.pushNamed(RoutesNames.PayerQR);
+                    } else if (_selectedMethod == 'Numéro') {
+                      context.pushNamed(RoutesNames.PayerForm);
+                    } else if (_selectedMethod == 'Lien') {
+                      context.pushNamed(RoutesNames.PayerLink);
+                    } else if (_selectedMethod == 'Marchand') {
+                      context.pushNamed(RoutesNames.PayerMerchant);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade500,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -196,72 +224,74 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(color: Colors.grey.shade200, width: 1.0),
+      bottomNavigationBar: SafeArea(top: false,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              top: BorderSide(color: Colors.grey.shade200, width: 1.0),
+            ),
           ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            if (index == 0) context.pushNamed(RoutesNames.Home);
-            if (index == 1) context.pushNamed(RoutesNames.Payer);
-            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-            if (index == 3) context.pushNamed(RoutesNames.Profil);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue.shade600,
-          unselectedItemColor: Colors.grey.shade500,
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+              if (index == 0) context.pushNamed(RoutesNames.Home);
+              if (index == 1) context.pushNamed(RoutesNames.Payer);
+              if (index == 2) context.pushNamed(RoutesNames.AddCarte);
+              if (index == 3) context.pushNamed(RoutesNames.Profil);
+            },
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            selectedItemColor: Theme.of(context).colorScheme.primary,
+            unselectedItemColor: Colors.grey.shade500,
+            showUnselectedLabels: true,
+            selectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+            elevation: 0,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.home_outlined),
+                ),
+                activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.home),
+                ),
+                label: 'Accueil',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.swap_horiz),
+                ),
+                label: 'Transactions',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.credit_card_outlined),
+                ),
+                label: 'Cartes',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.sentiment_satisfied_alt),
+                ),
+                label: 'Profil',
+              ),
+            ],
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-          ),
-          elevation: 0,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home_outlined),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home),
-              ),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.swap_horiz),
-              ),
-              label: 'Transactions',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.credit_card_outlined),
-              ),
-              label: 'Cartes',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.sentiment_satisfied_alt),
-              ),
-              label: 'Profil',
-            ),
-          ],
         ),
       ),
     );
@@ -277,7 +307,7 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w900,
-          color: isSelected ? Colors.blue.shade500 : const Color(0xFF111827),
+          color: isSelected ? Theme.of(context).colorScheme.primary : const Color(0xFF111827),
         ),
       );
     } else if (title == 'Numéro') {
@@ -286,20 +316,20 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w900,
-          color: isSelected ? Colors.blue.shade500 : const Color(0xFF111827),
+          color: isSelected ? Theme.of(context).colorScheme.primary : const Color(0xFF111827),
         ),
       );
     } else if (title == 'QR') {
       iconWidget = Icon(
         Icons.grid_on_rounded,
-        color: isSelected ? Colors.blue.shade500 : const Color(0xFF111827),
+        color: isSelected ? Theme.of(context).colorScheme.primary : const Color(0xFF111827),
         size: 20,
       );
     } else {
       // Lien
       iconWidget = Icon(
         Icons.bolt_rounded,
-        color: isSelected ? Colors.blue.shade500 : const Color(0xFF111827),
+        color: isSelected ? Theme.of(context).colorScheme.primary : const Color(0xFF111827),
         size: 22,
       );
     }
@@ -315,11 +345,11 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.blue.shade50.withOpacity(0.3)
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.08)
               : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? Colors.blue.shade500 : Colors.grey.shade200,
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade200,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -384,3 +414,4 @@ class _PayerHubPageState extends ConsumerState<PayerHubPage> {
     );
   }
 }
+

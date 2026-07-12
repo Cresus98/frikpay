@@ -12,7 +12,6 @@ abstract final class Env {
 
   static String get frikpayBaseUrl => const String.fromEnvironment(
         'FRIKPAY_BASE_URL',
-        defaultValue: 'https://api.friklabel.com/',
       );
 
   static String get headerCode => const String.fromEnvironment(
@@ -22,16 +21,13 @@ abstract final class Env {
 
   static String get bearerUsername => const String.fromEnvironment(
         'FRIKPAY_BEARER_USER',
-        defaultValue: 'flutter',
       );
 
   static String get bearerUsernameReset => const String.fromEnvironment(
         'FRIKPAY_BEARER_USER_RESET',
-        defaultValue: 'web',
       );
 
   static String get bearerPassword => const String.fromEnvironment(
         'FRIKPAY_BEARER_PASSWORD',
-        defaultValue: 'dvxhzdbppk-flutter',
       );
 }

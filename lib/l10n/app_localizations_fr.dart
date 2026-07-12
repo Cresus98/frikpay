@@ -33,7 +33,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get register7 => 'S\'inscrire';
 
   @override
-  String get register8 => 'L’inscription est faite une seule fois vous ne le ferez plus avant de vous connecter';
+  String get register8 => "L'inscription est faite une seule fois vous ne le ferez plus avant de vous connecter";
 
   @override
   String get activation => 'Activation de votre compte';
@@ -60,7 +60,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get home1 => 'Bienvenue,';
 
   @override
-  String get home2 => 'Bienvenue dans le service qu’il vous faut. Faites vos transactions en toute sécurité';
+  String get home2 => "Bienvenue dans le service qu'il vous faut. Faites vos transactions en toute sécurité";
 
   @override
   String get home3 => 'Encaisser';
@@ -123,7 +123,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgot_title => 'Mot de passe oublié';
 
   @override
-  String get forgot_hint => 'Entrez l’e-mail lié à votre compte. En mode démo, aucun e-mail n’est envoyé.';
+  String get forgot_hint => "Entrez l'e-mail lié à votre compte. En mode démo, aucun e-mail n'est envoyé.";
 
   @override
   String get forgot_send => 'Envoyer le lien';
@@ -177,14 +177,149 @@ class AppLocalizationsFr extends AppLocalizations {
   String get txn_mtn => 'MTN Mobile Money';
 
   @override
-  String get txn_demo => 'Démonstration : aucun paiement réel n’est effectué.';
+  String get txn_demo => "Démonstration : aucun paiement réel n'est effectué.";
 
   @override
-  String get txn_confirm_encaissement => 'Valider l’encaissement';
+  String get txn_confirm_encaissement => "Valider l'encaissement";
 
   @override
   String get txn_confirm_paiement => 'Confirmer le paiement';
 
   @override
   String get wntdisconect => 'Souhaitez vous vraiment vous déconnecter?';
+
+  @override
+  String get home_title => 'Tableau de bord';
+
+  @override
+  String get home_solde => 'Solde';
+
+  @override
+  String get home_recharge => 'Recharger';
+
+  @override
+  String get home_retrait => 'Retirer';
+
+  @override
+  String get home_historique => 'Historique';
+
+  @override
+  String get home_transactions_recentes => 'Transactions récentes';
+
+  @override
+  String get home_aucune_transaction => 'Aucune transaction';
+
+  @override
+  String get home_voir_tout => 'Voir tout';
+
+  @override
+  String get cards_ajouter => 'Ajouter une carte';
+
+  @override
+  String get cards_aucune_carte => 'Aucune carte';
+
+  @override
+  String get cards_solde => 'Solde de la carte';
+
+  @override
+  String get cards_details => 'Détails';
+
+  @override
+  String get cards_activer => 'Activer';
+
+  @override
+  String get cards_desactiver => 'Désactiver';
+
+  @override
+  String get cards_recharger => 'Recharger';
+
+  @override
+  String get cards_retirer => 'Retirer';
+
+  @override
+  String get cards_voir_details => 'Voir les détails';
+
+  @override
+  String get payer_title => 'Payer';
+
+  @override
+  String get payer_choisir_service => 'Choisir un service';
+
+  @override
+  String get payer_choisir_operateur => 'Choisir un opérateur';
+
+  @override
+  String get payer_montant => 'Montant';
+
+  @override
+  String get payer_numero => 'Numéro';
+
+  @override
+  String get payer_confirmer => 'Confirmer';
+
+  @override
+  String get payer_annuler => 'Annuler';
+
+  @override
+  String get encaissement_title => 'Encaissements';
+
+  @override
+  String get encaissement_aucun => 'Aucun encaissement';
+
+  @override
+  String get encaissement_details => 'Détails';
+
+  @override
+  String get encaissement_montant => 'Montant';
+
+  @override
+  String get encaissement_date => 'Date';
+
+  @override
+  String get encaissement_statut => 'Statut';
+
+  @override
+  String get encaissement_voir_tout => 'Voir tout';
+
+  @override
+  String get profile_title => 'Profil';
+
+  @override
+  String get profile_nom => 'Nom';
+
+  @override
+  String get profile_email => 'E-mail';
+
+  @override
+  String get profile_telephone => 'Téléphone';
+
+  @override
+  String get profile_deconnecter => 'Déconnexion';
+
+  @override
+  String get profile_parametres => 'Paramètres';
+
+  @override
+  String get profile_a_propos => 'À propos';
+
+  @override
+  String get common_chargement => 'Chargement...';
+
+  @override
+  String get commonErreur => 'Une erreur est survenue';
+
+  @override
+  String get common_reessayer => 'Réessayer';
+
+  @override
+  String get common_annuler => 'Annuler';
+
+  @override
+  String get common_confirmer => 'Confirmer';
+
+  @override
+  String get common_succes => 'Succès';
+
+  @override
+  String get common_echec => 'Échec';
 }

@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 class ColorName {
   ColorName._();
 
-  /// Color: #0F74A9
-  static const Color bleu = Color(0xFF0F74A9);
+  /// Color: #2196F3 (Material Blue 500 — primary reference)
+  static const Color bleu = Color(0xFF2196F3);
 
   /// Color: #F2EFF780
   static const Color gris = Color(0xF2EFF780);

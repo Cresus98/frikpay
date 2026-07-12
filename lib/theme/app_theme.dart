@@ -10,10 +10,10 @@ abstract final class AppRadius {
 
 abstract final class AppTheme {
   static ThemeData light() {
-    const primary = Color(0xFF0E7490);
+    const primary = Color(0xFF2196F3); // Material Blue 500 — reference palette from Payer screen
     const onPrimary = Color(0xFFFFFFFF);
     const secondary = Color(0xFFC2410C);
-    const surface = Color(0xFFF8FAFC);
+    const surface = Color(0xFFFFFFFF); // Pure white background
     const onSurface = Color(0xFF0F172A);
 
     final scheme = ColorScheme.fromSeed(
@@ -25,9 +25,9 @@ abstract final class AppTheme {
       onSecondary: Colors.white,
       surface: surface,
       onSurface: onSurface,
-      error: Color(0xFFDC2626),
-      outline: Color(0xFFCBD5E1),
-      outlineVariant: Color(0xFFE2E8F0),
+      error: const Color(0xFFDC2626),
+      outline: const Color(0xFFCBD5E1),
+      outlineVariant: const Color(0xFFE2E8F0),
     );
 
     final shapeSm = RoundedRectangleBorder(

@@ -166,7 +166,7 @@ class _AddCardStepperPageState extends ConsumerState<AddCardStepperPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Carte créée avec succès !'),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF2196F3),
         ),
       );
       context.pop();

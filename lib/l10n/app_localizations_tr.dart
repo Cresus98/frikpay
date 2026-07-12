@@ -187,4 +187,139 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get wntdisconect => 'Gerçekten oturumu kapatmak istiyor musunuz ? ';
+
+  @override
+  String get home_title => 'Kontrol Paneli';
+
+  @override
+  String get home_solde => 'Bakiye';
+
+  @override
+  String get home_recharge => 'Yükle';
+
+  @override
+  String get home_retrait => 'Çekme';
+
+  @override
+  String get home_historique => 'Geçmiş';
+
+  @override
+  String get home_transactions_recentes => 'Son İşlemler';
+
+  @override
+  String get home_aucune_transaction => 'İşlem yok';
+
+  @override
+  String get home_voir_tout => 'Tümünü Gör';
+
+  @override
+  String get cards_ajouter => 'Kart Ekle';
+
+  @override
+  String get cards_aucune_carte => 'Kart yok';
+
+  @override
+  String get cards_solde => 'Kart bakiyesi';
+
+  @override
+  String get cards_details => 'Detaylar';
+
+  @override
+  String get cards_activer => 'Aktifleştir';
+
+  @override
+  String get cards_desactiver => 'Devre dışı bırak';
+
+  @override
+  String get cards_recharger => 'Yükle';
+
+  @override
+  String get cards_retirer => 'Çek';
+
+  @override
+  String get cards_voir_details => 'Detayları Gör';
+
+  @override
+  String get payer_title => 'Öde';
+
+  @override
+  String get payer_choisir_service => 'Servis Seçin';
+
+  @override
+  String get payer_choisir_operateur => 'Operatör Seçin';
+
+  @override
+  String get payer_montant => 'Tutar';
+
+  @override
+  String get payer_numero => 'Numara';
+
+  @override
+  String get payer_confirmer => 'Onayla';
+
+  @override
+  String get payer_annuler => 'İptal';
+
+  @override
+  String get encaissement_title => 'Tahsilatlar';
+
+  @override
+  String get encaissement_aucun => 'Tahsilat yok';
+
+  @override
+  String get encaissement_details => 'Detaylar';
+
+  @override
+  String get encaissement_montant => 'Tutar';
+
+  @override
+  String get encaissement_date => 'Tarih';
+
+  @override
+  String get encaissement_statut => 'Durum';
+
+  @override
+  String get encaissement_voir_tout => 'Tümünü Gör';
+
+  @override
+  String get profile_title => 'Profil';
+
+  @override
+  String get profile_nom => 'İsim';
+
+  @override
+  String get profile_email => 'E-posta';
+
+  @override
+  String get profile_telephone => 'Telefon';
+
+  @override
+  String get profile_deconnecter => 'Çıkış';
+
+  @override
+  String get profile_parametres => 'Ayarlar';
+
+  @override
+  String get profile_a_propos => 'Hakkında';
+
+  @override
+  String get common_chargement => 'Yükleniyor...';
+
+  @override
+  String get commonErreur => 'Bir hata oluştu';
+
+  @override
+  String get common_reessayer => 'Tekrar Dene';
+
+  @override
+  String get common_annuler => 'İptal';
+
+  @override
+  String get common_confirmer => 'Onayla';
+
+  @override
+  String get common_succes => 'Başarılı';
+
+  @override
+  String get common_echec => 'Başarısız';
 }

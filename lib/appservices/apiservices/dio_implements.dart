@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fripay/appservices/apiservices/dio_interfaces.dart';
 import 'package:fripay/views/utils/extensions.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../../utils/app_logger.dart';
 import '../../views/utils/constantes.dart';
 import '../../views/utils/fonctions.dart';
 import 'apireponse.dart';
@@ -32,7 +34,7 @@ class DioServices implements HttpServices {
     ),
   )..interceptors.add(
       PrettyDioLogger(
-        logPrint: (stuff) => log('$stuff'),
+        logPrint: (stuff) => AppLogger.d('$stuff'),
         requestHeader: true,
         requestBody: true,
         maxWidth: 65536,
@@ -49,7 +51,7 @@ class DioServices implements HttpServices {
     ),
   )..interceptors.add(
       PrettyDioLogger(
-        logPrint: (stuff) => log('$stuff'),
+        logPrint: (stuff) => AppLogger.d('$stuff'),
         requestHeader: true,
         requestBody: true,
         maxWidth: 65536,
@@ -64,7 +66,7 @@ class DioServices implements HttpServices {
     response.status = false;
     try {
       response = await httpRequest;
-      log("le log dans le response $response et le status est ${response.status!}");
+      AppLogger.d("le log dans le response $response et le status est ${response.status}");
 
       if (response.status!) {
         onPositiveResponse?.call(response);
@@ -99,10 +101,10 @@ class DioServices implements HttpServices {
         case DioExceptionType.connectionError:
         case DioExceptionType.connectionTimeout:
 
-        response.message =   "Problème de Connexion Internet, veuillez vérifier cotre connexion et réessayez";
+          response.message = "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez";
            Fluttertoast.showToast(msg:
           //response.message =
-              "Problème de Connexion Internet, veuillez vérifier cotre connexion et réessayez",
+              "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez",
                toastLength: Toast.LENGTH_LONG,
                //;
           );
@@ -120,10 +122,10 @@ class DioServices implements HttpServices {
           );
           break;
         default:
-          response.message = "Erreur lors du proceesus,veuillez réessayer";
+          response.message = "Erreur lors du processus, veuillez réessayer";
           Fluttertoast.showToast(msg:
           //response.message =
-          "Erreur lors du proceesus,veuillez réessayer",
+          "Erreur lors du processus, veuillez réessayer",
               toastLength: Toast.LENGTH_LONG,
             //;
           //_l10n!.anErrorOccurred
@@ -133,12 +135,12 @@ class DioServices implements HttpServices {
     } catch (e) {
 
       Fluttertoast.showToast(
-          msg: "Erreur lors du proceesus $e",
+          msg: "Erreur lors du processus $e",
         toastLength: Toast.LENGTH_LONG,
         //_l10n!.anErrorOccurred
       );
-      response.message = "Erreur lors du proceesus , veuillez réessayer";
-      log("finlament on a l'erreur  dans le dispact  est la suivante $e");
+      response.message = "Erreur lors du processus, veuillez réessayer";
+      AppLogger.d("finalement on a l'erreur  dans le dispatch  est la suivante $e");
     }
 
     return response;
@@ -173,7 +175,7 @@ class DioServices implements HttpServices {
           queryParameters: params);
     }
 
-    print("le data reponse request ${response.data}");
+    AppLogger.d("le data reponse request ${response.data}");
 
     ApiReponse reponse = ApiReponse();
     reponse.data = response.data;
@@ -183,10 +185,10 @@ class DioServices implements HttpServices {
     else if (rcase == RequestCase.ResetWithMessageResetFormat) {
       reponse.message = response.data['message'];
     }
-    else if (rcase == RequestCase.GetCurrency && response.data["status"] != succes) {
+    else if (rcase == RequestCase.GetCurrency && response.data["status"] != "success") {
       reponse.message = response.data["msg"];
     }
-    reponse.status = response.data["status"] == succes ? true : false;
+    reponse.status = response.data["status"] == "success" ? true : false;
     return reponse;
   }
 }

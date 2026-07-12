@@ -1,42 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fripay/views/utils/extensions.dart';
-
-
-
 
 class GeneralScaffold extends ConsumerWidget {
   final Widget content;
-  final Color ? backgroundColor;
-  final GlobalKey<ScaffoldState> ? scaffoldKey;
-  const GeneralScaffold({super.key,required this.content,this.scaffoldKey,this.backgroundColor});
+  final Color? backgroundColor;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+  final bool useSafeArea;
+
+  const GeneralScaffold({
+    super.key,
+    required this.content,
+    this.scaffoldKey,
+    this.backgroundColor,
+    this.useSafeArea = true,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return
-      //SafeArea(
+    final body = useSafeArea ? SafeArea(child: content) : content;
 
-      //  child:
-        Scaffold(
-          key: scaffoldKey,
-          backgroundColor:
-              backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-          body: SafeArea(
-            child: Stack(
-              fit: StackFit.expand,
-              alignment: Alignment.bottomCenter,
-              children: [
-            SizedBox(
-              height: context.screenHeight,
-              width: context.screenWidth,
-              child: content,
-            ),
-              ],
-            ),
-          ),
-        )
-    //)
-    ;
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+      body: body,
+    );
   }
 }
-

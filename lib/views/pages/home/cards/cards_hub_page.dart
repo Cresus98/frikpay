@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fripay/l10n/app_localizations.dart';
 import 'package:fripay/theme/app_theme.dart';
 import 'package:fripay/views/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../utils/globalwidget/app_bottom_nav_bar.dart';
 
 class CardsHubPage extends ConsumerStatefulWidget {
   const CardsHubPage({super.key});
@@ -16,9 +18,10 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
+      body: SafeArea(bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -59,11 +62,21 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
                     // Action Buttons Row
                     Row(
                       children: [
-                        Expanded(child: _buildActionButton('Afficher', Icons.visibility_outlined)),
+                        Expanded(child: _buildActionButton('Créer', Icons.add_card, () {
+                          context.pushNamed(RoutesNames.AddCarteStepper);
+                        })),
                         const SizedBox(width: 12),
-                        Expanded(child: _buildActionButton('Bloquer', Icons.block_outlined)),
+                        Expanded(child: _buildActionButton('Afficher', Icons.visibility_outlined, () {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Affichage des détails de la carte')));
+                        })),
                         const SizedBox(width: 12),
-                        Expanded(child: _buildActionButton('Recharger', Icons.add)),
+                        Expanded(child: _buildActionButton('Bloquer', Icons.block_outlined, () {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Carte bloquée avec succès')));
+                        })),
+                        const SizedBox(width: 12),
+                        Expanded(child: _buildActionButton(l10n.cards_recharger, Icons.add, () {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Recharge de la carte')));
+                        })),
                       ],
                     ),
                     
@@ -92,75 +105,7 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey.shade200,
-              width: 1.0,
-            ),
-          ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            if (index == 0) context.pushNamed(RoutesNames.Home);
-            if (index == 1) context.pushNamed(RoutesNames.Payer);
-            if (index == 2) context.pushNamed(RoutesNames.AddCarte);
-            if (index == 3) context.pushNamed(RoutesNames.Profil);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue.shade600,
-          unselectedItemColor: Colors.grey.shade500,
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-          elevation: 0,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home_outlined),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.home),
-              ),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.swap_horiz),
-              ),
-              label: 'Transactions',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.credit_card_outlined),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.credit_card),
-              ),
-              label: 'Cartes',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
-                child: Icon(Icons.sentiment_satisfied_alt),
-              ),
-              label: 'Profil',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 2),
     );
   }
 
@@ -249,9 +194,11 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
     );
   }
 
-  Widget _buildActionButton(String title, IconData icon) {
-    return Container(
-      height: 100,
+  Widget _buildActionButton(String title, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 100,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -286,6 +233,7 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
           ),
         ],
       ),
+      ),
     );
   }
 
@@ -309,8 +257,12 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
       ),
     );
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sélection de la carte: $title')));
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -357,6 +309,7 @@ class _CardsHubPageState extends ConsumerState<CardsHubPage> {
             ],
           )
         ],
+      ),
       ),
     );
   }

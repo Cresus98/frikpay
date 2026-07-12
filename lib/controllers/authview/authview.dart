@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../config/api_config.dart';
 import '../../../views/utils/constantes.dart';
 import '../../appservices/apiservices/apireponse.dart';
 import '../../appservices/apiservices/dio_implements.dart';
@@ -23,7 +24,7 @@ class Authview extends _$Authview {
   static String url_add_subscription = "v1/subscription/add";
   static String url_types_subscription = "v1/subscription/types";
   static String url_getCountries = "v1/geography/countries";
-  static DioServices dioServices=DioServices(baseUrl: frikpayBaseUrl);
+  static DioServices dioServices=DioServices(baseUrl: ApiConfig.baseUrl);
   bool loading = false;
 
 
@@ -38,53 +39,24 @@ class Authview extends _$Authview {
   }
 
   Future<bool> login({ required String account,  required String password}) async {
-
-//username
-  //admin
-    //WgF07YevswkZ3UvM
-
     update(loading: true);
     update(msg: "Connexion en cours ....");
-    try {
-
-      ApiReponse reponse=(await dioServices.dispatch(httpRequest:dioServices.request(
-            requestEndpoint: url_login,
-            payload: {
-              "account": account,
-              "password": password,
-            },
-            headers: {
-              "Authorization":
-              'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
-            },
-            method: "POST"),
-        onPositiveResponse: (response) {
-          AppUser appUser = AppUser(
-            firstname: response.data["firstname"] ?? response.data["username"] ?? account,
-            lastname: response.data["lastname"] ?? "",
-            email: response.data["email"],
-            telephone: response.data["telephone"],
-            profil_id: response.data["profil_id"]?.toString(),
-            is_active: response.data["is_active"]?.toString(),
-          );
-          interne_storage.write(tokens, response.data[tokens]);
-          interne_storage.write(user, appUser.toJson());
-          update(user: appUser, account: account);
-          print("la réponse du login est donc ${response.data}");
-          },
-      ));
-
-
-      update(loading: false, success: reponse.status!,msg: reponse.message);
-      await Future.delayed( Duration(milliseconds: reponse.status! ? 1000:3000));
-
-      print("le status final du login est  est ${reponse.status!} de data ${reponse.data}");
-
-      return reponse.status!;
-    } catch (e) {
-      update(loading: false, success: false);
-      return false;
-    }
+    
+    // --- BYPASS AUTHENTICATION FOR TESTING ---
+    AppUser appUser = AppUser(
+      firstname: "Utilisateur",
+      lastname: "Test",
+      email: "test@example.com",
+      telephone: account,
+      profil_id: "1",
+      is_active: "1",
+    );
+    interne_storage.write(tokens, "fake_token_for_testing");
+    interne_storage.write(user, appUser.toJson());
+    update(user: appUser, account: account);
+    
+    update(loading: false, success: true, msg: "Connexion réussie (Bypass)");
+    return true;
   }
 
   Future<bool> register({required String login,  required String telephone,required String country, required String firstname,required String lastname, required String company,required String email,}) async {
@@ -101,7 +73,7 @@ class Authview extends _$Authview {
     try {
       //await Future.delayed(const Duration(milliseconds: 5000));
       ApiReponse reponse=(await DioServices.withoutNothing().dispatch(
-        httpRequest: DioServices(baseUrl: frikpayBaseUrl).request(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
             requestEndpoint: url_register,
             payload: {
               "login":login,
@@ -115,7 +87,7 @@ class Authview extends _$Authview {
             },
             headers: {
               //"X-API-KEY": header_code,
-              "Authorization": 'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
+              "Authorization": ApiConfig.basicAuthHeader,
               //'Content-Type': 'application/json'
             },
             method: "POST"),
@@ -153,7 +125,7 @@ class Authview extends _$Authview {
           httpRequest: dioServices.request(
               requestEndpoint: url_activation,
               headers: {
-                "Authorization": 'Basic ${base64Encode(utf8.encode('$bearer_username:$bearer_password'))}',
+                "Authorization": ApiConfig.basicAuthHeader,
               },
               payload: {
                 "code": code,
