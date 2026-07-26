@@ -6,19 +6,23 @@ part 'appuser.g.dart';
 
 
 @freezed
-class AppUser with _$AppUser
-{
+class AppUser with _$AppUser {
   factory AppUser({
     required String firstname,
     required String lastname,
-    String ? email,
-    String ? country_prefix,
-    String ? company,
-    String ? telephone,
-    String ? profil_id,
-    String ? photo_profil,
-    String ? is_active,
-  })=_AppUser;
+    String? id,
+    String? login,
+    String? email,
+    String? country_prefix,
+    String? company,
+    String? telephone,
+    String? profil_id,
+    String? photo_profil,
+    String? is_active,
+    String? rang_id,
+    String? sexe,
+    String? code,
+  }) = _AppUser;
 
-  factory AppUser.fromJson(Map<String, dynamic> json)=>_$AppUserFromJson(json);
+  factory AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);
 }

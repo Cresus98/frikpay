@@ -12,6 +12,7 @@ abstract final class Env {
 
   static String get frikpayBaseUrl => const String.fromEnvironment(
         'FRIKPAY_BASE_URL',
+        defaultValue: 'https://api.friklabel.com/',
       );
 
   static String get headerCode => const String.fromEnvironment(

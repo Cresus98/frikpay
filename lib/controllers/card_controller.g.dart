@@ -6,7 +6,7 @@ part of 'card_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cardControllerHash() => r'715d14eea8d01af1aa46e608585ed6f5676a931b';
+String _$cardControllerHash() => r'c54a8ed9eebdfebd5d56959cef61d819b9ffbd01';
 
 /// See also [CardController].
 @ProviderFor(CardController)

@@ -19,13 +19,29 @@ import 'package:fripay/views/pages/home/transactions/transactions_page.dart';
 import 'package:fripay/views/pages/splashscreen.dart' show Splashscreen;
 import 'package:fripay/views/utils/constantes.dart';
 import 'package:go_router/go_router.dart';
+import '../controllers/init.dart' show interne_storage;
 
 
+/// Routes publiques (accessibles sans connexion)
+const _publicRoutes = {'/Splash', '/Connexion', '/Inscription', '/ForgotPassword', '/Activate'};
 
 final appRoutes = GoRouter(
     initialLocation: "/${RoutesNames.Splasch}",
-    //initialLocation: "/${RoutesNames.Activate}",
-    //initialLocation:"/${RoutesNames.VerifyCode}",
+    redirect: (context, state) {
+      final isLoggedIn = interne_storage.read(tokens) != null;
+      final location = state.matchedLocation;
+      final isPublic = _publicRoutes.any((r) => location.startsWith(r));
+
+      // Si pas connecté et route protégée → Connexion
+      if (!isLoggedIn && !isPublic) {
+        return '/${RoutesNames.Connexion}';
+      }
+      // Si déjà connecté et sur Connexion → Home
+      if (isLoggedIn && location == '/${RoutesNames.Connexion}') {
+        return '/${RoutesNames.Home}';
+      }
+      return null; // pas de redirection
+    },
     routes: [
       GoRoute(
         name: RoutesNames.Splasch,

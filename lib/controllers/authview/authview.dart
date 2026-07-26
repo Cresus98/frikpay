@@ -38,25 +38,48 @@ class Authview extends _$Authview {
         : AuthState(user: AppUser(firstname: "", lastname: ""));
   }
 
-  Future<bool> login({ required String account,  required String password}) async {
+  Future<bool> login({ required String account, required String password}) async {
     update(loading: true);
     update(msg: "Connexion en cours ....");
-    
-    // --- BYPASS AUTHENTICATION FOR TESTING ---
-    AppUser appUser = AppUser(
-      firstname: "Utilisateur",
-      lastname: "Test",
-      email: "test@example.com",
-      telephone: account,
-      profil_id: "1",
-      is_active: "1",
-    );
-    interne_storage.write(tokens, "fake_token_for_testing");
-    interne_storage.write(user, appUser.toJson());
-    update(user: appUser, account: account);
-    
-    update(loading: false, success: true, msg: "Connexion réussie (Bypass)");
-    return true;
+
+    try {
+      final ApiReponse reponse = await DioServices.withoutNothing().dispatch(
+        httpRequest: DioServices(baseUrl: ApiConfig.baseUrl).request(
+          requestEndpoint: url_login,
+          payload: FormData.fromMap({
+            'account': account,
+            'password': password,
+          }),
+          headers: {
+            'Authorization': ApiConfig.basicAuthHeader,
+          },
+          method: 'POST',
+        ),
+        onPositiveResponse: (response) {
+          final userData = response.data['user'];
+          final token = response.data['token'];
+
+          if (userData != null) {
+            final appUser = AppUser.fromJson(
+              Map<String, dynamic>.from(userData).map(
+                (k, v) => MapEntry(k, v?.toString()),
+              ),
+            );
+            interne_storage.write(tokens, token);
+            interne_storage.write(user, appUser.toJson());
+            update(user: appUser, account: account);
+          }
+        },
+      );
+
+      update(loading: false, success: reponse.status!);
+      update(msg: reponse.message);
+      await Future.delayed(const Duration(milliseconds: 300));
+      return reponse.status!;
+    } catch (e) {
+      update(loading: false, success: false, msg: "Erreur de connexion");
+      return false;
+    }
   }
 
   Future<bool> register({required String login,  required String telephone,required String country, required String firstname,required String lastname, required String company,required String email,}) async {

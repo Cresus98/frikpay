@@ -10,6 +10,8 @@ _$AppUserImpl _$$AppUserImplFromJson(Map<String, dynamic> json) =>
     _$AppUserImpl(
       firstname: json['firstname'] as String,
       lastname: json['lastname'] as String,
+      id: json['id'] as String?,
+      login: json['login'] as String?,
       email: json['email'] as String?,
       country_prefix: json['country_prefix'] as String?,
       company: json['company'] as String?,
@@ -17,12 +19,17 @@ _$AppUserImpl _$$AppUserImplFromJson(Map<String, dynamic> json) =>
       profil_id: json['profil_id'] as String?,
       photo_profil: json['photo_profil'] as String?,
       is_active: json['is_active'] as String?,
+      rang_id: json['rang_id'] as String?,
+      sexe: json['sexe'] as String?,
+      code: json['code'] as String?,
     );
 
 Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
     <String, dynamic>{
       'firstname': instance.firstname,
       'lastname': instance.lastname,
+      'id': instance.id,
+      'login': instance.login,
       'email': instance.email,
       'country_prefix': instance.country_prefix,
       'company': instance.company,
@@ -30,4 +37,7 @@ Map<String, dynamic> _$$AppUserImplToJson(_$AppUserImpl instance) =>
       'profil_id': instance.profil_id,
       'photo_profil': instance.photo_profil,
       'is_active': instance.is_active,
+      'rang_id': instance.rang_id,
+      'sexe': instance.sexe,
+      'code': instance.code,
     };

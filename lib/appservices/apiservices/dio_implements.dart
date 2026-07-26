@@ -15,7 +15,7 @@ enum RequestCase {
   ResetWithMessageResetFormat,
   ResetSendCodeLong,
   RechargeBank,
-  GetCurrency
+  GetCurrency,
 }
 
 class DioServices implements HttpServices {
@@ -24,49 +24,56 @@ class DioServices implements HttpServices {
   DioServices.withoutNothing();
 
   /// Configure dio before
-  final _dio = Dio(
-    BaseOptions(
-      contentType: Headers.jsonContentType,
-      validateStatus: (code) => (code ?? 500) < 500,
-      connectTimeout: 32.seconds,
-      receiveTimeout: 32.seconds,
-      sendTimeout: 32.seconds,
-    ),
-  )..interceptors.add(
-      PrettyDioLogger(
-        logPrint: (stuff) => AppLogger.d('$stuff'),
-        requestHeader: true,
-        requestBody: true,
-        maxWidth: 65536,
-      ),
-    );
+  final _dio =
+      Dio(
+          BaseOptions(
+            contentType: Headers.jsonContentType,
+            validateStatus: (code) => (code ?? 500) < 500,
+            connectTimeout: 32.seconds,
+            receiveTimeout: 32.seconds,
+            sendTimeout: 32.seconds,
+          ),
+        )
+        ..interceptors.add(
+          PrettyDioLogger(
+            logPrint: (stuff) => AppLogger.d('$stuff'),
+            requestHeader: true,
+            requestBody: true,
+            maxWidth: 65536,
+          ),
+        );
 
-  final _dio2 = Dio(
-    BaseOptions(
-      contentType: Headers.jsonContentType,
-      validateStatus: (code) => (code ?? 500) < 500,
-      connectTimeout: 60.seconds,
-      receiveTimeout: 60.seconds,
-      sendTimeout: 60.seconds,
-    ),
-  )..interceptors.add(
-      PrettyDioLogger(
-        logPrint: (stuff) => AppLogger.d('$stuff'),
-        requestHeader: true,
-        requestBody: true,
-        maxWidth: 65536,
-      ),
-    );
+  final _dio2 =
+      Dio(
+          BaseOptions(
+            contentType: Headers.jsonContentType,
+            validateStatus: (code) => (code ?? 500) < 500,
+            connectTimeout: 60.seconds,
+            receiveTimeout: 60.seconds,
+            sendTimeout: 60.seconds,
+          ),
+        )
+        ..interceptors.add(
+          PrettyDioLogger(
+            logPrint: (stuff) => AppLogger.d('$stuff'),
+            requestHeader: true,
+            requestBody: true,
+            maxWidth: 65536,
+          ),
+        );
 
   @override
-  Future<ApiReponse> dispatch(
-      {required Future<ApiReponse> httpRequest,
-      ApiReponseCallBack? onPositiveResponse}) async {
+  Future<ApiReponse> dispatch({
+    required Future<ApiReponse> httpRequest,
+    ApiReponseCallBack? onPositiveResponse,
+  }) async {
     ApiReponse response = ApiReponse();
     response.status = false;
     try {
       response = await httpRequest;
-      AppLogger.d("le log dans le response $response et le status est ${response.status}");
+      AppLogger.d(
+        "le log dans le response $response et le status est ${response.status}",
+      );
 
       if (response.status!) {
         onPositiveResponse?.call(response);
@@ -93,86 +100,87 @@ class DioServices implements HttpServices {
       switch (error.type) {
         case DioExceptionType.cancel:
           response.message = "Requête arrétée ,veuillez réessayer !";
-           Fluttertoast.showToast(msg: "Request cancel ",
-               toastLength: Toast.LENGTH_LONG,
-           );
+          Fluttertoast.showToast(
+            msg: "Request cancel ",
+            toastLength: Toast.LENGTH_LONG,
+          );
           break;
 
         case DioExceptionType.connectionError:
         case DioExceptionType.connectionTimeout:
-
-          response.message = "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez";
-           Fluttertoast.showToast(msg:
-          //response.message =
-              "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez",
-               toastLength: Toast.LENGTH_LONG,
-               //;
+          response.message =
+              "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez";
+          Fluttertoast.showToast(
+            msg:
+                //response.message =
+                "Problème de Connexion Internet, veuillez vérifier votre connexion et réessayez",
+            toastLength: Toast.LENGTH_LONG,
+            //;
           );
           break;
 
         case DioExceptionType.sendTimeout:
         case DioExceptionType.receiveTimeout:
-
-        response.message ="Délai d'attente dépassé, réessayez svp!";
-          Fluttertoast.showToast(msg:
-          //response.message =
-          "Délai d'attente dépassé, réessayez svp!",
-              toastLength: Toast.LENGTH_LONG,
-          //;
+          response.message = "Délai d'attente dépassé, réessayez svp!";
+          Fluttertoast.showToast(
+            msg:
+                //response.message =
+                "Délai d'attente dépassé, réessayez svp!",
+            toastLength: Toast.LENGTH_LONG,
+            //;
           );
           break;
         default:
           response.message = "Erreur lors du processus, veuillez réessayer";
-          Fluttertoast.showToast(msg:
-          //response.message =
-          "Erreur lors du processus, veuillez réessayer",
-              toastLength: Toast.LENGTH_LONG,
+          Fluttertoast.showToast(
+            msg:
+                //response.message =
+                "Erreur lors du processus, veuillez réessayer",
+            toastLength: Toast.LENGTH_LONG,
             //;
-          //_l10n!.anErrorOccurred
+            //_l10n!.anErrorOccurred
           );
           break;
       }
     } catch (e) {
-
       Fluttertoast.showToast(
-          msg: "Erreur lors du processus $e",
+        msg: "Erreur lors du processus $e",
         toastLength: Toast.LENGTH_LONG,
         //_l10n!.anErrorOccurred
       );
       response.message = "Erreur lors du processus, veuillez réessayer";
-      AppLogger.d("finalement on a l'erreur  dans le dispatch  est la suivante $e");
+      AppLogger.d(
+        "finalement on a l'erreur  dans le dispatch  est la suivante $e",
+      );
     }
 
     return response;
   }
 
   @override
-  Future<ApiReponse> request(
-      {required String requestEndpoint,
-      Map<String, dynamic>? headers,
-      Object? payload,
-      String? method,
-      Map<String, dynamic>? params,
-      RequestCase rcase = RequestCase.Default}) async {
-
+  Future<ApiReponse> request({
+    required String requestEndpoint,
+    Map<String, dynamic>? headers,
+    Object? payload,
+    String? method,
+    Map<String, dynamic>? params,
+    RequestCase rcase = RequestCase.Default,
+  }) async {
     final Response<dynamic> response;
     if (rcase == RequestCase.ResetSendCodeLong) {
-      response = await _dio2.request(baseUrl + requestEndpoint,
-          options: Options(
-            method: method ?? 'GET',
-            headers: headers,
-          ),
-          data: payload,
-          queryParameters: params);
-    }
-    else {
-      response = await _dio.request(baseUrl + requestEndpoint,
-          options: Options(
-            method: method ?? 'GET',
-            headers: headers,
-          ),
-          data: payload,
-          queryParameters: params);
+      response = await _dio2.request(
+        baseUrl + requestEndpoint,
+        options: Options(method: method ?? 'GET', headers: headers),
+        data: payload,
+        queryParameters: params,
+      );
+    } else {
+      response = await _dio.request(
+        baseUrl + requestEndpoint,
+        options: Options(method: method ?? 'GET', headers: headers),
+        data: payload,
+        queryParameters: params,
+      );
     }
 
     AppLogger.d("le data reponse request ${response.data}");
@@ -181,11 +189,10 @@ class DioServices implements HttpServices {
     reponse.data = response.data;
     if (rcase == RequestCase.Default) {
       reponse.message = response.data['msg'];
-    }
-    else if (rcase == RequestCase.ResetWithMessageResetFormat) {
+    } else if (rcase == RequestCase.ResetWithMessageResetFormat) {
       reponse.message = response.data['message'];
-    }
-    else if (rcase == RequestCase.GetCurrency && response.data["status"] != "success") {
+    } else if (rcase == RequestCase.GetCurrency &&
+        response.data["status"] != "success") {
       reponse.message = response.data["msg"];
     }
     reponse.status = response.data["status"] == "success" ? true : false;
